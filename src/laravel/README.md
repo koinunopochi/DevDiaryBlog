@@ -1,66 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel コーディング規約
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 目的
 
-## About Laravel
+<!-- そのコーディング規約の適用範囲、なぜ必要なのか、それを守ることによりどんなメリットがあるかを書きます。 -->
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+この規約は、Laravel フレームワークをベースに Domain-Driven Design (DDD)の要素を取り入れたプロジェクトにおけるコーディング標準を定義します。本規約の目的は以下の通りです：
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. コードの一貫性と可読性の向上
+2. チーム内でのコミュニケーションの促進
+3. 保守性と拡張性の高いコードベースの構築
+4. DDD の概念を活用したドメイン中心の設計の促進
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+この規約を遵守することで、新人プログラマーを含むチーム全体が、より効率的に高品質なコードを生産することができます。
 
-## Learning Laravel
+## プロジェクトの構成
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+<!-- コーディングにはあまり関係なさそうな内容ですが、ソースプログラムの先頭にコメントを入れたりするのに使います。プロジェクトの名称などはあらかじめ決まっていることが多いので、もし、そうなら一覧表を付けます。メタ情報の指定方法、フォルダの構成方法なども決めておきます。 -->
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. プロジェクトのルートディレクトリ構造は、Laravel の標準構造を基本としつつ、DDD の要素を取り入れた以下の構成を採用します：
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```sh
+app/
+├── Domain/
+│   ├── Entities/
+│   ├── Exceptions/
+│   ├── Repositories/
+│   └── ValueObjects/
+├── Application/
+│   ├── DataTransferObjects/
+│   ├── Jobs/
+│   ├── Services/ # 複数のDomainObjectに対する操作の場合は、Serviceを使用する。
+│   │             # 複数のUseCaseを呼び出す形で実装する
+│   └── UseCases/ # 一つのDomainObjectに対する操作の場合は、UseCaseを使用する
+├── Infrastructure/
+│   ├── Common/ # 通常は利用しない
+│   ├── Persistence/
+│   └── AudioAPIClient.php
+├── Exceptions/ # Laravelの標準ディレクトリ
+├── Http/ # Laravelの標準ディレクトリ
+│   ├── Controllers/
+│   ├── Middleware/
+│   └── Requests/
+├── Models/ # Laravelの標準ディレクトリ- Eloquentモデルはここに配置し、Infrastructureで使用する
+└── ...（その他のLaravelの標準ディレクトリ）
+```
 
-## Laravel Sponsors
+## 命名規則
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+<!-- 変数、定数、メソッド(関数)、クラスなどの名前の付け方の基準を決める。変数名の先頭は小文字だとか、クラス名の先頭は大文字だとかがよく使われます。 -->
 
-### Premium Partners
+1. 変数名：キャメルケース（例：`$userEmail`）
+2. 関数名：キャメルケース（例：`getUserById()`）
+3. クラス名：パスカルケース（例：`UserRepository`）
+4. インターフェース名：パスカルケースで、先頭に「I」をつける（例：`IUserRepository`）
+5. トレイト名：パスカルケースで、末尾に「Trait」をつける（例：`LoggableTrait`）
+6. 定数：大文字のスネークケース（例：`USER_STATUS_ACTIVE`）
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## コーディングスタイル
 
-## Contributing
+<!-- コーディングスタイルはインデントの仕方とか、中かっこの位置とか、コメントの位置や内容とかを決めておきます。 -->
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+基本的に vs code の Linter に従うこととします。
 
-## Code of Conduct
+## リソース
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+<!-- エラーメッセージなどはハードコーディングしないで、よくリソースファイルのインデックスを指定したりします。もし使うなら、リソースの使用についての説明、制限なども書いておきましょう。（あまり大きいリソースの管理はたいへんなのでバランスを考えたほうがいいです。特に IDE を使う場合。） -->
 
-## Security Vulnerabilities
+必要に応じて新たに定義することとします。
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 禁止事項
 
-## License
+<!-- 使ってはいけない文法や今はほとんど使われない保守用になっているものとかを挙げておきます。一律に禁止でなく、場合によっては例外も設けておきます。(なぜ禁止なのか、その理由も必ず書きます) -->
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. グローバル変数の使用（理由：スコープの管理が難しくなり、副作用を引き起こす可能性があるため）
+2. 直接の DB クエリの実行（理由：リポジトリパターンを使用し、データアクセスを抽象化するため）
+
+## 制限事項
+
+<!-- あまり推奨されない機能、コーディング方法、クラスなどを揚げておきます。また、その条件を明示します。 -->
+
+1. すべてのコントローラーは、リクエストの検証とレスポンスの返却のみを記述し、ビジネスロジックは適切なサービスクラスに委譲します。（理由：コントローラーは薄いクラスであるべきであり、ビジネスロジックはドメインサービスに記述するべきであるため）
+2. すべての Controller・ApplicationService・ApplicationUseCase は、1 メソッドのみを持つ形に統一すること（理由：単一責任の原則に従い、コントローラーの責務を明確にするため）
+3. Eloquent モデルには、属性や関係の定義のみを含め、ビジネスロジックは適切なドメインサービスに記述します。（理由：Eloquent モデルはデータアクセスのためのクラスであり、ビジネスロジックはドメインサービスに記述するべきであるため）
+4. すべてのDomainObjectは、ValueObjectのみを使用して、不変性を保証すること（理由：不変性を保証することで、バグの発生を防ぎ、コードの信頼性を向上させるため）
+
+## 推奨事項
+
+<!-- 好ましいコーディング方法や複数の似たようなクラスや関数などがある場合、どちらが推奨されるかを書いておきます。 -->
+
+1. 型宣言を積極的に使用し、メソッドの引数と戻り値の型を明示します。
+2. 値オブジェクトを使用して、ドメインの概念を表現します（例：`Email`、`Money`）。
+3. ドメインイベントを使用して、ドメイン内の重要な変更を表現し、疎結合なシステムを構築します。
+4. 単一責任の原則に従い、クラスやメソッドの責務を明確に分離します。
+5. テストを書く際は、[Given-When-Then パターン](https://zenn.dev/miya_tech/articles/4e0de8046f88bf)を使用し、テストの意図を明確にします。
+
+この規約は、プロジェクトの進行に伴い、チームの合意のもとで適宜更新・改訂されるべきです。
