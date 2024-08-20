@@ -1,0 +1,64 @@
+services:
+  web:
+    container_name: "web"
+    build:
+      dockerfile: "./container/web/Dockerfile"
+    ports:
+      - "8080:80"
+    volumes:
+      - "./src/laravel/:/var/www/html"
+    depends_on:
+      - php
+    networks:
+      - app-network
+
+  php:
+    container_name: "php"
+    build:
+      dockerfile: "./container/php/Dockerfile"
+    volumes:
+      - ./src/laravel/:/var/www/html
+      - storage-volumes:/var/www/html/storage/framework
+      - vendor-volumes:/var/www/html/vendor
+    networks:
+      - app-network
+
+  db:
+    container_name: "db"
+    build:
+      dockerfile: "./container/db/Dockerfile"
+    ports:
+      - "3306:3306"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=password"
+      - "MYSQL_DATABASE=database"
+      - "MYSQL_USER=laravel"
+      - "MYSQL_PASSWORD=password"
+    volumes:
+      - "./container/db/data:/var/lib/mysql"
+    networks:
+      - app-network
+
+  # test-db:
+  #   container_name: "test-db"
+  #   build:
+  #     dockerfile: "./container/db/Dockerfile"
+  #   ports:
+  #     - "3307:3306"  # テスト用のDBは別のポートを使用
+  #   environment:
+  #     - "MYSQL_ROOT_PASSWORD=password"
+  #     - "MYSQL_DATABASE=test_database"
+  #     - "MYSQL_USER=test_user"
+  #     - "MYSQL_PASSWORD=password"
+  #   volumes:
+  #     - "./container/db/test-data:/var/lib/mysql"
+  #   networks:
+  #     - app-network
+      
+volumes:
+  storage-volumes:
+  vendor-volumes:
+
+networks:
+  app-network:
+    driver: bridge
