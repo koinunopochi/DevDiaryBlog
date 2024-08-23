@@ -50,7 +50,8 @@
 
 1. UserId
 
-   - UUID
+   - user-から始まるUUIDv4
+   - example: user-123e4567-e89b-12d3-a456-426614174000
 
 2. Username
 
