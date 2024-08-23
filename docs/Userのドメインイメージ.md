@@ -9,7 +9,7 @@
      - Username: Username (値オブジェクト)
      - Email: EmailAddress (値オブジェクト)
      - Password: HashedPassword (値オブジェクト)
-     - Status: UserStatus (値オブジェクト)
+     - UserStatus: UserStatus (値オブジェクト)
      - CreatedAt: DateTime
      - UpdatedAt: DateTime
      - LastLoginAt: DateTime (オプション)
