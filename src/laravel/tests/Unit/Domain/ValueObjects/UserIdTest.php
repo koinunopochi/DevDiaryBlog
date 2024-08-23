@@ -35,4 +35,17 @@ class UserIdTest extends TestCase
     $this->expectException(\InvalidArgumentException::class);
     new UserId($userId);
   }
+
+  /**
+   * @test
+   */
+  public function testInvalidUserIdPrefix(): void
+  {
+    // Given
+    $userId = Uuid::uuid4()->toString();
+
+    // When & Then
+    $this->expectException(\InvalidArgumentException::class);
+    new UserId($userId);
+  }
 }
