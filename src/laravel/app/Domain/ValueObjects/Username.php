@@ -11,7 +11,16 @@ class Username
    */
   public function __construct(string $name)
   {
+    $this->validate($name);
     $this->value = $name;
+  }
+
+  private function validate(string $name): void
+  {
+    $length = mb_strlen($name);
+    if ($length < 3 || 20 < $length) {
+      throw new \InvalidArgumentException("ユーザー名は3文字以上、20文字以下でなければなりません。");
+    }
   }
 
   /**
@@ -22,4 +31,3 @@ class Username
     return $this->value;
   }
 }
-
