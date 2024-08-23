@@ -7,16 +7,15 @@ use App\Domain\ValueObjects\Email;
 
 class EmailTest extends TestCase
 {
-    public function testToString()
-    {
-      // Given
-      $email_string = 'test@example.com';
+  public function testToString()
+  {
+    // Given
+    $email_string = 'test@example.com';
 
-      // When
-      $email = new Email($email_string);
+    // When
+    $email = new Email($email_string);
 
-      // Then
-      $this->assertEquals($email_string, $email->toString());
-    }
+    // Then
+    $this->assertEquals($email_string, $email->toString());
+  }
 }
-
