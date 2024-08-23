@@ -21,6 +21,10 @@ class Username
     if ($length < 3 || 20 < $length) {
       throw new \InvalidArgumentException("ユーザー名は3文字以上、20文字以下でなければなりません。");
     }
+
+    if (!preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
+      throw new \InvalidArgumentException("ユーザー名は半角英数字とアンダースコアのみ使用できます。");
+    }
   }
 
   /**
