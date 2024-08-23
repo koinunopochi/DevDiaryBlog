@@ -9,4 +9,9 @@ class UserStatus
   {
     $this->status = $status;
   }
+
+  public function toString(): string
+  {
+    return $this->status;
+  }
 }
