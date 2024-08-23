@@ -4,6 +4,7 @@ namespace Tests\Unit\Domain\ValueObjects;
 
 use Tests\TestCase;
 use App\Domain\ValueObjects\Email;
+use InvalidArgumentException;
 
 class EmailTest extends TestCase
 {
@@ -17,5 +18,15 @@ class EmailTest extends TestCase
 
     // Then
     $this->assertEquals($email_string, $email->toString());
+  }
+
+  public function testInvalidEmailFormat()
+  {
+    // Given
+    $invalidEmail = 'invalid-email';
+
+    // When & Then
+    $this->expectException(InvalidArgumentException::class);
+    new Email($invalidEmail);
   }
 }
