@@ -21,4 +21,17 @@ class UserStatusTest extends TestCase
     // Then
     $this->assertInstanceOf(UserStatus::class, $userStatus);
   }
+
+  public function testToString(): void
+  {
+    // Given
+    $status = 'Active';
+    $userStatus = new UserStatus($status);
+
+    // When
+    $result = $userStatus->toString();
+
+    // Then
+    $this->assertEquals($status, $result);
+  }
 }
