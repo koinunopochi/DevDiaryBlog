@@ -25,7 +25,7 @@ class UserStatusTest extends TestCase
   public function testToString(): void
   {
     // Given
-    $status = 'Active';
+    $status = UserStatus::STATUS_ACTIVE;
     $userStatus = new UserStatus($status);
 
     // When
@@ -33,5 +33,79 @@ class UserStatusTest extends TestCase
 
     // Then
     $this->assertEquals($status, $result);
+  }
+  /**
+   * @test
+   */
+  public function testCreateInstanceWithValidStatusActive(): void
+  {
+    // Given
+    $status = UserStatus::STATUS_ACTIVE;
+
+    // When
+    $userStatus = new UserStatus($status);
+
+    // Then
+    $this->assertInstanceOf(UserStatus::class, $userStatus);
+  }
+
+  /**
+   * @test
+   */
+  public function testCreateInstanceWithValidStatusInactive(): void
+  {
+    // Given
+    $status = UserStatus::STATUS_INACTIVE;
+
+    // When
+    $userStatus = new UserStatus($status);
+
+    // Then
+    $this->assertInstanceOf(UserStatus::class, $userStatus);
+  }
+
+  /**
+   * @test
+   */
+  public function testCreateInstanceWithValidStatusSuspended(): void
+  {
+    // Given
+    $status = UserStatus::STATUS_SUSPENDED;
+
+    // When
+    $userStatus = new UserStatus($status);
+
+    // Then
+    $this->assertInstanceOf(UserStatus::class, $userStatus);
+  }
+
+  /**
+   * @test
+   */
+  public function testCreateInstanceWithValidStatusDeleted(): void
+  {
+    // Given
+    $status = UserStatus::STATUS_DELETED;
+
+    // When
+    $userStatus = new UserStatus($status);
+
+    // Then
+    $this->assertInstanceOf(UserStatus::class, $userStatus);
+  }
+
+  /**
+   * @test
+   */
+  public function testCreateInstanceWithInvalidStatus(): void
+  {
+    // Given
+    $status = 'InvalidStatus';
+
+    // Then
+    $this->expectException(\Exception::class);
+
+    // When
+    new UserStatus($status);
   }
 }
