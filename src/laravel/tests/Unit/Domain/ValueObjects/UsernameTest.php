@@ -62,4 +62,25 @@ class UsernameTest extends TestCase
     $this->expectException(\InvalidArgumentException::class);
     new Username($name);
   }
+  public function testValidCharacters()
+  {
+    // Given
+    $name = "sample_user_123";
+
+    // When
+    $username = new Username($name);
+
+    // Then
+    $this->assertEquals($name, $username->toString());
+  }
+
+  public function testInvalidCharacters()
+  {
+    // Given
+    $name = "sample-user!?";
+
+    // When & Then
+    $this->expectException(\InvalidArgumentException::class);
+    new Username($name);
+  }
 }
