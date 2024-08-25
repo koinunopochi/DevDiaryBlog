@@ -38,4 +38,19 @@ class PasswordTest extends TestCase
     $this->assertNotEquals($plainTextPassword, $password->toString());
     $this->assertTrue(Hash::check($plainTextPassword, $password->toString()));
   }
+
+  /**
+   * @test
+   */
+  public function testPreservesHashedPasswords()
+  {
+    // Given
+    $hashedPassword = Hash::make('secret');
+
+    // When
+    $password = new Password($hashedPassword);
+
+    // Then
+    $this->assertEquals($hashedPassword, $password->toString());
+  }
 }
