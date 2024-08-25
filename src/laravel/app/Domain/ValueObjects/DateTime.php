@@ -16,4 +16,14 @@ class DateTime
   {
     $this->datetime = new DateTimeImmutable($datetime);
   }
+
+  private function format(string $format = 'Y-m-d\TH:i:sP'): string
+  {
+    return $this->datetime->format($format);
+  }
+
+  public function toString(): string
+  {
+    return $this->format();
+  }
 }
