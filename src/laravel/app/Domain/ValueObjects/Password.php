@@ -10,4 +10,8 @@ class Password
   {
     $this->password = $password;
   }
+  public function toString(): string
+  {
+    return $this->password;
+  }
 }
