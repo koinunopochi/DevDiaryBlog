@@ -20,4 +20,20 @@ class DateTimeTest extends TestCase
     // Then
     $this->assertInstanceOf(DateTime::class, $dateTime);
   }
+
+  /**
+   * @test
+   */
+  public function testToString()
+  {
+    // Given
+    $now = new \DateTimeImmutable();
+    $dateTime = new DateTime($now->format('Y-m-d H:i:s'));
+
+    // When
+    $result = $dateTime->toString();
+
+    // Then
+    $this->assertSame($now->format('Y-m-d\TH:i:sP'), $result);
+  }
 }
