@@ -14,7 +14,7 @@ class PasswordTest extends TestCase
   public function testValidPassword()
   {
     // Given
-    $password = 'password';
+    $password = '!@#$%^&*()_+1aA';
 
     // When
     $passwordObject = new Password($password);
@@ -29,7 +29,7 @@ class PasswordTest extends TestCase
   public function testHashedPassword()
   {
     // Given
-    $plainTextPassword = 'secret';
+    $plainTextPassword = '!@#$%^&*()_+1aA';
 
     // When
     $password = new Password($plainTextPassword);
@@ -45,7 +45,7 @@ class PasswordTest extends TestCase
   public function testPreservesHashedPasswords()
   {
     // Given
-    $hashedPassword = Hash::make('secret');
+    $hashedPassword = Hash::make('!@#$%^&*()_+1aA');
 
     // When
     $password = new Password($hashedPassword);
@@ -60,13 +60,65 @@ class PasswordTest extends TestCase
   public function testVerify()
   {
     // Given
-    $plainTextPassword = 'secret';
+    $plainTextPassword = '!@#$%^&*()_+1aA';
 
     // When
     $password = new Password($plainTextPassword);
 
     // Then
     $this->assertTrue($password->verify($plainTextPassword));
-    $this->assertFalse($password->verify('wrong_password'));
+    $this->assertFalse($password->verify('Password123!'));
+  }
+
+  /**
+   * @test
+   * @dataProvider validPasswords
+   */
+  public function testValidPasswords(string $password)
+  {
+    // Given
+    // When
+    $passwordObject = new Password($password);
+    // Then
+    $this->assertInstanceOf(Password::class, $passwordObject);
+  }
+
+  /**
+   * @test
+   * @dataProvider invalidPasswords
+   */
+  public function testInvalidPasswords(string $password)
+  {
+    // Given
+    // When
+
+    // Then
+    $this->expectException(\InvalidArgumentException::class);
+    new Password($password);
+  }
+
+  public static function validPasswords(): array
+  {
+    return [
+      ['Password123!'],
+      ['!@#$%^&*()_+1aA'],
+      ['1234567890abC+'],
+      ['abcdefghijklmnopqrstuvwxyz1A+'],
+      ['ABCDEFGHIJKLMNOPQRSTUVWXYZ1a!'],
+    ];
+  }
+
+  public static function invalidPasswords(): array
+  {
+    return [
+      ['password'],
+      ['Password123'],
+      ['Password!'],
+      ['Password '],
+      ['12345678901'],
+      ['abcdefghijklmnopqrstuvwxyz'],
+      ['ABCDEFGHIJKLMNOPQRSTUVWXYZ'],
+      ['!@#$%^&*()_+'],
+    ];
   }
 }
