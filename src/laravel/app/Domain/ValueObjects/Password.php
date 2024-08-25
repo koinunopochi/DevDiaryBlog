@@ -16,4 +16,9 @@ class Password
   {
     return $this->password;
   }
+
+  public function verify(string $password): bool
+  {
+    return Hash::check($password, $this->password);
+  }
 }
