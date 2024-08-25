@@ -1,0 +1,72 @@
+<?php
+
+namespace Tests\Unit\Domain\ValueObjects;
+
+use App\Domain\ValueObjects\Password;
+use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
+
+class PasswordTest extends TestCase
+{
+  /**
+   * @test
+   */
+  public function testValidPassword()
+  {
+    // Given
+    $password = 'password';
+
+    // When
+    $passwordObject = new Password($password);
+
+    // Then
+    $this->assertInstanceOf(Password::class, $passwordObject);
+  }
+
+  /**
+   * @test
+   */
+  public function testHashedPassword()
+  {
+    // Given
+    $plainTextPassword = 'secret';
+
+    // When
+    $password = new Password($plainTextPassword);
+
+    // Then
+    $this->assertNotEquals($plainTextPassword, $password->toString());
+    $this->assertTrue(Hash::check($plainTextPassword, $password->toString()));
+  }
+
+  /**
+   * @test
+   */
+  public function testPreservesHashedPasswords()
+  {
+    // Given
+    $hashedPassword = Hash::make('secret');
+
+    // When
+    $password = new Password($hashedPassword);
+
+    // Then
+    $this->assertEquals($hashedPassword, $password->toString());
+  }
+
+  /**
+   * @test
+   */
+  public function testVerify()
+  {
+    // Given
+    $plainTextPassword = 'secret';
+
+    // When
+    $password = new Password($plainTextPassword);
+
+    // Then
+    $this->assertTrue($password->verify($plainTextPassword));
+    $this->assertFalse($password->verify('wrong_password'));
+  }
+}
