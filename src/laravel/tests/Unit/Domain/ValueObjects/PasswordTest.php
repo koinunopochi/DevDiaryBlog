@@ -21,4 +21,19 @@ class PasswordTest extends TestCase
     // Then
     $this->assertInstanceOf(Password::class, $passwordObject);
   }
+
+ /**
+  * @test
+  */
+ public function testToString()
+ {
+     // Given
+     $password = 'password';
+
+     // When
+     $passwordObject = new Password($password);
+
+     // Then
+     $this->assertEquals($password, $passwordObject->toString());
+ }
 }
