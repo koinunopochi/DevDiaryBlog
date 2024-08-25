@@ -53,4 +53,20 @@ class PasswordTest extends TestCase
     // Then
     $this->assertEquals($hashedPassword, $password->toString());
   }
+
+  /**
+   * @test
+   */
+  public function testVerify()
+  {
+    // Given
+    $plainTextPassword = 'secret';
+
+    // When
+    $password = new Password($plainTextPassword);
+
+    // Then
+    $this->assertTrue($password->verify($plainTextPassword));
+    $this->assertFalse($password->verify('wrong_password'));
+  }
 }
