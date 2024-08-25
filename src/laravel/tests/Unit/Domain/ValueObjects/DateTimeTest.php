@@ -36,4 +36,28 @@ class DateTimeTest extends TestCase
     // Then
     $this->assertSame($now->format('Y-m-d\TH:i:sP'), $result);
   }
+  /**
+   * @test
+   * @dataProvider dateFormatsProvider
+   */
+  public function testCreateFromStringWithVariousFormats(string $dateTimeString)
+  {
+    // Given
+    $expectedDateTime = new \DateTimeImmutable($dateTimeString);
+
+    // When
+    $dateTime = new DateTime($dateTimeString);
+
+    // Then
+    $this->assertSame($expectedDateTime->format('Y-m-d\TH:i:sP'), $dateTime->toString());
+  }
+
+  public static function dateFormatsProvider(): array
+  {
+    return [
+      ['2024-02-10 12:34:56'],
+      ['2024/02/10 12:34:56'],
+      ['20240210123456'],
+    ];
+  }
 }
