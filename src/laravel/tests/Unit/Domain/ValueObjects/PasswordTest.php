@@ -3,6 +3,7 @@
 namespace Tests\Unit\Domain\ValueObjects;
 
 use App\Domain\ValueObjects\Password;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class PasswordTest extends TestCase
@@ -25,15 +26,16 @@ class PasswordTest extends TestCase
   /**
    * @test
    */
-  public function testToString()
+  public function testHashedPassword()
   {
     // Given
-    $password = 'password';
+    $plainTextPassword = 'secret';
 
     // When
-    $passwordObject = new Password($password);
+    $password = new Password($plainTextPassword);
 
     // Then
-    $this->assertEquals($password, $passwordObject->toString());
+    $this->assertNotEquals($plainTextPassword, $password->toString());
+    $this->assertTrue(Hash::check($plainTextPassword, $password->toString()));
   }
 }
