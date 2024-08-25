@@ -61,4 +61,16 @@ class UserIdTest extends TestCase
     $this->expectException(\InvalidArgumentException::class);
     new UserId($userId);
   }
+
+  /**
+   * @test
+   */
+  public function testGenerateNewIdWhenNoArgument(): void
+  {
+    // Given & When
+    $userIdValueObject = new UserId();
+
+    // Then
+    $this->assertStringStartsWith('user-', $userIdValueObject->toString());
+  }
 }

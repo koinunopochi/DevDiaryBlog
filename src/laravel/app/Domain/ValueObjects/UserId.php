@@ -2,14 +2,20 @@
 
 namespace App\Domain\ValueObjects;
 
+use Ramsey\Uuid\Uuid;
+
 class UserId
 {
   private string $userId;
 
-  public function __construct(string $userId)
+  public function __construct(?string $userId = null)
   {
-    $this->validate($userId);
-    $this->userId = $userId;
+    if (is_null($userId)) {
+      $this->userId = 'user-' . Uuid::uuid4()->toString();
+    } else {
+      $this->validate($userId);
+      $this->userId = $userId;
+    }
   }
 
   public function validate(string $userId): void
