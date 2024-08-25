@@ -2,13 +2,15 @@
 
 namespace App\Domain\ValueObjects;
 
+use Illuminate\Support\Facades\Hash;
+
 class Password
 {
   private string $password;
 
   public function __construct(string $password)
   {
-    $this->password = $password;
+    $this->password = Hash::needsRehash($password) ? Hash::make($password) : $password;
   }
   public function toString(): string
   {
