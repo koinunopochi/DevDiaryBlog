@@ -88,6 +88,8 @@
 9. SocialLinkCollection
 
    - キーと値のペアのコレクション（例：{twitter: "https://twitter.com/username", ...}）
+   - キーの長さは 50 文字以下で空文字は許可しない
+   - 値は URL オブジェクトとして作成が可能であること
 
 10. RoleId
 
