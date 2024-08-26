@@ -8,7 +8,19 @@ class PolicyName
 
   public function __construct(string $name)
   {
+    $this->validate($name);
     $this->name = $name;
+  }
+
+  private function validate(string $name): void
+  {
+    if (empty($name)) {
+      throw new \InvalidArgumentException('PolicyNameは1文字以上50文字以下である必要があります。');
+    }
+
+    if (strlen($name) > 50) {
+      throw new \InvalidArgumentException('PolicyNameは50文字以下である必要があります。');
+    }
   }
 
   public function toString(): string
