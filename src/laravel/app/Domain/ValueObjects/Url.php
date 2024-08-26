@@ -10,4 +10,9 @@ class Url
   {
     $this->url = $url;
   }
+
+  public function toString(): string
+  {
+    return $this->url;
+  }
 }
