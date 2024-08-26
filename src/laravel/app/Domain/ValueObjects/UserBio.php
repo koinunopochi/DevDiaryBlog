@@ -10,4 +10,9 @@ class UserBio
   {
     $this->userBio = $userBio;
   }
+
+  public function toString(): string
+  {
+    return $this->userBio;
+  }
 }
