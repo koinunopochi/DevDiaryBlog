@@ -37,4 +37,64 @@ class UserBioTest extends TestCase
     // Then
     $this->assertEquals($bioString, $result);
   }
+
+  /**
+   * @test
+   */
+  public function testCanBeCreatedWithLongEnglishBio(): void
+  {
+    // Given
+    $bioString = str_repeat('a', 500);
+
+    // When
+    $userBio = new UserBio($bioString);
+
+    // Then
+    $this->assertInstanceOf(UserBio::class, $userBio);
+  }
+
+  /**
+   * @test
+   */
+  public function testCannotBeCreatedWithTooLongEnglishBio(): void
+  {
+    // Given
+    $bioString = str_repeat('a', 501);
+
+    // Then
+    $this->expectException(\InvalidArgumentException::class);
+
+    // When
+    new UserBio($bioString);
+  }
+
+  /**
+   * @test
+   */
+  public function testCanBeCreatedWithLongJapaneseBio(): void
+  {
+    // Given
+    $bioString = str_repeat('あ', 500);
+
+    // When
+    $userBio = new UserBio($bioString);
+
+    // Then
+    $this->assertInstanceOf(UserBio::class, $userBio);
+  }
+
+  /**
+   * @test
+   */
+  public function testCannotBeCreatedWithTooLongJapaneseBio(): void
+  {
+    // Given
+    $bioString = str_repeat('あ', 501);
+
+    // Then
+    $this->expectException(\InvalidArgumentException::class);
+
+    // When
+    new UserBio($bioString);
+  }
 }
