@@ -93,7 +93,8 @@
 
 10. RoleId
 
-    - UUID
+    - role-から始まるUUIDv4
+    - example: role-123e4567-e89b-12d3-a456-426614174000
 
 11. RoleName
 
