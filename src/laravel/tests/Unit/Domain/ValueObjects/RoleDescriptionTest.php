@@ -33,4 +33,28 @@ class RoleDescriptionTest extends TestCase
     // Then
     $this->assertSame($roleDescriptionString, $result);
   }
+
+  /** @test */
+  public function testValidate_TooLong()
+  {
+    // Given
+    $roleDescriptionString = str_repeat('a', 256);
+
+    // When & Then
+    $this->expectException(\InvalidArgumentException::class);
+    new RoleDescription($roleDescriptionString);
+  }
+
+  /** @test */
+  public function testValidate_MaximumLength()
+  {
+    // Given
+    $roleDescriptionString = str_repeat('a', 255);
+
+    // When
+    $roleDescription = new RoleDescription($roleDescriptionString);
+
+    // Then
+    $this->assertInstanceOf(RoleDescription::class, $roleDescription);
+  }
 }
