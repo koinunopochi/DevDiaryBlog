@@ -94,11 +94,12 @@
 10. RoleId
 
     - UUID
+    - 一意制約
 
 11. RoleName
 
     - 文字列（最大長さ 50）
-    - 一意性制約
+
 
 12. RoleDescription
 
