@@ -108,7 +108,9 @@
 
 13. PolicyId
 
-    - UUID
+    - policy-から始まるUUIDv4
+    - example: policy-123e4567-e89b-12d3-a456-426614174000
+    - 一意制約
 
 14. PolicyName
 
