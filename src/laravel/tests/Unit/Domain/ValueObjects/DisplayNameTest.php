@@ -19,4 +19,18 @@ class DisplayNameTest extends TestCase
     // Then
     $this->assertInstanceOf(DisplayName::class, $displayName);
   }
+
+  /** @test */
+  public function testToString()
+  {
+    // Given
+    $displayNameString = 'テストユーザー';
+    $displayName = new DisplayName($displayNameString);
+
+    // When
+    $result = $displayName->toString();
+
+    // Then
+    $this->assertEquals($displayNameString, $result);
+  }
 }
