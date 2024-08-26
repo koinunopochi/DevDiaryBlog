@@ -60,7 +60,7 @@ class RoleNameTest extends TestCase
     }
   }
 
-  public function roleNameProvider(): array
+  public static function roleNameProvider(): array
   {
     return [
       '0文字はエラー' => [0, false],
