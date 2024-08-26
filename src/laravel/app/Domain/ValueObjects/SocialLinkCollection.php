@@ -10,4 +10,9 @@ class SocialLinkCollection
   {
     $this->socialLinks = $socialLinks;
   }
+
+  public function toArray(): array
+  {
+    return $this->socialLinks;
+  }
 }
