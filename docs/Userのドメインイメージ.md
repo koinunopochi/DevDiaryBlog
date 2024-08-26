@@ -117,7 +117,7 @@
 
 15. PolicyDescription
 
-    - 文字列（最大長さ 255）
+    - 文字列（0文字以上255文字以下）
 
 16. PolicyDocument
 
