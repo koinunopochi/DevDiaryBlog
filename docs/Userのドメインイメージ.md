@@ -93,16 +93,18 @@
 
 10. RoleId
 
-    - UUID
+    - role-から始まるUUIDv4
+    - example: role-123e4567-e89b-12d3-a456-426614174000
+    - 一意制約
 
 11. RoleName
 
-    - 文字列（最大長さ 50）
-    - 一意性制約
+    - 文字列（1文字以上50文字以下）
+
 
 12. RoleDescription
 
-    - 文字列（最大長さ 255）
+    - 文字列（0文字以上255文字以下）
 
 13. PolicyId
 
