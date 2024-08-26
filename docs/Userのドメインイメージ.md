@@ -83,6 +83,7 @@
 8. Url
 
    - 有効な URL 形式
+   - 完全な URL であることは保証せず、概要レベルのバリデーションを行う
 
 9. SocialLinkCollection
 
