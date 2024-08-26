@@ -13,4 +13,9 @@ class DisplayName
   {
     $this->displayName = $displayName;
   }
+
+  public function toString(): string
+  {
+    return $this->displayName;
+  }
 }
