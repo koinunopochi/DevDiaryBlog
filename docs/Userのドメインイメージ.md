@@ -98,7 +98,7 @@
 
 11. RoleName
 
-    - 文字列（最大長さ 50）
+    - 文字列（1文字以上50文字以下）
 
 
 12. RoleDescription
