@@ -74,11 +74,11 @@
 
 6. DisplayName
 
-   - 文字列（最大長さ 50）
+   - 文字列（1文字以上50文字以下）
 
 7. UserBio
 
-   - 文字列（最大長さ 500）
+   - 文字列（0文字以上500文字以下）
 
 8. Url
 
@@ -88,6 +88,8 @@
 9. SocialLinkCollection
 
    - キーと値のペアのコレクション（例：{twitter: "https://twitter.com/username", ...}）
+   - キーの長さは 50 文字以下で空文字は許可しない
+   - 値は URL オブジェクトとして作成が可能であること
 
 10. RoleId
 
