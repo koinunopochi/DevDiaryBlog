@@ -21,4 +21,20 @@ class UserBioTest extends TestCase
     // Then
     $this->assertInstanceOf(UserBio::class, $userBio);
   }
+
+  /**
+   * @test
+   */
+  public function testToString(): void
+  {
+    // Given
+    $bioString = 'テストユーザーの自己紹介';
+    $userBio = new UserBio($bioString);
+
+    // When
+    $result = $userBio->toString();
+
+    // Then
+    $this->assertEquals($bioString, $result);
+  }
 }
