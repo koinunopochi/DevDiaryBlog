@@ -21,4 +21,19 @@ class SocialLinkCollectionTest extends TestCase
     // Then
     $this->assertInstanceOf(SocialLinkCollection::class, $socialLinkCollection);
   }
+
+  /** @test */
+  public function testToArray()
+  {
+    // Given
+    $socialLinks = [
+      'twitter' => 'https://twitter.com/example',
+    ];
+
+    // When
+    $socialLinkCollection = new SocialLinkCollection($socialLinks);
+
+    // Then
+    $this->assertEquals($socialLinks, $socialLinkCollection->toArray());
+  }
 }
