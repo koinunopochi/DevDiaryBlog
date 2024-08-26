@@ -19,4 +19,17 @@ class UrlTest extends TestCase
     // Then
     $this->assertInstanceOf(Url::class, $url);
   }
+
+  /** @test */
+  public function testToString()
+  {
+    // Given
+    $urlString = 'https://example.com';
+
+    // When
+    $url = new Url($urlString);
+
+    // Then
+    $this->assertEquals($urlString, $url->toString());
+  }
 }
