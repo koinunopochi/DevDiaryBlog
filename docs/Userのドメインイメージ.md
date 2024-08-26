@@ -113,7 +113,6 @@
 14. PolicyName
 
     - 文字列（最大長さ 50）
-    - 一意性制約
 
 15. PolicyDescription
 
