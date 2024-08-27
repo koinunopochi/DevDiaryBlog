@@ -11,12 +11,11 @@ type User = {
 };
 
 export const Page: React.FC = () => {
-  const [user, setUser] = React.useState<User>();
+  const [user, setUser] = React.useState<User>({name:"default"});
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    setUser(undefined);
-    AuthService.logout();
+  const handleLogout = async () => {
+    await AuthService.logout();
     navigate('/login');
   };
 
