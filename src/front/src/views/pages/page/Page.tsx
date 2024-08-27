@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { Header } from '../../components/blocks/Header/Header';
+import { Header } from '../../components/blocks/header/Header';
 
 import './page.css';
+import { useNavigate } from 'react-router-dom';
+import AuthService from '../../../services/AuthService';
 
 type User = {
   name: string;
@@ -10,14 +12,21 @@ type User = {
 
 export const Page: React.FC = () => {
   const [user, setUser] = React.useState<User>();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setUser(undefined);
+    AuthService.logout();
+    navigate('/login');
+  };
 
   return (
     <article>
       <Header
         user={user}
-        onLogin={() => setUser({ name: 'Jane Doe' })}
-        onLogout={() => setUser(undefined)}
-        onCreateAccount={() => setUser({ name: 'Jane Doe' })}
+        onLogin={() => navigate('/login')}
+        onLogout={handleLogout}
+        onCreateAccount={() => navigate('/register')}
       />
 
       <section className="storybook-page">
