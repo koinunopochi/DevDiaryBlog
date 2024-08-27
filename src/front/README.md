@@ -1,50 +1,46 @@
-# React + TypeScript + Vite
+# React コーディング規約
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 目的
 
-Currently, two official plugins are available:
+この規約は、React を使用してコーディングする際のコーディング規約です。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. コードの一貫性と可読性の向上
+2. コードの保守性と拡張性の高いコードベースの構築
 
-## Expanding the ESLint configuration
+## プロジェクトの構成
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+src/
+├── img/ (画像置き場)
+├── ts/ (react外でjsを使うときに使用)
+├── App.tsx (エントリーポイント)
+├── stores/
+│   ├── index.ts (slicesディレクトリで作られたSliceを結合する)
+│   └── slices/ (このディレクトリ下で各sliceファイルを扱う)
+└── views/
+    ├── components/（使い回しのできる要素）
+    │   ├── atoms/ (最小単位のcomponent)
+    │   ├── block/ (atomsを組み合わせたり、atomsでは管理しきれないcomponent)
+    │   └── modules(機能を持ったcomponent)
+    └── pages/（各ページの呼び出し先）
+        ├── login
+        └── top
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 命名規則
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## コーディングスタイル
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+基本的に vs code の Linter に従うこととします。
+
+## リソース
+
+必要に応じて新たに定義することとします。
+
+## 禁止事項
+1. グローバル変数の使用（理由：スコープの管理が難しくなり、副作用を引き起こす可能性があるため）
+
+## 制限事項
+
+## 推奨事項
+1. storeを使用する場合は、スコープの管理が難しくなるため可能な限りstoreを使用しないこと
