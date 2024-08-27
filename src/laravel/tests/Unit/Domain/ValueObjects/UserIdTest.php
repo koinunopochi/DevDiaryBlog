@@ -73,4 +73,19 @@ class UserIdTest extends TestCase
     // Then
     $this->assertStringStartsWith('user-', $userIdValueObject->toString());
   }
+
+  /**
+   * @test
+   */
+  public function testToDb(): void
+  {
+    // Given
+    $userId = new UserId();
+
+    // When
+    $userIdDb = $userId->toDb();
+
+    // Then
+    $this->assertEquals(str_replace('user-', '', $userId->toString()), $userIdDb);
+  }
 }
