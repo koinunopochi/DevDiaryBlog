@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
-import { Page } from './views/pages/Page/Page';
-import { Button } from './views/components/atoms/Button/Button';
+import { Page } from './views/pages/page/Page';
+import { Button } from './views/components/atoms/button/Button';
 
 
 function App() {
