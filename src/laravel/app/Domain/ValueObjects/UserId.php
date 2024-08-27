@@ -39,4 +39,9 @@ class UserId
   {
     return $this->userId;
   }
+
+  public function toDb(): string
+  {
+    return str_replace('user-', '', $this->userId);
+  }
 }

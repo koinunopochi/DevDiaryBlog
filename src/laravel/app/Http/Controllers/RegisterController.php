@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\ValueObjects\UserId;
 use App\Models\User; // ユーザーモデルをインポート
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -31,8 +32,12 @@ class RegisterController extends Controller
         ], 422);
       }
 
+      $userId = new UserId();
+
+      Log::info('UserId', ['userId' => $userId->toDb()]);
       // ユーザーを作成
       $user = User::create([
+        'id' => $userId->toDb(),
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
@@ -41,7 +46,11 @@ class RegisterController extends Controller
       // ユーザ登録成功のレスポンスを返す
       return new JsonResponse([
         'message' => 'Userの登録が完了しました',
-        'user' => $user
+        'user' => [
+          'id' => $userId->toString(),
+          'name' => $user->name,
+          'email' => $user->email,
+        ]
       ], 201);
     } catch (Exception $e) {
       Log::error('RegisterController register error', ['error' => $e]);
