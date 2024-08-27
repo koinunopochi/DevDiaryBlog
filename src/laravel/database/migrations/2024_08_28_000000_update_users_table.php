@@ -16,6 +16,7 @@ return new class extends Migration
       $table->dropPrimary('id');
 
       // id カラムを UUID に変更し、主キーに設定
+      // note: 性能向上のため、stringではなくuuidを使用する。なので、app側でuser-を削除・追加する必要がある。
       $table->uuid('id')->primary()->change();
 
       // status カラムを追加
