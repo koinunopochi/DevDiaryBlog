@@ -7,7 +7,7 @@ use App\Domain\ValueObjects\Password;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\Username;
 use App\Domain\ValueObjects\UserStatus;
-use DateTime;
+use App\Domain\ValueObjects\DateTime;
 
 class User
 {
