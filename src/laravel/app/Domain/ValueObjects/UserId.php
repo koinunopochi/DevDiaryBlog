@@ -2,41 +2,41 @@
 
 namespace App\Domain\ValueObjects;
 
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 class UserId
 {
   private string $userId;
+  private string $prefix = 'user0000';
 
   public function __construct(?string $userId = null)
   {
     if (is_null($userId)) {
-      $this->userId = 'user-' . Uuid::uuid4()->toString();
+      // UUID v4 を生成し、最初の8文字を 'user0000' で置換
+      $uuid = Uuid::uuid4()->toString();
+      $this->userId = $this->prefix . substr($uuid, 8);
     } else {
       $this->validate($userId);
       $this->userId = $userId;
     }
+    Log::info('class : UserId - method : constructor - $userId : ' . $this->userId);
   }
 
   public function validate(string $userId): void
   {
-    // user-で始まっていない場合はエラー
-    if (!str_starts_with($userId, 'user-')) {
-      throw new \InvalidArgumentException('UserIdはuser-から始まる必要があります。');
+    // UUID v4 の形式で、最初の8文字が 'user0000' であることを確認
+    $uuidRegex = '/^' . $this->prefix . '-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/';
+    if (!preg_match($uuidRegex, $userId)) {
+      Log::error('class : UserId - method : validate - $userId : ' . $userId);
+      throw new \InvalidArgumentException("UserIdの形式が正しくありません。$this->prefix で始まるUUID v4形式である必要があります。");
     }
-
-    // user-を取り外す
-    $trimmedUserId = str_replace('user-', '', $userId);
-
-    // uuid v4の形式
-    $uuidRegex = '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/';
-    if (!preg_match($uuidRegex, $trimmedUserId)) {
-      throw new \InvalidArgumentException('UUID v4の形式ではありません。');
-    }
+    Log::info('class : UserId - method : validate - $userId : ' . $userId);
   }
 
   public function toString(): string
   {
+    Log::info('class : UserId - method : toString - $userId : ' . $this->userId);
     return $this->userId;
   }
 }
