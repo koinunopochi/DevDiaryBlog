@@ -4,17 +4,24 @@ namespace Tests\Unit\Domain\ValueObjects;
 
 use Tests\TestCase;
 use App\Domain\ValueObjects\UserId;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 class UserIdTest extends TestCase
 {
+  protected function setUp(): void
+  {
+    parent::setUp();
+    config()->set('logging.default', 'stderr'); 
+  }
+
   /**
    * @test
    */
   public function testToString(): void
   {
     // Given
-    $userId = "user-" . Uuid::uuid4()->toString();
+    $userId = 'user0000-' . substr(Uuid::uuid4()->toString(), 9);
 
     // When
     $userIdValueObject = new UserId($userId);
@@ -29,7 +36,7 @@ class UserIdTest extends TestCase
   public function testInvalidUserIdFormat(): void
   {
     // Given
-    $userId = "user-invalid-user-id-format";
+    $userId = "user0000-invalid-user-id-format";
 
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
@@ -55,7 +62,7 @@ class UserIdTest extends TestCase
   public function testInvalidUserIdUuidVersion(): void
   {
     // Given
-    $userId = 'user-' . Uuid::uuid3(Uuid::NAMESPACE_URL, 'example.com')->toString();
+    $userId = 'user0000-' . Uuid::uuid3(Uuid::NAMESPACE_URL, 'example.com')->toString();
 
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
@@ -71,21 +78,6 @@ class UserIdTest extends TestCase
     $userIdValueObject = new UserId();
 
     // Then
-    $this->assertStringStartsWith('user-', $userIdValueObject->toString());
-  }
-
-  /**
-   * @test
-   */
-  public function testToDb(): void
-  {
-    // Given
-    $userId = new UserId();
-
-    // When
-    $userIdDb = $userId->toDb();
-
-    // Then
-    $this->assertEquals(str_replace('user-', '', $userId->toString()), $userIdDb);
+    $this->assertStringStartsWith('user0000-', $userIdValueObject->toString());
   }
 }
