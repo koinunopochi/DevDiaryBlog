@@ -8,13 +8,21 @@ use Ramsey\Uuid\Uuid;
 
 class UserRoleIdTest extends TestCase
 {
+  private string $prefix = 'userRole';
+
+  public function setUp(): void
+  {
+    parent::setUp();
+    config()->set('logging.default', 'stderr');
+  }
+
   /**
    * @test
    */
   public function testToString(): void
   {
     // Given
-    $userId = "user-role-" . Uuid::uuid4()->toString();
+    $userId = $this->prefix . substr(Uuid::uuid4()->toString(), 8);
 
     // When
     $userIdValueObject = new UserRoleId($userId);
@@ -29,7 +37,7 @@ class UserRoleIdTest extends TestCase
   public function testInvalidUserIdFormat(): void
   {
     // Given
-    $userId = "user-role-invalid-user-id-format";
+    $userId = $this->prefix . "-invalid-user-id-format";
 
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
@@ -55,7 +63,7 @@ class UserRoleIdTest extends TestCase
   public function testInvalidUserIdUuidVersion(): void
   {
     // Given
-    $userId = 'user-role-' . Uuid::uuid3(Uuid::NAMESPACE_URL, 'example.com')->toString();
+    $userId = $this->prefix . '-' . Uuid::uuid3(Uuid::NAMESPACE_URL, 'example.com')->toString();
 
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
@@ -71,6 +79,6 @@ class UserRoleIdTest extends TestCase
     $userIdValueObject = new UserRoleId();
 
     // Then
-    $this->assertStringStartsWith('user-role-', $userIdValueObject->toString());
+    $this->assertStringStartsWith($this->prefix, $userIdValueObject->toString());
   }
 }
