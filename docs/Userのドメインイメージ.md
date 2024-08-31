@@ -50,8 +50,8 @@
 
 1. UserId
 
-   - user-から始まるUUIDv4
-   - example: user-123e4567-e89b-12d3-a456-426614174000
+   - user0000から始まるUUIDv4
+   - example: user0000-e89b-12d3-a456-426614174000
 
 2. Username
 
@@ -93,8 +93,8 @@
 
 10. RoleId
 
-    - role-から始まるUUIDv4
-    - example: role-123e4567-e89b-12d3-a456-426614174000
+    - role0000から始まるUUIDv4
+    - example: role0000-e89b-12d3-a456-426614174000
     - 一意制約
 
 11. RoleName
@@ -108,8 +108,8 @@
 
 13. PolicyId
 
-    - policy-から始まるUUIDv4
-    - example: policy-123e4567-e89b-12d3-a456-426614174000
+    - policy00から始まるUUIDv4
+    - example: policy0000-e89b-12d3-a456-426614174000
     - 一意制約
 
 14. PolicyName
@@ -126,7 +126,8 @@
     - ポリシーの詳細な定義（許可/拒否するアクション、リソース、条件など）
 
 17. UserRoleId
-    - UUID
+    - userRoleから始まるUUIDv4
+    - example: userRole-e89b-12d3-a456-426614174000
 
 ## 集約
 
