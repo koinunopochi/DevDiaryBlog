@@ -7,11 +7,11 @@ use Ramsey\Uuid\Uuid;
 class UserRoleId
 {
   private string $userRoleId;
-
+  private string $prefix = 'userRole';
   public function __construct(?string $userRoleId = null)
   {
     if (is_null($userRoleId)) {
-      $this->userRoleId = 'user-role-' . Uuid::uuid4()->toString();
+      $this->userRoleId = $this->prefix . substr(Uuid::uuid4()->toString(), 8);
     } else {
       $this->validate($userRoleId);
       $this->userRoleId = $userRoleId;
@@ -21,17 +21,14 @@ class UserRoleId
   public function validate(string $userRoleId): void
   {
     // user-role-で始まっていない場合はエラー
-    if (!str_starts_with($userRoleId, 'user-role-')) {
-      throw new \InvalidArgumentException('UserRoleIdはuser-role-から始まる必要があります。');
+    if (!str_starts_with($userRoleId, $this->prefix)) {
+      throw new \InvalidArgumentException('UserRoleIdは' . $this->prefix . 'から始まる必要があります。');
     }
 
-    // user-role-を取り外す
-    $trimmedUserRoleId = str_replace('user-role-', '', $userRoleId);
-
     // uuid v4の形式
-    $uuidRegex = '/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/';
-    if (!preg_match($uuidRegex, $trimmedUserRoleId)) {
-      throw new \InvalidArgumentException('UUID v4の形式ではありません。');
+    $uuidRegex = '/^' . $this->prefix . '-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/';
+    if (!preg_match($uuidRegex, $userRoleId)) {
+      throw new \InvalidArgumentException('UserRoleIdの形式が正しくありません。' . $this->prefix . 'で始まるUUID v4形式である必要があります。');
     }
   }
 
