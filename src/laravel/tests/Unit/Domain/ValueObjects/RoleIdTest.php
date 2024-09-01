@@ -3,17 +3,19 @@
 namespace Tests\Unit\Domain\ValueObjects;
 
 use App\Domain\ValueObjects\RoleId;
+use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class RoleIdTest extends TestCase
 {
+  private string $prefix = 'role0000';
   /**
    * @test
    */
   public function testCreateFromString(): void
   {
     // Given
-    $roleId = 'role-' . \Ramsey\Uuid\Uuid::uuid4()->toString();
+    $roleId = $this->prefix . substr(Uuid::uuid4()->toString(), 8);
 
     // When
     $roleIdValueObject = new RoleId($roleId);
@@ -28,7 +30,7 @@ class RoleIdTest extends TestCase
   public function testInvalidRoleIdFormat(): void
   {
     // Given
-    $roleId = "role-invalid-role-id-format";
+    $roleId = $this->prefix . "-invalid-role-id-format";
 
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
@@ -41,7 +43,7 @@ class RoleIdTest extends TestCase
   public function testInvalidRoleIdPrefix(): void
   {
     // Given
-    $roleId = \Ramsey\Uuid\Uuid::uuid4()->toString();
+    $roleId = "invalid-role-id-prefix" . substr(Uuid::uuid4()->toString(), 8);
 
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
@@ -54,7 +56,7 @@ class RoleIdTest extends TestCase
   public function testInvalidRoleIdUuidVersion(): void
   {
     // Given
-    $roleId = 'role-' . \Ramsey\Uuid\Uuid::uuid3(\Ramsey\Uuid\Uuid::NAMESPACE_URL, 'example.com')->toString();
+    $roleId = $this->prefix . substr(Uuid::uuid3(Uuid::NAMESPACE_URL, 'example.com')->toString(), 8);
 
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
@@ -70,6 +72,6 @@ class RoleIdTest extends TestCase
     $roleIdValueObject = new RoleId();
 
     // Then
-    $this->assertStringStartsWith('role-', $roleIdValueObject->toString());
+    $this->assertStringStartsWith($this->prefix, $roleIdValueObject->toString());
   }
 }

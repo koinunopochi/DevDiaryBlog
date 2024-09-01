@@ -8,13 +8,14 @@ use Ramsey\Uuid\Uuid;
 
 class PolicyIdTest extends TestCase
 {
+  private $prefix = "policy00";
   /**
    * @test
    */
   public function testToString(): void
   {
     // Given
-    $policyId = "policy-" . Uuid::uuid4()->toString();
+    $policyId = $this->prefix . substr(Uuid::uuid4()->toString(), 8);
 
     // When
     $policyIdValueObject = new PolicyId($policyId);
@@ -29,7 +30,7 @@ class PolicyIdTest extends TestCase
   public function testInvalidPolicyIdFormat(): void
   {
     // Given
-    $policyId = "policy-invalid-policy-id-format";
+    $policyId = $this->prefix . "invalid-policy-id-format";
 
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
@@ -55,7 +56,7 @@ class PolicyIdTest extends TestCase
   public function testInvalidPolicyIdUuidVersion(): void
   {
     // Given
-    $policyId = 'policy-' . Uuid::uuid3(Uuid::NAMESPACE_URL, 'example.com')->toString();
+    $policyId = $this->prefix . substr(Uuid::uuid3(Uuid::NAMESPACE_URL, 'example.com')->toString(), 8);
 
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
@@ -71,6 +72,6 @@ class PolicyIdTest extends TestCase
     $policyIdValueObject = new PolicyId();
 
     // Then
-    $this->assertStringStartsWith('policy-', $policyIdValueObject->toString());
+    $this->assertStringStartsWith($this->prefix, $policyIdValueObject->toString());
   }
 }
