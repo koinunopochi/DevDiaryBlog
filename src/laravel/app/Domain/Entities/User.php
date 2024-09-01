@@ -71,4 +71,16 @@ class User
   {
     return $this->updatedAt;
   }
+
+  public function toArray(): array
+  {
+    return [
+      'id' => $this->id->toString(),
+      'username' => $this->username->toString(),
+      'email' => $this->email->toString(),
+      'status' => $this->status->toString(),
+      'createdAt' => $this->createdAt->toString(),
+      'updatedAt' => $this->updatedAt->toString(),
+    ];
+  }
 }
