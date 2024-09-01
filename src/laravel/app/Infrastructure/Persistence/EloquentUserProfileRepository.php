@@ -6,13 +6,13 @@ use App\Domain\Entities\Profile;
 use App\Domain\ValueObjects\UserId;
 use App\Models\EloquentProfile;
 use Illuminate\Support\Collection;
-use App\Domain\Repositories\EloquentUserProfileRepositoryInterface;
+use App\Domain\Repositories\UserProfileRepositoryInterface;
 use App\Domain\ValueObjects\DisplayName;
 use App\Domain\ValueObjects\SocialLinkCollection;
 use App\Domain\ValueObjects\Url;
 use App\Domain\ValueObjects\UserBio;
 
-class EloquentUserProfileRepository implements EloquentUserProfileRepositoryInterface
+class EloquentUserProfileRepository implements UserProfileRepositoryInterface
 {
   public function all(): Collection
   {

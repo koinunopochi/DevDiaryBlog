@@ -34,10 +34,10 @@ class RegisterController extends Controller
 
       $userId = new UserId();
 
-      Log::info('UserId', ['userId' => $userId->toDb()]);
+      Log::info('UserId', ['userId' => $userId->toString()]);
       // ユーザーを作成
       $user = User::create([
-        'id' => $userId->toDb(),
+        'id' => $userId->toString(),
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
