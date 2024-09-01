@@ -40,4 +40,40 @@ class ProfileTest extends TestCase
     $this->assertEquals($avatarUrl, $profile->getAvatarUrl());
     $this->assertEquals($socialLinks, $profile->getSocialLinks());
   }
+
+  /**
+   * @test
+   */
+  public function testProfileToArray(): void
+  {
+    // Given
+    $twitterUrl = new Url('https://twitter.com/testuser');
+    $githubUrl = new Url('https://github.com/testuser');
+    $userId = new UserId();
+    $displayName = new DisplayName('testuser');
+    $bio = new UserBio('test bio');
+    $avatarUrl = new Url('https://example.com/avatar.png');
+    $socialLinks = new SocialLinkCollection([
+      'twitter' => $twitterUrl->toString(),
+      'github' => $githubUrl->toString(),
+    ]);
+
+    // When
+    $profile = new Profile(
+      $userId,
+      $displayName,
+      $bio,
+      $avatarUrl,
+      $socialLinks
+    );
+
+    // Then
+    $this->assertEquals([
+      'id' => $profile->getUserId()->toString(),
+      'displayName' => $profile->getDisplayName()->toString(),
+      'bio' => $profile->getBio()->toString(),
+      'avatarUrl' => $profile->getAvatarUrl()->toString(),
+      'socialLinks' => $profile->getSocialLinks()->toArray(),
+    ], $profile->toArray());
+  }
 }
