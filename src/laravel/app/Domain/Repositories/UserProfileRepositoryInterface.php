@@ -6,7 +6,7 @@ use App\Domain\Entities\Profile;
 use App\Domain\ValueObjects\UserId;
 use Illuminate\Support\Collection;
 
-interface EloquentUserProfileRepositoryInterface
+interface UserProfileRepositoryInterface
 {
   /**
    * Get all UserProfiles
