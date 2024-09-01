@@ -54,4 +54,15 @@ class Profile
   {
     return $this->socialLinks;
   }
+
+  public function toArray(): array
+  {
+    return [
+      'id' => $this->userId->toString(),
+      'displayName' => $this->displayName->toString(),
+      'bio' => $this->bio->toString(),
+      'avatarUrl' => $this->avatarUrl->toString(),
+      'socialLinks' => $this->socialLinks->toArray(),
+    ];
+  }
 }
