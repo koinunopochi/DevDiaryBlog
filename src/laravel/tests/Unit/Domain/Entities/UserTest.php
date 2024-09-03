@@ -70,7 +70,7 @@ class UserTest extends TestCase
     // Then
     $this->assertEquals([
       'id' => $user->getUserId()->toString(),
-      'username' => $user->getUsername()->toString(),
+      'name' => $user->getUsername()->toString(),
       'email' => $user->getEmail()->toString(),
       'status' => $user->getStatus()->toString(),
       'createdAt' => $user->getCreatedAt()->toString(),

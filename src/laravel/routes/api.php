@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GetUserDetailsController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
@@ -24,3 +25,5 @@ Route::post('/register', [RegisterController::class, 'register']);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });
+
+Route::get('/user/{userId}', [GetUserDetailsController::class, 'execute']);
