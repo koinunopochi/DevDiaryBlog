@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Application\Services\GetUserDetailsService;
+use App\Application\Services\GetUserDetailsByUserIdService;
 use App\Domain\ValueObjects\UserId;
 use Exception;
 use Illuminate\Http\Request;
@@ -10,17 +10,18 @@ use Illuminate\Http\JsonResponse;
 
 class GetUserDetailsController extends Controller
 {
-  private GetUserDetailsService $getUserDetailsService;
+  private GetUserDetailsByUserIdService $getUserDetailsByUserIdService;
 
-  public function __construct(GetUserDetailsService $getUserDetailsService)
+  public function __construct(GetUserDetailsByUserIdService $getUserDetailsByUserIdService)
+
   {
-    $this->getUserDetailsService = $getUserDetailsService;
+    $this->getUserDetailsByUserIdService = $getUserDetailsByUserIdService;
   }
 
   public function execute(Request $request, string $userId): JsonResponse
   {
     try {
-      $userDetails = $this->getUserDetailsService->execute(new UserId($userId));
+      $userDetails = $this->getUserDetailsByUserIdService->execute(new UserId($userId));
 
       if (!$userDetails) {
         return new JsonResponse(['error' => 'User not found'], 404);
