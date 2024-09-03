@@ -29,6 +29,10 @@ class GetUserDetailsController extends Controller
       return new JsonResponse($userDetails->toArray());
     } catch (Exception $e) {
 
+      if ($e instanceof \InvalidArgumentException) {
+        return new JsonResponse(['error' => $e->getMessage()], 400);
+      }
+
       return new JsonResponse(['error' => $e->getMessage()], 500);
     }
   }
