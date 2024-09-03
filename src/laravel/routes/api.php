@@ -4,6 +4,7 @@ use App\Http\Controllers\GetUserDetailsController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SaveProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,3 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/user/{userId}', [GetUserDetailsController::class, 'execute']);
+
+Route::group(['middleware' => 'auth:sanctum'], function () {
+  Route::post('/profile', [SaveProfileController::class, 'execute']);
+});
