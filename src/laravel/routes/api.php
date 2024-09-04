@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
   return $request->user();
 });
 
-Route::get('/user/{userId}', [GetUserDetailsController::class, 'execute']);
+Route::get('/user', [GetUserDetailsController::class, 'execute']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
   Route::post('/profile', [SaveProfileController::class, 'execute']);

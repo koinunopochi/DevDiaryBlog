@@ -7,7 +7,7 @@ use App\Application\UseCases\FindUserByIdUseCase;
 use App\Domain\Entities\UserDetails;
 use App\Domain\ValueObjects\UserId;
 
-class GetUserDetailsService
+class GetUserDetailsByUserIdService
 {
   private FindUserByIdUseCase $findUserByIdUseCase;
   private FindProfileByUserIdUseCase $findProfileByUserIdUseCase;
