@@ -17,6 +17,7 @@ const Textarea: React.FC<TextareaProps> = ({
 }) => {
   const [value, setValue] = useState(initialValue);
   const [error, setError] = useState<string | null>(null);
+  const [isInitialRender, setIsInitialRender] = useState(true);
 
   const validateTextarea = (newValue: string) => {
     if (validate) {
@@ -35,6 +36,7 @@ const Textarea: React.FC<TextareaProps> = ({
     if (onTextareaChange) {
       onTextareaChange(newValue, !validationError);
     }
+    setIsInitialRender(false);
   };
 
   useEffect(() => {
@@ -58,10 +60,12 @@ const Textarea: React.FC<TextareaProps> = ({
         value={value}
         onChange={handleChange}
         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-          error ? 'border-red-500' : ''
+          error && !isInitialRender ? 'border-red-500' : ''
         }`}
       />
-      {error && <p className="text-red-500 text-xs italic">{error}</p>}
+      {error && !isInitialRender && (
+        <p className="text-red-500 text-xs italic">{error}</p>
+      )}
     </div>
   );
 };
