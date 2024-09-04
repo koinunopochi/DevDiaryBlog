@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 
 interface IconProps {
   src: string;
@@ -17,14 +17,19 @@ const Icon: React.FC<IconProps> = ({
   isButton = false,
   onClick = () => {},
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   const baseStyles = `bg-cover bg-center ${size} ${shape}`;
-  const buttonStyles = isButton ? 'cursor-pointer hover:opacity-80' : '';
+  const buttonStyles = isButton ? 'cursor-pointer' : '';
+  const rippleStyles = isButton && isHovered ? 'after:animate-ripple' : '';
 
   return (
     <div
-      className={`${baseStyles} ${buttonStyles}`}
+      className={`${baseStyles} ${buttonStyles} ${rippleStyles} relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-white after:opacity-0 after:rounded-full`}
       style={{ backgroundImage: `url(${src})` }}
       onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       role={isButton ? 'button' : ''}
       tabIndex={isButton ? 0 : -1}
       aria-label={alt}
