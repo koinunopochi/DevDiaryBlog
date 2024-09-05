@@ -12,7 +12,7 @@ const meta = {
     size: {
       control: {
         type: 'select',
-        options: ['w-6 h-6', 'w-8 h-8', 'w-10 h-10'],
+        options: ['w-6 h-6', 'w-8 h-8', 'w-10 h-10', 'w-20 h-20'],
       },
     },
     shape: {
@@ -22,6 +22,7 @@ const meta = {
       },
     },
     isButton: { control: 'boolean' },
+    className: { control: 'text' },
   },
 } satisfies Meta<typeof Icon>;
 
@@ -34,6 +35,7 @@ export const ProfileIcon: Story = {
     alt: 'プロフィールアイコン',
     size: 'w-10 h-10',
     shape: 'rounded-full',
+    className: '',
   },
 };
 
@@ -43,6 +45,7 @@ export const HeaderIcon: Story = {
     alt: 'ヘッダーアイコン',
     size: 'w-8 h-8',
     shape: 'rounded-lg',
+    className: '',
   },
 };
 
@@ -54,5 +57,18 @@ export const SendIcon: Story = {
     onClick: () => {
       console.log('send');
     },
+    className: '',
+  },
+};
+
+export const CustomStyledIcon: Story = {
+  args: {
+    src: 'http://127.0.0.1:9000/dev-diary-blog/profile-icons/defaults/icon_107620_128.png',
+    alt: 'カスタムスタイルアイコン',
+    size: 'w-20 h-20',
+    shape: 'rounded-lg',
+    isButton: true,
+    className:
+      'border-4 border-blue-500 hover:border-red-500 transition-colors duration-300',
   },
 };

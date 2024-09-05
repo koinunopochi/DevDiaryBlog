@@ -8,6 +8,7 @@ interface IconProps {
   isButton?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
   href?: string;
+  className?: string; // Add this line to accept custom className
 }
 
 const Icon: React.FC<IconProps> = ({
@@ -18,6 +19,7 @@ const Icon: React.FC<IconProps> = ({
   isButton = false,
   onClick = () => {},
   href,
+  className = '',
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -27,7 +29,7 @@ const Icon: React.FC<IconProps> = ({
 
   const icon = (
     <div
-      className={`${baseStyles} ${buttonStyles} ${rippleStyles} relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-white after:opacity-0 after:rounded-full`}
+      className={`${baseStyles} ${buttonStyles} ${rippleStyles} relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-white after:opacity-0 after:rounded-full ${className}`}
       style={{ backgroundImage: `url(${src})` }}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
