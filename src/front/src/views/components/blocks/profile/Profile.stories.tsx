@@ -31,7 +31,7 @@ const baseUserData = {
     displayName: 'userName',
     bio: '初心者の文系学生 薄く広く学習中',
     avatarUrl:
-      'http://127.0.0.1:9000/profile-icons/defaults/icon_102260_128.png',
+      'http://127.0.0.1:9000/dev-diary-blog/profile-icons/defaults/icon_102260_128.png',
     socialLinks: {
       github: 'https://github.com',
       twitter: 'https://twitter.com',
