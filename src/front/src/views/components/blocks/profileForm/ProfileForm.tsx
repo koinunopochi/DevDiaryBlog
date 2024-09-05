@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Save, Plus, Trash2 } from 'lucide-react';
 import Input from '@components/atoms/form/input/Input';
 import Textarea from '@components/atoms/form/textarea/Textarea';
+import Icon from '@components/atoms/icon/Icon';
+import ProfileIconSelector from '@components/blocks/profileIconSelector/ProfileIconSelector';
 import {
   validateAdditionalLinkName,
   validateDisplayName,
   validateUrl,
   validateUserBio,
 } from './ProfileFormValidate';
+import unKnownUser from '@img/unknown-user.png';
 
 interface SocialLink {
   name: string;
@@ -27,12 +30,17 @@ interface ProfileFormData {
 
 interface ProfileFormProps {
   initialData?: ProfileFormData;
+  defaultProfileIcons: Array<string>;
   onSubmit: (data: ProfileFormData) => void;
 }
 
 const MAX_LINKS = 15;
 
-const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit }) => {
+const ProfileForm: React.FC<ProfileFormProps> = ({
+  initialData,
+  defaultProfileIcons,
+  onSubmit,
+}) => {
   const [formData, setFormData] = useState<ProfileFormData>(() => ({
     displayName: initialData?.displayName || '',
     bio: initialData?.bio || '',
@@ -60,6 +68,8 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit }) => {
     github: false,
   });
 
+  const [showIconSelector, setShowIconSelector] = useState(false);
+
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -78,6 +88,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit }) => {
       setAdditionalLinks(otherLinks);
     }
   }, [initialData]);
+
+  const handleIconChange = (newIconUrl: string) => {
+    setFormData((prev) => ({ ...prev, avatarUrl: newIconUrl }));
+    setIsValid((prev) => ({ ...prev, avatarUrl: true }));
+    setShowIconSelector(false);
+  };
 
   const handleInputChange = (
     field: keyof ProfileFormData,
@@ -192,6 +208,34 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit }) => {
   return (
     <div className="min-w-[500px] max-w-[600px]: max-w-2xl mx-auto p-6">
       <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex flex-col items-center">
+          <div className="relative mb-2">
+            <Icon
+              src={formData.avatarUrl}
+              alt="プロフィールのアイコン"
+              size="w-20 h-20"
+              shape="rounded-full"
+              defaultSrc={formData.avatarUrl ? undefined : unKnownUser}
+              className="border-2 border-gray-200"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowIconSelector(!showIconSelector)}
+            className="text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200 underline"
+          >
+            {showIconSelector ? 'キャンセル' : '変更する'}
+          </button>
+        </div>
+        {showIconSelector && (
+          <div className="mt-4">
+            <ProfileIconSelector
+              icons={defaultProfileIcons}
+              selectedIcon={formData.avatarUrl}
+              onSelectIcon={handleIconChange}
+            />
+          </div>
+        )}
         <Input
           label="表示名"
           initialValue={formData.displayName}
@@ -210,16 +254,6 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit }) => {
             handleInputChange('bio', value, valid)
           }
           validate={validateUserBio}
-          required
-        />
-        <Input
-          label="アバターURL"
-          initialValue={formData.avatarUrl}
-          placeholder="https://example.com/avatar.jpg"
-          onInputChange={(value, valid) =>
-            handleInputChange('avatarUrl', value, valid)
-          }
-          validate={validateUrl}
           required
         />
         <Input
