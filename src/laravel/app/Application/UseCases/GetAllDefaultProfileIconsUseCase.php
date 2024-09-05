@@ -15,6 +15,21 @@ class GetAllDefaultProfileIconsUseCase
 
   public function execute(): array
   {
-    return $this->profileIconRepository->getDefaultAll();
+    // .envファイルからs3のエンドポイントを取得する
+    $s3Endpoint = env('AWS_ENDPOINT');
+    $defaultBucket = env('AWS_BUCKET');
+    $bucketPath = $s3Endpoint . '/' . $defaultBucket;
+
+    if (str_starts_with($s3Endpoint, 'http://minio')) {
+      $bucketPath = str_replace('minio', 'localhost', $bucketPath);
+    }
+
+    // bucketPath + pathで完全な場所を返したい
+    $defaultIcons = $this->profileIconRepository->getDefaultAll();
+    $icons = [];
+    foreach ($defaultIcons as $icon) {
+      $icons[] = $bucketPath . '/' . $icon;
+    }
+    return $icons;
   }
 }
