@@ -6,5 +6,6 @@
   "tailwindCSS.emmetCompletions": true,
   "tailwindCSS.includeLanguages": {
     "plaintext": "html"
-  }
+  },
+  "cSpell.words": ["Minio"]
 }
