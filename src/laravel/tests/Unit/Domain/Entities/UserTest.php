@@ -47,4 +47,34 @@ class UserTest extends TestCase
     $this->assertEquals($createdAt, $user->getCreatedAt());
     $this->assertEquals($updatedAt, $user->getUpdatedAt());
   }
+
+  /**
+   * @test
+   */
+  public function testUserToArray(): void
+  {
+    // Given
+    $user = new User(
+      new UserId(),
+      new Username('testuser'),
+      new Email('test@example.com'),
+      new Password('password*A1aaa'),
+      new UserStatus(UserStatus::STATUS_ACTIVE),
+      new DateTime(),
+      new DateTime()
+    );
+
+    // When
+    $array = $user->toArray();
+
+    // Then
+    $this->assertEquals([
+      'id' => $user->getUserId()->toString(),
+      'name' => $user->getUsername()->toString(),
+      'email' => $user->getEmail()->toString(),
+      'status' => $user->getStatus()->toString(),
+      'createdAt' => $user->getCreatedAt()->toString(),
+      'updatedAt' => $user->getUpdatedAt()->toString(),
+    ], $array);
+  }
 }
