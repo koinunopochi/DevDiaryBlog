@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Icon from './Icon';
+import unKnownUser from '@img/unknown-user.png'
 
 const meta = {
   title: 'atoms/Icon',
@@ -70,5 +71,24 @@ export const CustomStyledIcon: Story = {
     isButton: true,
     className:
       'border-4 border-blue-500 hover:border-red-500 transition-colors duration-300',
+  },
+};
+
+export const DefaultIconError: Story = {
+  args: {
+    src: 'http://127.0.0.1:9000/not-exist/path',
+    alt: 'カスタムスタイルアイコン',
+    size: 'w-20 h-20',
+    shape: 'rounded-lg',
+  },
+};
+
+export const CustomIconError: Story = {
+  args: {
+    src: 'http://127.0.0.1:9000/not-exist/path',
+    alt: 'カスタムスタイルアイコン',
+    size: 'w-20 h-20',
+    shape: 'rounded-lg',
+    defaultSrc: unKnownUser
   },
 };
