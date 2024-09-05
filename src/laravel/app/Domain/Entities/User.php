@@ -7,7 +7,7 @@ use App\Domain\ValueObjects\Password;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\Username;
 use App\Domain\ValueObjects\UserStatus;
-use DateTime;
+use App\Domain\ValueObjects\DateTime;
 
 class User
 {
@@ -70,5 +70,17 @@ class User
   public function getUpdatedAt(): DateTime
   {
     return $this->updatedAt;
+  }
+
+  public function toArray(): array
+  {
+    return [
+      'id' => $this->id->toString(),
+      'name' => $this->username->toString(),
+      'email' => $this->email->toString(),
+      'status' => $this->status->toString(),
+      'createdAt' => $this->createdAt->toString(),
+      'updatedAt' => $this->updatedAt->toString(),
+    ];
   }
 }

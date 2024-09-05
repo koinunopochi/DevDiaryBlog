@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Domain\ValueObjects\DateTime;
+use App\Domain\ValueObjects\UserStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -23,12 +25,16 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $now = new DateTime();
         return [
-            'name' => fake()->name(),
+            'name' => $this->randomName(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'email_verified_at' => $now->toString(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'status' => UserStatus::STATUS_ACTIVE,
+            'created_at' => $now->toString(),
+            'updated_at' => $now->toString(),
         ];
     }
 
@@ -40,5 +46,10 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    private function randomName(): string
+    {
+        return Str::random(rand(3, 20));
     }
 }
