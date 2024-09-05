@@ -1,4 +1,5 @@
-import React, { MouseEventHandler, useState } from 'react';
+import React, { MouseEventHandler, useState, useEffect } from 'react';
+import defaultIconError from '@img/default-icon-error.png'
 
 interface IconProps {
   src: string;
@@ -8,6 +9,8 @@ interface IconProps {
   isButton?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
   href?: string;
+  className?: string;
+  defaultSrc?: string; // Add this line for default image source
 }
 
 const Icon: React.FC<IconProps> = ({
@@ -18,8 +21,18 @@ const Icon: React.FC<IconProps> = ({
   isButton = false,
   onClick = () => {},
   href,
+  className = '',
+  defaultSrc = defaultIconError,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [imageSrc, setImageSrc] = useState(src);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = src;
+    img.onload = () => setImageSrc(src);
+    img.onerror = () => setImageSrc(defaultSrc);
+  }, [src, defaultSrc]);
 
   const baseStyles = `bg-cover bg-center ${size} ${shape}`;
   const buttonStyles = isButton ? 'cursor-pointer' : '';
@@ -27,8 +40,8 @@ const Icon: React.FC<IconProps> = ({
 
   const icon = (
     <div
-      className={`${baseStyles} ${buttonStyles} ${rippleStyles} relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-white after:opacity-0 after:rounded-full`}
-      style={{ backgroundImage: `url(${src})` }}
+      className={`${baseStyles} ${buttonStyles} ${rippleStyles} relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-white after:opacity-0 after:rounded-full ${className}`}
+      style={{ backgroundImage: `url(${imageSrc})` }}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
