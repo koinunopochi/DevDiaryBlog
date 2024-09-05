@@ -7,6 +7,12 @@ use App\Domain\ValueObjects\SocialLinkCollection;
 
 class SocialLinkCollectionTest extends TestCase
 {
+  public function setUp(): void
+  {
+    parent::setUp();
+    config()->set('logging.default', 'stderr'); 
+  }
+
   /** @test */
   public function testCreateInstance()
   {
@@ -89,5 +95,39 @@ class SocialLinkCollectionTest extends TestCase
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
     new SocialLinkCollection($socialLinks);
+  }
+
+  /** @test */
+  public function testValidate_UrlLengthTooLong()
+  {
+    // Given
+    $baseUrl = "https://example.com/";
+    $usrLength = strlen($baseUrl);
+    $url = $baseUrl . str_repeat('a', 151 - $usrLength);
+
+    $socialLinks = [
+      'twitter' => $url,
+    ];
+
+    // When & Then
+    $this->expectException(\InvalidArgumentException::class);
+    new SocialLinkCollection($socialLinks);
+  }
+
+  /** @test */
+  public function testValidate_UrlLengthOk()
+  {
+    // Given
+    $url = "https://example.com/";
+    $usrLength = strlen($url);
+    $socialLinks = [
+      'twitter' => $url . str_repeat('a', 150 - $usrLength),
+    ];
+
+    // When
+    $socialLinkCollection = new SocialLinkCollection($socialLinks);
+
+    // Then
+    $this->assertInstanceOf(SocialLinkCollection::class, $socialLinkCollection);
   }
 }
