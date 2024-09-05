@@ -67,6 +67,8 @@ services:
     ports:
       - "9000:9000"
       - "9090:9090"
+    networks:
+      - app-network
   createbuckets:
     image: minio/mc:RELEASE.2022-12-24T15-21-38Z
     depends_on:
