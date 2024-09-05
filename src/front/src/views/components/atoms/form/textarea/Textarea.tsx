@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, useCallback } from 'react';
 
 interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -20,12 +20,15 @@ const Textarea: React.FC<TextareaProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isInitialRender, setIsInitialRender] = useState(true);
 
-  const validateTextarea = (newValue: string) => {
-    if (validate) {
-      return validate(newValue);
-    }
-    return null;
-  };
+  const validateTextarea = useCallback(
+    (newValue: string) => {
+      if (validate) {
+        return validate(newValue);
+      }
+      return null;
+    },
+    [validate]
+  );
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newValue = e.target.value;
@@ -41,13 +44,14 @@ const Textarea: React.FC<TextareaProps> = ({
   };
 
   useEffect(() => {
-    // 初期値のバリデーション
+    // 初期値のバリデーションと value state の更新
     const initialError = validateTextarea(initialValue);
     setError(initialError);
+    setValue(initialValue); // initialValue が変更されたら value を更新
     if (onTextareaChange) {
       onTextareaChange(initialValue, !initialError);
     }
-  }, [initialValue, validate, onTextareaChange]);
+  }, [initialValue, validateTextarea, onTextareaChange]);
 
   return (
     <div className="mb-4">

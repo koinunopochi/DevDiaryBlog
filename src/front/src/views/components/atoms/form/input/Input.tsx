@@ -40,9 +40,10 @@ const Input: React.FC<InputProps> = ({
   };
 
   useEffect(() => {
-    // 初期値のバリデーション
+    // 初期値のバリデーションと value state の更新
     const initialError = validateInput(initialValue);
     setError(initialError);
+    setValue(initialValue); // initialValue が変更されたら value を更新
     if (onInputChange) {
       onInputChange(initialValue, !initialError);
     }
