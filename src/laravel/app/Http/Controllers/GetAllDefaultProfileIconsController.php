@@ -17,7 +17,7 @@ class GetAllDefaultProfileIconsController extends Controller
   {
     try {
       $result = $this->allDefaultProfileIconsUseCase->execute();
-      return response()->json(['icons'=>$result]);
+      return response()->json(['icons'=>$result->toArray()]);
     } catch (\Exception $e) {
       return response()->json(['error' =>  $e->getMessage()], 500);
     }
