@@ -92,3 +92,14 @@ export const CustomIconError: Story = {
     defaultSrc: unKnownUser
   },
 };
+
+export const CustomErrorMessage: Story = {
+  args: {
+    src: 'http://127.0.0.1:9000/not-exist/path',
+    alt: 'カスタムスタイルアイコン',
+    size: 'w-20 h-20',
+    shape: 'rounded-lg',
+    defaultSrc: unKnownUser,
+    errorMessage:'プロフィールアイコンの取得に失敗しました'
+  },
+};
