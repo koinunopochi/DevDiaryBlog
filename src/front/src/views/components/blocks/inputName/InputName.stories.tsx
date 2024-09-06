@@ -20,6 +20,7 @@ type Story = StoryObj<typeof meta>;
 const mockCheckNameAvailability = async (name: string): Promise<boolean> => {
   // This is a mock function. In a real scenario, this would call an API.
   await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
+  console.log("問合せがありました")
   return !['admin', 'root', 'user'].includes(name.toLowerCase());
 };
 
