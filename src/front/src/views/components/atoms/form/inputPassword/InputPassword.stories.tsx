@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import InputPassword from './InputPassword';
 
 const meta = {
-  title: 'blocks/InputPassword',
+  title: 'atoms/form/InputPassword',
   component: InputPassword,
   parameters: {
     layout: 'centered',

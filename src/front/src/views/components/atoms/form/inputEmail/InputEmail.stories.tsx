@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import InputEmail from './InputEmail';
 
 const meta = {
-  title: 'blocks/InputEmail',
+  title: 'atoms/form/InputEmail',
   component: InputEmail,
   parameters: {
     layout: 'centered',

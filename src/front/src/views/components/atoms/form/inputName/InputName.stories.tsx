@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import InputName from './InputName';
 
 const meta = {
-  title: 'blocks/InputName',
+  title: 'atoms/form/InputName',
   component: InputName,
   parameters: {
     layout: 'centered',
