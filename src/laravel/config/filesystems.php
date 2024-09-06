@@ -73,4 +73,5 @@ return [
         public_path('storage') => storage_path('app/public'),
     ],
 
+    's3_default_bucket_path' => env('AWS_ENDPOINT') . '/' . env('AWS_BUCKET'),
 ];
