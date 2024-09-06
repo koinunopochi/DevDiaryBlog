@@ -87,9 +87,13 @@
 
 9. SocialLinkCollection
 
+   - JSON形式であれば{}も許可する
    - キーと値のペアのコレクション（例：{twitter: "https://twitter.com/username", ...}）
    - キーの長さは 50 文字以下で空文字は許可しない
-   - 値は URL オブジェクトとして作成が可能であること
+   - 値
+     - 有効な URL 形式
+     - 長さは 150 文字以下
+     - キーの数は 0 以上 15 個以下
 
 10. RoleId
 

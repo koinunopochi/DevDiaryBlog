@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useState, useEffect } from 'react';
-import defaultIconError from '@img/default-icon-error.png'
+import defaultIconError from '@img/default-icon-error.png';
 
 interface IconProps {
   src: string;
@@ -10,7 +10,8 @@ interface IconProps {
   onClick?: MouseEventHandler<HTMLDivElement>;
   href?: string;
   className?: string;
-  defaultSrc?: string; // Add this line for default image source
+  defaultSrc?: string;
+  errorMessage?: string;
 }
 
 const Icon: React.FC<IconProps> = ({
@@ -23,15 +24,23 @@ const Icon: React.FC<IconProps> = ({
   href,
   className = '',
   defaultSrc = defaultIconError,
+  errorMessage = '画像の取得に失敗しました',
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [imageSrc, setImageSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     const img = new Image();
     img.src = src;
-    img.onload = () => setImageSrc(src);
-    img.onerror = () => setImageSrc(defaultSrc);
+    img.onload = () => {
+      setImageSrc(src);
+      setHasError(false);
+    };
+    img.onerror = () => {
+      setImageSrc(defaultSrc);
+      setHasError(true);
+    };
   }, [src, defaultSrc]);
 
   const baseStyles = `bg-cover bg-center ${size} ${shape}`;
@@ -39,16 +48,23 @@ const Icon: React.FC<IconProps> = ({
   const rippleStyles = isButton && isHovered ? 'after:animate-ripple' : '';
 
   const icon = (
-    <div
-      className={`${baseStyles} ${buttonStyles} ${rippleStyles} relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-white after:opacity-0 after:rounded-full ${className}`}
-      style={{ backgroundImage: `url(${imageSrc})` }}
-      onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      role={isButton ? 'button' : ''}
-      tabIndex={isButton ? 0 : -1}
-      aria-label={alt}
-    />
+    <div className="flex flex-col items-center">
+      <div
+        className={`${baseStyles} ${buttonStyles} ${rippleStyles} relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-white after:opacity-0 after:rounded-full ${className}`}
+        style={{ backgroundImage: `url(${imageSrc})` }}
+        onClick={onClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        role={isButton ? 'button' : undefined}
+        tabIndex={isButton ? 0 : undefined}
+        aria-label={alt}
+      />
+      {hasError && (
+        <p className="text-red-500 mt-2 text-sm text-center max-w-[200px]">
+          {errorMessage}
+        </p>
+      )}
+    </div>
   );
 
   return href ? (

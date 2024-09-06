@@ -32,7 +32,7 @@ class MinioProfileIconRepositoryTest extends TestCase
     $repository = new MinioProfileIconRepository();
 
     // When
-    $icons = $repository->getDefaultAll();
+    $icons = $repository->getDefaultAll()->toArray();
 
     // Then
     $this->assertCount(10, $icons);

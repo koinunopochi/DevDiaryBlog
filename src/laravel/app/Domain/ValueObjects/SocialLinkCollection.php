@@ -14,8 +14,16 @@ class SocialLinkCollection
 
   private function validate(array $socialLinks): void
   {
+    if (count($socialLinks) > 15) {
+      throw new \InvalidArgumentException("socialLinksの数が15を超えています");
+    }
+
     foreach ($socialLinks as $key => $value) {
       new Url($value); // urlの形式が正しいかチェックする
+
+      if (strlen($value) > 150) {
+        throw new \InvalidArgumentException("urlの長さが150文字を超えています: $value");
+      }
 
       if ($key === "") {
         throw new \InvalidArgumentException("keyは空にできません: $key");

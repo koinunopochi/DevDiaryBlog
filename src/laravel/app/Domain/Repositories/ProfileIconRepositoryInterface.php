@@ -2,12 +2,14 @@
 
 namespace App\Domain\Repositories;
 
+use App\Domain\ValueObjects\S3FilePathCollection;
+
 interface ProfileIconRepositoryInterface
 {
   /**
    * Get all ProfileIcons
    *
-   * @return array
+   * @return S3FilePathCollection
    */
-  public function getDefaultAll(): array;
+  public function getDefaultAll(): S3FilePathCollection;
 }
