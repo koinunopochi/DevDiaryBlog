@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SaveProfileController;
+use App\Http\Controllers\SaveUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,4 +34,5 @@ Route::get('/profile-icons/defaults', [GetAllDefaultProfileIconsController::clas
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
   Route::post('/profile', [SaveProfileController::class, 'execute']);
+  Route::post('/user',[SaveUserController::class, 'execute']);
 });
