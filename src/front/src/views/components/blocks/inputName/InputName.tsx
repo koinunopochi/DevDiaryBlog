@@ -1,7 +1,14 @@
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import Input from '@components/atoms/form/input/Input';
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { debounce } from 'lodash';
-import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import Input from '@components/atoms/form/input/Input';
+import RequirementItem from '@components/atoms/requirement/RequirementItem';
 
 interface InputNameProps {
   initialValue?: string;
@@ -15,20 +22,38 @@ const InputName: React.FC<InputNameProps> = ({
   checkNameAvailability,
 }) => {
   const [inputValue, setInputValue] = useState(initialValue);
-  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [isChecking, setIsChecking] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [requirements, setRequirements] = useState({
+    length: false,
+    characters: false,
+    available: null as boolean | null,
+  });
 
-  const validateName = useCallback((value: string): string | null => {
-    if (value.length < 3) {
-      return '名前は3文字以上である必要があります。';
-    }
-    if (value.length > 20) {
-      return '名前は20文字以下である必要があります。';
-    }
-    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-      return '名前は半角英数字とアンダースコアのみ使用できます。';
-    }
-    return null;
+  const previousValueRef = useRef(initialValue);
+  const isInitialMount = useRef(true);
+
+  const validateName = useCallback(
+    (value: string): string | null => {
+      if (
+        value.length < 3 ||
+        value.length > 20 ||
+        !/^[a-zA-Z0-9_]+$/.test(value) ||
+        requirements.available === false
+      ) {
+        return 'ユーザー名は全ての要件を満たす必要があります';
+      }
+      return null;
+    },
+    [requirements.available]
+  );
+
+  const updateRequirements = useCallback((value: string) => {
+    setRequirements((prevReq) => ({
+      ...prevReq,
+      length: value.length >= 3 && value.length <= 20,
+      characters: /^[a-zA-Z0-9_]+$/.test(value),
+    }));
   }, []);
 
   const checkAvailability = useCallback(
@@ -41,15 +66,28 @@ const InputName: React.FC<InputNameProps> = ({
         setIsChecking(true);
         try {
           const available = await checkNameAvailability(name);
-          setIsAvailable(available);
+          console.log('API response:', available);
+          setRequirements((prevReq) => ({
+            ...prevReq,
+            available,
+          }));
         } catch (error) {
           console.error('Error checking availability:', error);
-          setIsAvailable(null);
+          setRequirements((prevReq) => ({ ...prevReq, available: null }));
         } finally {
           setIsChecking(false);
+          // APIチェック後に現在の入力値を再確認
+          const currentValue = previousValueRef.current;
+          if (
+            currentValue.length < 3 ||
+            currentValue.length > 20 ||
+            !/^[a-zA-Z0-9_]+$/.test(currentValue)
+          ) {
+            setRequirements((prevReq) => ({ ...prevReq, available: null }));
+          }
         }
       } else {
-        setIsAvailable(null);
+        setRequirements((prevReq) => ({ ...prevReq, available: null }));
       }
     },
     [checkNameAvailability]
@@ -58,8 +96,10 @@ const InputName: React.FC<InputNameProps> = ({
   const debouncedCheckAvailability = useMemo(
     () =>
       debounce((value: string) => {
-        checkAvailability(value);
-      }, 300),
+        if (value.length >= 3 && /^[a-zA-Z0-9_]+$/.test(value)) {
+          checkAvailability(value);
+        }
+      }, 500),
     [checkAvailability]
   );
 
@@ -71,14 +111,43 @@ const InputName: React.FC<InputNameProps> = ({
 
   const handleInputChange = useCallback(
     (value: string, isValid: boolean) => {
-      setInputValue(value);
-      debouncedCheckAvailability(value);
-      if (onInputChange) {
-        onInputChange(value, isValid);
+      if (value !== previousValueRef.current) {
+        setInputValue(value);
+        updateRequirements(value); // 即時にrequirementsを更新
+        if (value.length >= 3 && /^[a-zA-Z0-9_]+$/.test(value)) {
+          debouncedCheckAvailability(value);
+        } else {
+          setRequirements((prevReq) => ({ ...prevReq, available: null }));
+        }
+        if (onInputChange) {
+          onInputChange(value, isValid);
+        }
+        if (!hasInteracted && value !== '') {
+          setHasInteracted(true);
+        }
+        previousValueRef.current = value;
       }
     },
-    [debouncedCheckAvailability, onInputChange]
+    [
+      debouncedCheckAvailability,
+      onInputChange,
+      hasInteracted,
+      updateRequirements,
+    ]
   );
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      if (initialValue !== '') {
+        updateRequirements(initialValue);
+        setHasInteracted(true);
+        if (initialValue.length >= 3 && /^[a-zA-Z0-9_]+$/.test(initialValue)) {
+          checkAvailability(initialValue);
+        }
+      }
+      isInitialMount.current = false;
+    }
+  }, [initialValue, checkAvailability, updateRequirements]);
 
   return (
     <div className="relative">
@@ -94,23 +163,24 @@ const InputName: React.FC<InputNameProps> = ({
         {isChecking && (
           <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
         )}
-        {!isChecking && isAvailable === false && (
-          <XCircle className="h-5 w-5 text-red-500" />
-        )}
-        {!isChecking && isAvailable === true && (
-          <CheckCircle2 className="h-5 w-5 text-green-500" />
-        )}
       </div>
-      {!isChecking && isAvailable === false && (
-        <p className="text-red-500 text-xs italic mt-1">
-          既に使われているユーザー名です
-        </p>
-      )}
-      {!isChecking && isAvailable === true && (
-        <p className="text-green-500 text-xs italic mt-1">
-          利用可能なユーザー名です
-        </p>
-      )}
+      <ul className="text-xs mt-2 space-y-1">
+        <RequirementItem met={requirements.length} isInitial={!hasInteracted}>
+          3文字以上20文字以下
+        </RequirementItem>
+        <RequirementItem
+          met={requirements.characters}
+          isInitial={!hasInteracted}
+        >
+          半角英数字とアンダースコアのみ
+        </RequirementItem>
+        <RequirementItem
+          met={requirements.available === true}
+          isInitial={!hasInteracted || requirements.available === null}
+        >
+          {isChecking ? '利用可能性を確認中...' : '利用可能な名前'}
+        </RequirementItem>
+      </ul>
     </div>
   );
 };
