@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Input from '@components/atoms/form/input/Input';
+import RequirementItem from '@components/atoms/requirement/RequirementItem';
 import { Eye, EyeOff } from 'lucide-react';
 
 interface InputPasswordProps {
@@ -13,39 +14,58 @@ const InputPassword: React.FC<InputPasswordProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState(initialValue);
   const [showPassword, setShowPassword] = useState(false);
+  const [requirements, setRequirements] = useState({
+    length: false,
+    lowercase: false,
+    uppercase: false,
+    number: false,
+    symbol: false,
+    containsOnlyAllowedChars:false,
+  });
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const validatePassword = useCallback((value: string): string | null => {
-    if (value.length < 12) {
-      return 'パスワードは12文字以上で入力してください';
-    }
-    if (!/[a-z]/.test(value)) {
-      return 'パスワードには小文字が含まれている必要があります';
-    }
-    if (!/[A-Z]/.test(value)) {
-      return 'パスワードには大文字が含まれている必要があります';
-    }
-    if (!/[0-9]/.test(value)) {
-      return 'パスワードには数字が含まれている必要があります';
-    }
-    if (!/[!@#$%^&*()\-_=+{};:,<.>]/.test(value)) {
-      return 'パスワードには記号が含まれている必要があります';
-    }
-    return null;
+    const newRequirements = {
+      length: value.length >= 12,
+      lowercase: /[a-z]/.test(value),
+      uppercase: /[A-Z]/.test(value),
+      number: /[0-9]/.test(value),
+      symbol: /[!@#$%^&*()\-_=+{};:,<.>]/.test(value),
+      containsOnlyAllowedChars: /^[a-zA-Z0-9!@#$%^&*()\-_=+{};:,<.>]*$/.test(value),
+    };
+    setRequirements(newRequirements);
+
+    return Object.values(newRequirements).every(Boolean)
+      ? null
+      : 'パスワードは全ての要件を満たす必要があります';
   }, []);
 
   const handleInputChange = useCallback(
     (value: string, isValid: boolean) => {
       setInputValue(value);
+      validatePassword(value);
       if (onInputChange) {
         onInputChange(value, isValid);
       }
+      if (!hasInteracted && value !== '') {
+        setHasInteracted(true);
+      }
     },
-    [onInputChange]
+    [onInputChange, validatePassword, hasInteracted]
   );
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    validatePassword(initialValue);
+    if (initialValue !== '') {
+      setHasInteracted(true);
+    }
+  }, [initialValue, validatePassword]);
+
+  const isInitial = !hasInteracted;
 
   return (
     <div className="relative">
@@ -57,7 +77,7 @@ const InputPassword: React.FC<InputPasswordProps> = ({
         required
         type={showPassword ? 'text' : 'password'}
         placeholder="Enter your password"
-        className='pr-10'
+        className="pr-10"
       />
       <div className="absolute top-0 right-0 mt-0.5 mr-1">
         <button
@@ -72,12 +92,28 @@ const InputPassword: React.FC<InputPasswordProps> = ({
           )}
         </button>
       </div>
-      <ul className="text-xs mt-2 text-gray-600">
-        <li>12文字以上</li>
-        <li>小文字を含む</li>
-        <li>大文字を含む</li>
-        <li>数字を含む</li>
-        <li>記号を含む (!@#$%^&*()-_=+&#123;&#125;;:,&lt;&gt;)</li>
+      <ul className="text-xs mt-2 space-y-1">
+        <RequirementItem met={requirements.length} isInitial={isInitial}>
+          12文字以上
+        </RequirementItem>
+        <RequirementItem met={requirements.lowercase} isInitial={isInitial}>
+          半角小文字を含む
+        </RequirementItem>
+        <RequirementItem met={requirements.uppercase} isInitial={isInitial}>
+          半角大文字を含む
+        </RequirementItem>
+        <RequirementItem met={requirements.number} isInitial={isInitial}>
+          半角数字を含む
+        </RequirementItem>
+        <RequirementItem met={requirements.symbol} isInitial={isInitial}>
+          半角記号を含む (!@#$%^&*()-_=+&#123;&#125;;:,&lt;&gt;)
+        </RequirementItem>
+        <RequirementItem
+          met={requirements.containsOnlyAllowedChars}
+          isInitial={isInitial}
+        >
+          使用可能な文字のみを含む
+        </RequirementItem>
       </ul>
     </div>
   );
