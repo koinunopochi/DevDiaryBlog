@@ -75,7 +75,7 @@ class AuthService {
         body: JSON.stringify({
           email,
           password,
-          name: 'default-user-' + Math.random(),
+          name: this.randomUserNameGenerate(),
         }),
         credentials: 'include',
       });
@@ -111,6 +111,15 @@ class AuthService {
 
     // ログアウト処理（トークン削除など）
     localStorage.removeItem('token');
+  }
+
+  private randomUserNameGenerate() {
+    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_';
+    let result = '';
+    for (let i = 0; i < 20; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
   }
 }
 
