@@ -5,6 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   initialValue?: string;
   onInputChange?: (value: string, isValid: boolean) => void;
   validate?: (value: string) => string | null;
+  className?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -12,6 +13,7 @@ const Input: React.FC<InputProps> = ({
   initialValue = '',
   onInputChange,
   validate,
+  className = '',
   required,
   ...props
 }) => {
@@ -64,7 +66,7 @@ const Input: React.FC<InputProps> = ({
         required={required}
         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
           error && !isInitialRender ? 'border-red-500' : ''
-        }`}
+        } ${className}`}
       />
       {error && !isInitialRender && (
         <p className="text-red-500 text-xs italic">{error}</p>

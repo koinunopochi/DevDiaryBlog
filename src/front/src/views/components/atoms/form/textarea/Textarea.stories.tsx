@@ -71,3 +71,12 @@ export const WithCustomValidation: Story = {
     },
   },
 };
+
+export const CustomStyle: Story = {
+  args: {
+    label: 'カスタムスタイル',
+    placeholder: 'カスタムスタイル',
+    rows: 3,
+    className:"border-2 border-pink-400 rounded-md p-2"
+  },
+};
