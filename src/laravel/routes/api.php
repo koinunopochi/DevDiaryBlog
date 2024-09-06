@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GetAllDefaultProfileIconsController;
 use App\Http\Controllers\GetUserDetailsController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -28,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/user', [GetUserDetailsController::class, 'execute']);
+Route::get('/profile-icons/defaults', [GetAllDefaultProfileIconsController::class,'execute']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
   Route::post('/profile', [SaveProfileController::class, 'execute']);
