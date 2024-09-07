@@ -9,7 +9,8 @@ interface Requirement {
   validator: (value: string) => boolean;
 }
 
-interface InputWithRequirementsProps {
+interface InputWithRequirementsProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   initialValue?: string;
   onInputChange?: (value: string, isValid: boolean) => void;
@@ -29,6 +30,7 @@ const InputWithRequirements: React.FC<InputWithRequirementsProps> = ({
   placeholder,
   validate,
   toggleVisibility = false,
+  ...props
 }) => {
   const [inputValue, setInputValue] = useState(initialValue);
   const [showPassword, setShowPassword] = useState(false);
@@ -84,11 +86,11 @@ const InputWithRequirements: React.FC<InputWithRequirementsProps> = ({
   return (
     <div className="relative">
       <Input
+        {...props}
         label={label}
         initialValue={inputValue}
         onInputChange={handleInputChange}
         validate={validateInput}
-        required
         type={toggleVisibility ? (showPassword ? 'text' : 'password') : type}
         placeholder={placeholder}
         className={toggleVisibility ? 'pr-10' : ''}

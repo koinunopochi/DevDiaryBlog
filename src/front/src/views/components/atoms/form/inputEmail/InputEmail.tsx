@@ -51,6 +51,7 @@ const InputEmail: React.FC<InputEmailProps> = ({
       type="email"
       placeholder="example@example.com"
       validate={validateEmail}
+      required
     />
   );
 };

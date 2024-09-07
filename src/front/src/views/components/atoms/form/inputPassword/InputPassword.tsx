@@ -60,6 +60,7 @@ const InputPassword: React.FC<InputPasswordProps> = ({
       placeholder="Enter your password"
       validate={validatePassword}
       toggleVisibility
+      required
     />
   );
 };
