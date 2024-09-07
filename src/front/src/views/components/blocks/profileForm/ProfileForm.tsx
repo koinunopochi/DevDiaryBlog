@@ -55,11 +55,11 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
     });
 
     const [isValid, setIsValid] = useState<Record<string, boolean>>({
-      displayName: false,
-      bio: false,
-      avatarUrl: false,
-      twitter: false,
-      github: false,
+      displayName: true,
+      bio: true,
+      avatarUrl: true,
+      twitter: true,
+      github: true,
     });
 
     const [showIconSelector, setShowIconSelector] = useState(false);

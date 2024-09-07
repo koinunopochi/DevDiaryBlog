@@ -98,3 +98,21 @@ export const HasErrorIcon: Story = {
     defaultProfileIcons: [...defaultIcons, 'invalid-icon'],
   },
 };
+
+export const WithError: Story = {
+  args: {
+    initialData: {
+      displayName: 'a'.repeat(51),
+      bio: 'a'.repeat(501),
+      avatarUrl: 'ht',
+      socialLinks: {
+        twitter: 'h/alexj',
+        github: 'https.com/alexj',
+        dribbble: 'httpribbble.com/alexj',
+        medium: 'httpedium.com/@alexj',
+      },
+    },
+    onSubmit: (data) => console.log('Submitted data:', data),
+    defaultProfileIcons: [...defaultIcons, 'invalid-icon'],
+  },
+};
