@@ -1,14 +1,18 @@
 import React from 'react';
 import InputWithRequirements from '@components/atoms/form/inputWithRequirements/InputWithRequirements';
 
-interface InputDisplayNameProps {
-  initialValue?: string;
-  onInputChange?: (value: string, isValid: boolean) => void;
+interface InputDisplayNameProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  label?: string;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
 }
 
 const InputDisplayName: React.FC<InputDisplayNameProps> = ({
-  initialValue = '',
-  onInputChange,
+  label = '表示名',
+  value,
+  onChange,
+  ...props
 }) => {
   const displayNameRequirements = [
     {
@@ -31,13 +35,14 @@ const InputDisplayName: React.FC<InputDisplayNameProps> = ({
 
   return (
     <InputWithRequirements
-      label="表示名"
-      initialValue={initialValue}
-      onInputChange={onInputChange}
+      label={label}
+      value={value}
+      onChange={onChange}
       requirements={displayNameRequirements}
       validate={validateDisplayName}
       placeholder="ぶろぐたろう"
       required
+      {...props}
     />
   );
 };

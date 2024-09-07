@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import InputDisplayName from './InputDisplayName';
 
-const meta = {
+const meta: Meta<typeof InputDisplayName> = {
   title: 'atoms/form/InputDisplayName',
   component: InputDisplayName,
   parameters: {
@@ -9,52 +10,86 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    initialValue: { control: 'text' },
-    onInputChange: { action: 'inputChanged' },
+    label: { control: 'text' },
+    value: { control: 'text' },
+    onChange: { action: 'changed' },
   },
-} satisfies Meta<typeof InputDisplayName>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof InputDisplayName>;
+
+const InputDisplayNameWrapper = (
+  args: React.ComponentProps<typeof InputDisplayName>
+) => {
+  const [value, setValue] = useState(args.value || '');
+  return (
+    <InputDisplayName
+      {...args}
+      value={value}
+      onChange={(newValue, isValid) => {
+        setValue(newValue);
+        args.onChange(newValue, isValid);
+      }}
+    />
+  );
+};
 
 export const Default: Story = {
-  args: {},
+  render: (args) => <InputDisplayNameWrapper {...args} />,
+  args: {
+    label: '表示名',
+    value: '',
+  },
 };
 
 export const WithInitialValue: Story = {
+  render: (args) => <InputDisplayNameWrapper {...args} />,
   args: {
-    initialValue: 'ブログ太郎',
+    label: '表示名',
+    value: 'ブログ太郎',
   },
 };
 
-export const WithCustomOnInputChange: Story = {
+export const WithCustomOnChange: Story = {
+  render: (args) => <InputDisplayNameWrapper {...args} />,
   args: {
-    onInputChange: (value: string, isValid: boolean) => {
+    label: '表示名',
+    value: '',
+    onChange: (value: string, isValid: boolean) => {
       console.log(`Value: ${value}, Is Valid: ${isValid}`);
     },
   },
 };
 
 export const MinLengthEdgeCase: Story = {
+  render: (args) => <InputDisplayNameWrapper {...args} />,
   args: {
-    initialValue: 'あ',
+    label: '表示名',
+    value: 'あ',
   },
 };
 
 export const MaxLengthEdgeCase: Story = {
+  render: (args) => <InputDisplayNameWrapper {...args} />,
   args: {
-    initialValue: ''.padEnd(50, 'あ'),
+    label: '表示名',
+    value: ''.padEnd(50, 'あ'),
   },
 };
 
 export const ExceedsMaxLength: Story = {
+  render: (args) => <InputDisplayNameWrapper {...args} />,
   args: {
-    initialValue: ''.padEnd(51, 'あ'),
+    label: '表示名',
+    value: ''.padEnd(51, 'あ'),
   },
 };
 
 export const EmptyInput: Story = {
+  render: (args) => <InputDisplayNameWrapper {...args} />,
   args: {
-    initialValue: '',
+    label: '表示名',
+    value: '',
   },
 };
