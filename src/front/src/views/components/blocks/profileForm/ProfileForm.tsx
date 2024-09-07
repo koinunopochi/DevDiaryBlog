@@ -7,7 +7,7 @@ import InputDisplayName from '@components/atoms/form/inputDisplayName/InputDispl
 import InputUrl from '@components/atoms/form/inputUrl/InputUrl';
 import InputBio from '@components/atoms/form/inputBio/InputBio';
 import InputAdditionalLinkName from '@components/atoms/form/inputAdditionalLinkName/InputAdditionalLinkName';
-import Input from '../../atoms/form/input/Input';
+import Input from '@components/atoms/form/input/Input';
 
 interface SocialLink {
   name: string;
