@@ -10,21 +10,19 @@ interface Requirement {
 }
 
 interface InputWithRequirementsProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   label: string;
-  initialValue?: string;
-  onInputChange?: (value: string, isValid: boolean) => void;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
   requirements: Requirement[];
-  type?: string;
-  placeholder?: string;
   validate: (value: string) => string | null;
   toggleVisibility?: boolean;
 }
 
 const InputWithRequirements: React.FC<InputWithRequirementsProps> = ({
   label,
-  initialValue = '',
-  onInputChange,
+  value,
+  onChange,
   requirements,
   type = 'text',
   placeholder,
@@ -32,7 +30,6 @@ const InputWithRequirements: React.FC<InputWithRequirementsProps> = ({
   toggleVisibility = false,
   ...props
 }) => {
-  const [inputValue, setInputValue] = useState(initialValue);
   const [showPassword, setShowPassword] = useState(false);
   const [requirementStates, setRequirementStates] = useState<
     Record<string, boolean>
@@ -40,32 +37,29 @@ const InputWithRequirements: React.FC<InputWithRequirementsProps> = ({
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const validateInput = useCallback(
-    (value: string) => {
+    (inputValue: string) => {
       const newRequirementStates = requirements.reduce(
         (acc, req) => {
-          acc[req.key] = req.validator(value);
+          acc[req.key] = req.validator(inputValue);
           return acc;
         },
         {} as Record<string, boolean>
       );
       setRequirementStates(newRequirementStates);
-      return validate(value);
+      return validate(inputValue);
     },
     [requirements, validate]
   );
 
   const handleInputChange = useCallback(
-    (value: string, isValid: boolean) => {
-      setInputValue(value);
-      validateInput(value);
-      if (onInputChange) {
-        onInputChange(value, isValid);
-      }
-      if (!hasInteracted && value !== '') {
+    (newValue: string, isValid: boolean) => {
+      validateInput(newValue);
+      onChange(newValue, isValid);
+      if (!hasInteracted && newValue !== '') {
         setHasInteracted(true);
       }
     },
-    [onInputChange, validateInput, hasInteracted]
+    [onChange, validateInput, hasInteracted]
   );
 
   const toggleShowPassword = () => {
@@ -75,11 +69,11 @@ const InputWithRequirements: React.FC<InputWithRequirementsProps> = ({
   };
 
   useEffect(() => {
-    validateInput(initialValue);
-    if (initialValue !== '') {
+    validateInput(value);
+    if (value !== '') {
       setHasInteracted(true);
     }
-  }, [initialValue, validateInput]);
+  }, [value, validateInput]);
 
   const isInitial = !hasInteracted;
 
@@ -88,8 +82,8 @@ const InputWithRequirements: React.FC<InputWithRequirementsProps> = ({
       <Input
         {...props}
         label={label}
-        initialValue={inputValue}
-        onInputChange={handleInputChange}
+        value={value}
+        onChange={handleInputChange}
         validate={validateInput}
         type={toggleVisibility ? (showPassword ? 'text' : 'password') : type}
         placeholder={placeholder}

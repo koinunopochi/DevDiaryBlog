@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import InputWithRequirements from './InputWithRequirements';
 
-const meta = {
+const meta: Meta<typeof InputWithRequirements> = {
   title: 'atoms/form/InputWithRequirements',
   component: InputWithRequirements,
   parameters: {
@@ -10,13 +11,13 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     label: { control: 'text' },
-    initialValue: { control: 'text' },
-    onInputChange: { action: 'onInputChange' },
+    value: { control: 'text' },
+    onChange: { action: 'onChange' },
     type: { control: 'select', options: ['text', 'email', 'password'] },
     placeholder: { control: 'text' },
     toggleVisibility: { control: 'boolean' },
   },
-} satisfies Meta<typeof InputWithRequirements>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -40,10 +41,22 @@ const validateInput = (value: string): string | null => {
     : '全ての要件を満たす必要があります';
 };
 
+const InputWithRequirementsWrapper = (args: any) => {
+  const [value, setValue] = useState(args.value || '');
+  const handleChange = (newValue: string, isValid: boolean) => {
+    setValue(newValue);
+    args.onChange(newValue, isValid);
+  };
+  return (
+    <InputWithRequirements {...args} value={value} onChange={handleChange} />
+  );
+};
+
 export const Default: Story = {
+  render: (args) => <InputWithRequirementsWrapper {...args} />,
   args: {
     label: 'サンプル入力',
-    initialValue: '',
+    value: '',
     requirements: defaultRequirements,
     type: 'text',
     placeholder: 'テキストを入力',
@@ -52,9 +65,10 @@ export const Default: Story = {
 };
 
 export const Email: Story = {
+  render: (args) => <InputWithRequirementsWrapper {...args} />,
   args: {
     label: 'メールアドレス',
-    initialValue: '',
+    value: '',
     requirements: [
       {
         key: 'validEmail',
@@ -72,9 +86,10 @@ export const Email: Story = {
 };
 
 export const Password: Story = {
+  render: (args) => <InputWithRequirementsWrapper {...args} />,
   args: {
     label: 'パスワード',
-    initialValue: '',
+    value: '',
     requirements: [
       {
         key: 'length',
@@ -112,13 +127,15 @@ export const Password: Story = {
 };
 
 export const WithInitialValue: Story = {
+  render: (args) => <InputWithRequirementsWrapper {...args} />,
   args: {
     ...Default.args,
-    initialValue: 'Initial Value',
+    value: 'Initial Value',
   },
 };
 
 export const WithLongLabel: Story = {
+  render: (args) => <InputWithRequirementsWrapper {...args} />,
   args: {
     ...Default.args,
     label:
@@ -127,6 +144,7 @@ export const WithLongLabel: Story = {
 };
 
 export const WithManyRequirements: Story = {
+  render: (args) => <InputWithRequirementsWrapper {...args} />,
   args: {
     ...Default.args,
     requirements: [
