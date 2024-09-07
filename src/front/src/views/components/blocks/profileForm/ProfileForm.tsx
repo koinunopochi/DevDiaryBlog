@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Save, Plus, Trash2 } from 'lucide-react';
-import Input from '@components/atoms/form/input/Input';
-import Textarea from '@components/atoms/form/textarea/Textarea';
+// import Input from '@components/atoms/form/input/Input';
+// import Textarea from '@components/atoms/form/textarea/Textarea';
 import Icon from '@components/atoms/icon/Icon';
 import ProfileIconSelector from '@components/blocks/profileIconSelector/ProfileIconSelector';
 import {
-  validateAdditionalLinkName,
-  validateDisplayName,
+//   validateAdditionalLinkName,
+//   validateDisplayName,
   validateUrl,
-  validateUserBio,
+//   validateUserBio,
 } from './ProfileFormValidate';
 import unKnownUser from '@img/unknown-user.png';
+import InputDisplayName from '../../atoms/form/inputDisplayName/InputDisplayName';
+import InputUrl from '../../atoms/form/inputUrl/InputUrl';
+// import InputAdditionalLinkName from '../../atoms/form/inputAdditionalLinkName/InputAdditionalLinkName';
+import InputBio from '../../atoms/form/inputBio/InputBio';
+import Input from '../../atoms/form/input/Input';
 
 interface SocialLink {
   name: string;
@@ -236,43 +241,33 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
             />
           </div>
         )}
-        <Input
-          label="表示名"
+        <InputDisplayName
           initialValue={formData.displayName}
-          placeholder="ぶろぐたろう"
           onInputChange={(value, valid) =>
             handleInputChange('displayName', value, valid)
           }
-          validate={validateDisplayName}
-          required
         />
-        <Textarea
-          label="経歴・自己紹介"
+        <InputBio
           initialValue={formData.bio}
-          placeholder="○○に興味があります！"
-          onTextareaChange={(value, valid) =>
+          onInputChange={(value, valid) =>
             handleInputChange('bio', value, valid)
           }
-          validate={validateUserBio}
-          required
         />
-        <Input
+        <InputUrl
           label="Twitter(X)"
           initialValue={formData.socialLinks.twitter}
-          placeholder="https://twitter.com/blogtaro"
           onInputChange={(value, valid) =>
             handleSocialLinkChange('twitter', value, valid)
           }
-          validate={validateUrl}
+          placeholder="https://twitter.com/blogtaro"
         />
-        <Input
+        <InputUrl
           label="GitHub"
           initialValue={formData.socialLinks.github}
-          placeholder="https://github.com/blogtaro"
           onInputChange={(value, valid) =>
             handleSocialLinkChange('github', value, valid)
           }
-          validate={validateUrl}
+          placeholder="https://github.com/blogtaro"
         />
         {additionalLinks.map((link, index) => (
           <div key={index} className="mb-4 border p-4 rounded-md relative">
@@ -283,20 +278,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({
               onInputChange={(value, valid) =>
                 handleAdditionalLinkChange(index, 'name', value, valid)
               }
-              validate={validateAdditionalLinkName}
-              required
-              className="mb-2"
             />
             <Input
               label={`URL${index + 1}`}
-              placeholder="https://example.com"
               initialValue={link.url}
               onInputChange={(value, valid) =>
                 handleAdditionalLinkChange(index, 'url', value, valid)
               }
               validate={validateUrl}
               required
-              className="mb-2"
             />
             <button
               type="button"
