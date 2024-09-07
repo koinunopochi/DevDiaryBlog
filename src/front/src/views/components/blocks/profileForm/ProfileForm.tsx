@@ -4,6 +4,7 @@ import InputUrl from '../../atoms/form/inputUrl/InputUrl';
 interface ProfileFormData {
   socialLinks: {
     twitter?: string;
+    github?: string;
   };
 }
 
@@ -16,11 +17,13 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit }) => {
   const [formData, setFormData] = useState<ProfileFormData>(() => ({
     socialLinks: {
       twitter: initialData?.socialLinks.twitter || '',
+      github: initialData?.socialLinks.github || '',
     },
   }));
 
   const [isValid, setIsValid] = useState<Record<string, boolean>>({
     twitter: false,
+    github: false,
   });
 
   useEffect(() => {
@@ -28,13 +31,14 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit }) => {
       setFormData({
         socialLinks: {
           twitter: initialData.socialLinks.twitter || '',
+          github: initialData.socialLinks.github || '',
         },
       });
     }
   }, [initialData]);
 
   const handleSocialLinkChange = (
-    platform: 'twitter',
+    platform: 'twitter' | 'github',
     value: string,
     valid: boolean
   ) => {
@@ -58,6 +62,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit }) => {
       ...formData,
       socialLinks: {
         twitter: formData.socialLinks.twitter || '',
+        github: formData.socialLinks.github || '',
       },
     };
 
@@ -75,6 +80,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialData, onSubmit }) => {
             handleSocialLinkChange('twitter', value, valid);
           }}
           placeholder="https://twitter.com/blogtaro"
+        />
+        <InputUrl
+          label="GitHub"
+          value={formData.socialLinks.github || ''}
+          onChange={(value, valid) => {
+            console.log('GitHub Input Change', value, valid);
+            handleSocialLinkChange('github', value, valid);
+          }}
+          placeholder="https://github.com/blogtaro"
         />
         <button
           type="submit"
