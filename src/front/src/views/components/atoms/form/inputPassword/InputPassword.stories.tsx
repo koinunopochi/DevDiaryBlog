@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import InputPassword from './InputPassword';
 
-const meta = {
+const meta: Meta<typeof InputPassword> = {
   title: 'atoms/form/InputPassword',
   component: InputPassword,
   parameters: {
@@ -9,58 +10,104 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    initialValue: { control: 'text' },
-    onInputChange: { action: 'onInputChange' },
+    label: { control: 'text' },
+    value: { control: 'text' },
+    onChange: { action: 'changed' },
   },
-} satisfies Meta<typeof InputPassword>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const InputPasswordWrapper = (
+  args: React.ComponentProps<typeof InputPassword>
+) => {
+  const [value, setValue] = useState(args.value || '');
+  return (
+    <InputPassword
+      {...args}
+      value={value}
+      onChange={(newValue, isValid) => {
+        setValue(newValue);
+        args.onChange(newValue, isValid);
+      }}
+    />
+  );
+};
+
+// デフォルトの onChange ハンドラー
+const defaultOnChange = (value: string, isValid: boolean) => {
+  console.log(`Value: ${value}, Is Valid: ${isValid}`);
+};
+
 export const Default: Story = {
+  render: (args) => <InputPasswordWrapper {...args} />,
   args: {
-    initialValue: '',
+    label: 'パスワード',
+    value: '',
+    onChange: defaultOnChange,
   },
 };
 
 export const WithValidPassword: Story = {
+  render: (args) => <InputPasswordWrapper {...args} />,
   args: {
-    initialValue: 'ValidP@ssw0rd123',
+    label: 'パスワード',
+    value: 'ValidP@ssw0rd123',
+    onChange: defaultOnChange,
   },
 };
 
 export const WithInvalidPassword: Story = {
+  render: (args) => <InputPasswordWrapper {...args} />,
   args: {
-    initialValue: 'weak',
+    label: 'パスワード',
+    value: 'weak',
+    onChange: defaultOnChange,
   },
 };
 
 export const WithoutLowercase: Story = {
+  render: (args) => <InputPasswordWrapper {...args} />,
   args: {
-    initialValue: 'NOLOWERCASE123@',
+    label: 'パスワード',
+    value: 'NOLOWERCASE123@',
+    onChange: defaultOnChange,
   },
 };
 
 export const WithoutUppercase: Story = {
+  render: (args) => <InputPasswordWrapper {...args} />,
   args: {
-    initialValue: 'nouppercase123@',
+    label: 'パスワード',
+    value: 'nouppercase123@',
+    onChange: defaultOnChange,
   },
 };
 
 export const WithoutNumber: Story = {
+  render: (args) => <InputPasswordWrapper {...args} />,
   args: {
-    initialValue: 'NoNumberHere@',
+    label: 'パスワード',
+    value: 'NoNumberHere@',
+    onChange: defaultOnChange,
   },
 };
 
 export const WithoutSymbol: Story = {
+  render: (args) => <InputPasswordWrapper {...args} />,
   args: {
-    initialValue: 'NoSymbolHere123',
+    label: 'パスワード',
+    value: 'NoSymbolHere123',
+    onChange: defaultOnChange,
   },
 };
 
 export const TooShort: Story = {
+  render: (args) => <InputPasswordWrapper {...args} />,
   args: {
-    initialValue: 'Short1@',
+    label: 'パスワード',
+    value: 'Short1@',
+    onChange: defaultOnChange,
   },
 };

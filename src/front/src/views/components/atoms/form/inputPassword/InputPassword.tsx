@@ -1,14 +1,18 @@
 import React from 'react';
 import InputWithRequirements from '@components/atoms/form/inputWithRequirements/InputWithRequirements';
 
-interface InputPasswordProps {
-  initialValue?: string;
-  onInputChange?: (value: string, isValid: boolean) => void;
+interface InputPasswordProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  label?: string;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
 }
 
 const InputPassword: React.FC<InputPasswordProps> = ({
-  initialValue = '',
-  onInputChange,
+  label = 'パスワード',
+  value,
+  onChange,
+  ...props
 }) => {
   const passwordRequirements = [
     {
@@ -52,15 +56,16 @@ const InputPassword: React.FC<InputPasswordProps> = ({
 
   return (
     <InputWithRequirements
-      label="パスワード"
-      initialValue={initialValue}
-      onInputChange={onInputChange}
+      label={label}
+      value={value}
+      onChange={onChange}
       requirements={passwordRequirements}
       type="password"
       placeholder="Enter your password"
       validate={validatePassword}
       toggleVisibility
       required
+      {...props}
     />
   );
 };
