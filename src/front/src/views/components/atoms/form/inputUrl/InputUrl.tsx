@@ -1,7 +1,7 @@
 import React from 'react';
 import InputWithRequirements from '@components/atoms/form/inputWithRequirements/InputWithRequirements';
 
-interface InputUrlProps {
+interface InputUrlProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   initialValue?: string;
   onInputChange?: (value: string, isValid: boolean) => void;
@@ -13,6 +13,7 @@ const InputUrl: React.FC<InputUrlProps> = ({
   initialValue = '',
   onInputChange,
   placeholder,
+  ...props
 }) => {
   const urlRequirements = [
     {
@@ -51,6 +52,7 @@ const InputUrl: React.FC<InputUrlProps> = ({
       requirements={urlRequirements}
       validate={validateUrl}
       placeholder={placeholder}
+      {...props}
     />
   );
 };
