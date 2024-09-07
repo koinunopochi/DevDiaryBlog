@@ -153,7 +153,7 @@ const InputName: React.FC<InputNameProps> = ({
   return (
     <div className="relative">
       <Input
-        label="Name"
+        label="ユーザー名"
         value={inputValue}
         onChange={handleInputChange}
         validate={validateName}
