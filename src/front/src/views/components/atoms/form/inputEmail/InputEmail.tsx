@@ -1,14 +1,18 @@
 import React from 'react';
 import InputWithRequirements from '@components/atoms/form/inputWithRequirements/InputWithRequirements';
 
-interface InputEmailProps {
-  initialValue?: string;
-  onInputChange?: (value: string, isValid: boolean) => void;
+interface InputEmailProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  label?: string;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
 }
 
 const InputEmail: React.FC<InputEmailProps> = ({
-  initialValue = '',
-  onInputChange,
+  label = 'メールアドレス',
+  value,
+  onChange,
+  ...props
 }) => {
   const emailRequirements = [
     {
@@ -44,14 +48,15 @@ const InputEmail: React.FC<InputEmailProps> = ({
 
   return (
     <InputWithRequirements
-      label="メールアドレス"
-      initialValue={initialValue}
-      onInputChange={onInputChange}
+      label={label}
+      value={value}
+      onChange={onChange}
       requirements={emailRequirements}
       type="email"
       placeholder="example@example.com"
       validate={validateEmail}
       required
+      {...props}
     />
   );
 };
