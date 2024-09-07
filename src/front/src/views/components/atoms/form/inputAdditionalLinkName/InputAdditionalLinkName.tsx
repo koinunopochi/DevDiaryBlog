@@ -1,14 +1,18 @@
 import React from 'react';
 import InputWithRequirements from '@components/atoms/form/inputWithRequirements/InputWithRequirements';
 
-interface InputAdditionalLinkNameProps {
-  initialValue?: string;
-  onInputChange?: (value: string, isValid: boolean) => void;
+interface InputAdditionalLinkNameProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  label?: string;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
 }
 
 const InputAdditionalLinkName: React.FC<InputAdditionalLinkNameProps> = ({
-  initialValue = '',
-  onInputChange,
+  label = 'リンク名',
+  value,
+  onChange,
+  ...props
 }) => {
   const additionalLinkNameRequirements = [
     {
@@ -31,13 +35,14 @@ const InputAdditionalLinkName: React.FC<InputAdditionalLinkNameProps> = ({
 
   return (
     <InputWithRequirements
-      label="リンク名"
-      initialValue={initialValue}
-      onInputChange={onInputChange}
+      label={label}
+      value={value}
+      onChange={onChange}
       requirements={additionalLinkNameRequirements}
       validate={validateAdditionalLinkName}
       placeholder="表示したい名前"
       required
+      {...props}
     />
   );
 };
