@@ -28,7 +28,7 @@ const InputEmail: React.FC<InputEmailProps> = ({
     },
     {
       key: 'noInvalidChars',
-      label: '無効なEmail書式でないこと',
+      label: '有効なメールアドレス形式であること',
       validator: (value: string) =>
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
           value
