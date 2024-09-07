@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import ProfileForm from './ProfileForm';
 
-const meta = {
+const meta: Meta<typeof ProfileForm> = {
   title: 'blocks/ProfileForm',
   component: ProfileForm,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof ProfileForm>;
+};
 
 export default meta;
 type Story = StoryObj<typeof ProfileForm>;
