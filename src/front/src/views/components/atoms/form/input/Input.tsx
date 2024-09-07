@@ -1,55 +1,88 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, {
+  ChangeEvent,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from 'react';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   label?: string;
-  initialValue?: string;
-  onInputChange?: (value: string, isValid: boolean) => void;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
   validate?: (value: string) => string | null;
   className?: string;
+  debounceTime?: number;
 }
 
 const Input: React.FC<InputProps> = ({
   label,
-  initialValue = '',
-  onInputChange,
+  value,
+  onChange,
   validate,
   className = '',
   required,
+  debounceTime = 300,
   ...props
 }) => {
-  const [value, setValue] = useState(initialValue);
   const [error, setError] = useState<string | null>(null);
-  const [isInitialRender, setIsInitialRender] = useState(true);
+  const [isTouched, setIsTouched] = useState(false);
+  const [localValue, setLocalValue] = useState(value);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const validateInput = (newValue: string) => {
-    if (validate) {
-      return validate(newValue);
-    }
-    return null;
-  };
+  const validateInput = useCallback(
+    (inputValue: string) => {
+      if (validate) {
+        return validate(inputValue);
+      }
+      return null;
+    },
+    [validate]
+  );
+
+  const debouncedOnChange = useCallback(
+    (newValue: string) => {
+      const validationError = validateInput(newValue);
+      setError(validationError);
+      onChange(newValue, !validationError);
+    },
+    [onChange, validateInput]
+  );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    setValue(newValue);
+    setLocalValue(newValue);
+    setIsTouched(true);
 
-    const validationError = validateInput(newValue);
-    setError(validationError);
-
-    if (onInputChange) {
-      onInputChange(newValue, !validationError);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
     }
-    setIsInitialRender(false);
+
+    timerRef.current = setTimeout(() => {
+      debouncedOnChange(newValue);
+    }, debounceTime);
+  };
+
+  const handleBlur = () => {
+    setIsTouched(true);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    debouncedOnChange(localValue);
   };
 
   useEffect(() => {
-    // 初期値のバリデーションと value state の更新
-    const initialError = validateInput(initialValue);
-    setError(initialError);
-    setValue(initialValue); // initialValue が変更されたら value を更新
-    if (onInputChange) {
-      onInputChange(initialValue, !initialError);
-    }
-  }, [initialValue, validate, onInputChange]);
+    setLocalValue(value);
+  }, [value]);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="mb-4">
@@ -61,14 +94,15 @@ const Input: React.FC<InputProps> = ({
       )}
       <input
         {...props}
-        value={value}
+        value={localValue}
         onChange={handleChange}
+        onBlur={handleBlur}
         required={required}
         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-          error && !isInitialRender ? 'border-red-500' : ''
+          error && isTouched ? 'border-red-500' : ''
         } ${className}`}
       />
-      {error && !isInitialRender && (
+      {error && isTouched && (
         <p className="text-red-500 text-xs italic">{error}</p>
       )}
     </div>
