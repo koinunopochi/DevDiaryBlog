@@ -10,7 +10,8 @@ import { Loader2 } from 'lucide-react';
 import Input from '@components/atoms/form/input/Input';
 import RequirementItem from '@components/atoms/requirement/RequirementItem';
 
-interface InputNameProps {
+interface InputNameProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   initialValue?: string;
   onInputChange?: (value: string, isValid: boolean) => void;
   checkNameAvailability: (name: string) => Promise<boolean>;
@@ -113,7 +114,7 @@ const InputName: React.FC<InputNameProps> = ({
     (value: string, isValid: boolean) => {
       if (value !== previousValueRef.current) {
         setInputValue(value);
-        updateRequirements(value); // 即時にrequirementsを更新
+        updateRequirements(value);
         if (value.length >= 3 && /^[a-zA-Z0-9_]+$/.test(value)) {
           debouncedCheckAvailability(value);
         } else {
@@ -153,8 +154,8 @@ const InputName: React.FC<InputNameProps> = ({
     <div className="relative">
       <Input
         label="Name"
-        initialValue={inputValue}
-        onInputChange={handleInputChange}
+        value={inputValue}
+        onChange={handleInputChange}
         validate={validateName}
         required
         placeholder="user_name"

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import InputName from './InputName';
 
-const meta = {
+const meta: Meta<typeof InputName> = {
   title: 'atoms/form/InputName',
   component: InputName,
   parameters: {
@@ -12,7 +12,7 @@ const meta = {
     initialValue: { control: 'text' },
     onInputChange: { action: 'onInputChange' },
   },
-} satisfies Meta<typeof InputName>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
