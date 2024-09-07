@@ -145,6 +145,10 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
         );
         setIsValid((prevIsValid) => {
           const newIsValid = { ...prevIsValid };
+          // Remove validation state for the deleted link
+          delete newIsValid[`additionalLink${index}_name`];
+          delete newIsValid[`additionalLink${index}_url`];
+          // Shift validation state for remaining links
           for (let i = index; i < additionalLinks.length - 1; i++) {
             newIsValid[`additionalLink${i}_name`] =
               newIsValid[`additionalLink${i + 1}_name`];
@@ -163,7 +167,16 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
       (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (Object.values(isValid).some((valid) => !valid)) {
+        const isFormValid = Object.entries(isValid).every(([key, valid]) => {
+          if (key.startsWith('additionalLink')) {
+            const [, index] = key.split('_');
+            const linkIndex = parseInt(index, 10);
+            return linkIndex >= additionalLinks.length || valid;
+          }
+          return valid;
+        });
+
+        if (!isFormValid) {
           alert(
             'エラーがあるため保存できません。必須項目や入力内容を確認してください。'
           );
@@ -274,7 +287,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
               onChange={(value, valid) =>
                 handleAdditionalLinkChange(index, 'url', value, valid)
               }
-              placeholder='https://dev-diary-blog'
+              placeholder="https://dev-diary-blog"
               required
             />
             <button
