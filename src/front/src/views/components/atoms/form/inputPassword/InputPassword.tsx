@@ -20,7 +20,7 @@ const InputPassword: React.FC<InputPasswordProps> = ({
     uppercase: false,
     number: false,
     symbol: false,
-    containsOnlyAllowedChars:false,
+    containsOnlyAllowedChars: false,
   });
   const [hasInteracted, setHasInteracted] = useState(false);
 
@@ -31,7 +31,9 @@ const InputPassword: React.FC<InputPasswordProps> = ({
       uppercase: /[A-Z]/.test(value),
       number: /[0-9]/.test(value),
       symbol: /[!@#$%^&*()\-_=+{};:,<.>]/.test(value),
-      containsOnlyAllowedChars: /^[a-zA-Z0-9!@#$%^&*()\-_=+{};:,<.>]*$/.test(value),
+      containsOnlyAllowedChars: /^[a-zA-Z0-9!@#$%^&*()\-_=+{};:,<.>]*$/.test(
+        value
+      ),
     };
     setRequirements(newRequirements);
 
@@ -92,7 +94,13 @@ const InputPassword: React.FC<InputPasswordProps> = ({
           )}
         </button>
       </div>
-      <ul className="text-xs mt-2 space-y-1">
+      <ul
+        className={`
+          text-xs mt-2 space-y-1
+          transition-all duration-300 ease-in-out
+          ${isInitial ? 'opacity-0 max-h-0 overflow-hidden' : 'opacity-100 max-h-96'}
+        `}
+      >
         <RequirementItem met={requirements.length} isInitial={isInitial}>
           12文字以上
         </RequirementItem>

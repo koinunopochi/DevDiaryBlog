@@ -71,7 +71,13 @@ const InputEmail: React.FC<InputEmailProps> = ({
         type="email"
         required
       />
-      <ul className="text-xs mt-2 space-y-1">
+      <ul
+        className={`
+          text-xs mt-2 space-y-1
+          transition-all duration-300 ease-in-out
+          ${!hasInteracted ? 'opacity-0 max-h-0 overflow-hidden' : 'opacity-100 max-h-96'}
+        `}
+      >
         <RequirementItem met={requirements.notEmpty} isInitial={isInitial}>
           空でないこと
         </RequirementItem>

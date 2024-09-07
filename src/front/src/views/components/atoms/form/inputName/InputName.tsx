@@ -164,7 +164,13 @@ const InputName: React.FC<InputNameProps> = ({
           <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
         )}
       </div>
-      <ul className="text-xs mt-2 space-y-1">
+      <ul
+        className={`
+          text-xs mt-2 space-y-1
+          transition-all duration-300 ease-in-out
+          ${!hasInteracted ? 'opacity-0 max-h-0 overflow-hidden' : 'opacity-100 max-h-96'}
+        `}
+      >
         <RequirementItem met={requirements.length} isInitial={!hasInteracted}>
           3文字以上20文字以下
         </RequirementItem>
