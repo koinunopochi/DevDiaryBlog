@@ -234,7 +234,6 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
             handleSocialLinkChange('twitter', value, valid)
           }
           placeholder="https://twitter.com/blogtaro"
-          required
         />
       ),
       [formData.socialLinks.twitter, handleSocialLinkChange]
@@ -249,7 +248,6 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
             handleSocialLinkChange('github', value, valid)
           }
           placeholder="https://github.com/blogtaro"
-          required
         />
       ),
       [formData.socialLinks.github, handleSocialLinkChange]
@@ -276,6 +274,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
               onChange={(value, valid) =>
                 handleAdditionalLinkChange(index, 'url', value, valid)
               }
+              placeholder='https://dev-diary-blog'
               required
             />
             <button
