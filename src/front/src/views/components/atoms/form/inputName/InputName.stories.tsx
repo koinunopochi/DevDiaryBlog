@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import InputName from './InputName';
 
-const meta = {
-  title: 'blocks/InputName',
+const meta: Meta<typeof InputName> = {
+  title: 'atoms/form/InputName',
   component: InputName,
   parameters: {
     layout: 'centered',
@@ -12,7 +12,7 @@ const meta = {
     initialValue: { control: 'text' },
     onInputChange: { action: 'onInputChange' },
   },
-} satisfies Meta<typeof InputName>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -20,6 +20,7 @@ type Story = StoryObj<typeof meta>;
 const mockCheckNameAvailability = async (name: string): Promise<boolean> => {
   // This is a mock function. In a real scenario, this would call an API.
   await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API delay
+  console.log("問合せがありました")
   return !['admin', 'root', 'user'].includes(name.toLowerCase());
 };
 

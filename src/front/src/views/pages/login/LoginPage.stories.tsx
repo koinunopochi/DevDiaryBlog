@@ -1,10 +1,13 @@
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
 import LoginPage from './LoginPage';
 
-export default {
-  title: 'Components/LoginPage',
+const meta = {
+  title: 'pages/LoginPage',
   component: LoginPage,
+  parameters: {
+    layout: 'fullscreen',
+  },
   decorators: [
     (Story) => (
       <MemoryRouter>
@@ -12,9 +15,11 @@ export default {
       </MemoryRouter>
     ),
   ],
-} as Meta;
+  tags: ['autodocs'],
+} satisfies Meta<typeof LoginPage>;
 
-const Template: StoryFn<typeof LoginPage> = () => <LoginPage />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
-Default.args = {};
+export const Default: Story = {};
+

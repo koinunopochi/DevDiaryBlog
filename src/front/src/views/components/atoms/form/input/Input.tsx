@@ -1,78 +1,94 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { debounce } from 'lodash';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   label?: string;
-  initialValue?: string;
-  onInputChange?: (value: string, isValid: boolean) => void;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
   validate?: (value: string) => string | null;
   className?: string;
+  debounceTime?: number;
 }
 
-const Input: React.FC<InputProps> = ({
-  label,
-  initialValue = '',
-  onInputChange,
-  validate,
-  className = '',
-  required,
-  ...props
-}) => {
-  const [value, setValue] = useState(initialValue);
-  const [error, setError] = useState<string | null>(null);
-  const [isInitialRender, setIsInitialRender] = useState(true);
+const Input: React.FC<InputProps> = React.memo(
+  ({
+    label,
+    value,
+    onChange,
+    validate,
+    className = '',
+    required,
+    debounceTime = 300,
+    ...props
+  }) => {
+    const [error, setError] = useState<string | null>(null);
+    const [isTouched, setIsTouched] = useState(false);
+    const [localValue, setLocalValue] = useState(value);
 
-  const validateInput = (newValue: string) => {
-    if (validate) {
-      return validate(newValue);
-    }
-    return null;
-  };
+    const debouncedValidateRef = useRef<ReturnType<typeof debounce>>();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    setValue(newValue);
+    useEffect(() => {
+      debouncedValidateRef.current = debounce((inputValue: string) => {
+        if (validate) {
+          const validationError = validate(inputValue);
+          setError(validationError);
+          onChange(inputValue, !validationError);
+        } else {
+          onChange(inputValue, true);
+        }
+      }, debounceTime);
 
-    const validationError = validateInput(newValue);
-    setError(validationError);
+      return () => {
+        debouncedValidateRef.current?.cancel();
+      };
+    }, [onChange, validate, debounceTime]);
 
-    if (onInputChange) {
-      onInputChange(newValue, !validationError);
-    }
-    setIsInitialRender(false);
-  };
+    const handleChange = useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.value;
+        setLocalValue(newValue);
+        setIsTouched(true);
+        debouncedValidateRef.current?.(newValue);
+      },
+      []
+    );
 
-  useEffect(() => {
-    // 初期値のバリデーションと value state の更新
-    const initialError = validateInput(initialValue);
-    setError(initialError);
-    setValue(initialValue); // initialValue が変更されたら value を更新
-    if (onInputChange) {
-      onInputChange(initialValue, !initialError);
-    }
-  }, [initialValue, validate, onInputChange]);
+    const handleBlur = useCallback(() => {
+      setIsTouched(true);
+      debouncedValidateRef.current?.flush();
+    }, []);
 
-  return (
-    <div className="mb-4">
-      {label && (
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
-        </label>
-      )}
-      <input
-        {...props}
-        value={value}
-        onChange={handleChange}
-        required={required}
-        className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-          error && !isInitialRender ? 'border-red-500' : ''
-        } ${className}`}
-      />
-      {error && !isInitialRender && (
-        <p className="text-red-500 text-xs italic">{error}</p>
-      )}
-    </div>
-  );
-};
+    useEffect(() => {
+      setLocalValue(value);
+    }, [value]);
+
+    return (
+      <div className="mb-4">
+        {label && (
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            {label}
+            {required && <span className="text-red-500 ml-1">*</span>}
+          </label>
+        )}
+        <input
+          {...props}
+          value={localValue}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          required={required}
+          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline box-border ${
+            error && isTouched ? 'border-red-500' : ''
+          } ${className}`}
+        />
+        {error && isTouched && (
+          <p className="text-red-500 text-xs italic">{error}</p>
+        )}
+      </div>
+    );
+  }
+);
+
+Input.displayName = 'Input';
 
 export default Input;

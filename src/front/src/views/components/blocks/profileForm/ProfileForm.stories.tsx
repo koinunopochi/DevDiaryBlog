@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import ProfileForm from './ProfileForm';
 
-const meta = {
+const meta: Meta<typeof ProfileForm> = {
   title: 'blocks/ProfileForm',
   component: ProfileForm,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof ProfileForm>;
+};
 
 export default meta;
 type Story = StoryObj<typeof ProfileForm>;
@@ -92,6 +92,24 @@ export const HasErrorIcon: Story = {
         github: 'https://github.com/alexj',
         dribbble: 'https://dribbble.com/alexj',
         medium: 'https://medium.com/@alexj',
+      },
+    },
+    onSubmit: (data) => console.log('Submitted data:', data),
+    defaultProfileIcons: [...defaultIcons, 'invalid-icon'],
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    initialData: {
+      displayName: 'a'.repeat(51),
+      bio: 'a'.repeat(501),
+      avatarUrl: 'ht',
+      socialLinks: {
+        twitter: 'h/alexj',
+        github: 'https.com/alexj',
+        dribbble: 'httpribbble.com/alexj',
+        medium: 'httpedium.com/@alexj',
       },
     },
     onSubmit: (data) => console.log('Submitted data:', data),
