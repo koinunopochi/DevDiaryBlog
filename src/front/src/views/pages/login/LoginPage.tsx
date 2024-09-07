@@ -44,14 +44,14 @@ const LoginPage: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <InputEmail
-              initialValue={email}
-              onInputChange={handleEmailChange}
+              value={email}
+              onChange={handleEmailChange}
             />
           </div>
           <div className="mb-6">
             <InputPassword
-              initialValue={password}
-              onInputChange={handlePasswordChange}
+              value={password}
+              onChange={handlePasswordChange}
             />
           </div>
           <div className="flex items-center justify-between">
