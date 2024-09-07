@@ -77,7 +77,7 @@ const Input: React.FC<InputProps> = React.memo(
           onChange={handleChange}
           onBlur={handleBlur}
           required={required}
-          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+          className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline box-border ${
             error && isTouched ? 'border-red-500' : ''
           } ${className}`}
         />
