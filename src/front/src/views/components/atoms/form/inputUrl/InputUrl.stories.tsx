@@ -1,7 +1,8 @@
+import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import InputUrl from './InputUrl';
 
-const meta = {
+const meta: Meta<typeof InputUrl> = {
   title: 'atoms/form/InputUrl',
   component: InputUrl,
   parameters: {
@@ -10,68 +11,91 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     label: { control: 'text' },
-    initialValue: { control: 'text' },
-    onInputChange: { action: 'inputChanged' },
+    value: { control: 'text' },
+    onChange: { action: 'changed' },
     placeholder: { control: 'text' },
   },
-} satisfies Meta<typeof InputUrl>;
+};
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof InputUrl>;
+
+const InputUrlWrapper = (args: React.ComponentProps<typeof InputUrl>) => {
+  const [value, setValue] = useState(args.value || '');
+  return (
+    <InputUrl
+      {...args}
+      value={value}
+      onChange={(newValue, isValid) => {
+        setValue(newValue);
+        args.onChange(newValue, isValid);
+      }}
+    />
+  );
+};
 
 export const Default: Story = {
+  render: (args) => <InputUrlWrapper {...args} />,
   args: {
     label: 'ウェブサイト URL',
     placeholder: 'https://example.com',
+    value: '',
   },
 };
 
 export const WithInitialValue: Story = {
+  render: (args) => <InputUrlWrapper {...args} />,
   args: {
     label: 'ブログ URL',
-    initialValue: 'https://myblog.example.com',
+    value: 'https://myblog.example.com',
     placeholder: 'https://yourblog.com',
   },
 };
 
-export const WithCustomOnInputChange: Story = {
+export const WithCustomOnChange: Story = {
+  render: (args) => <InputUrlWrapper {...args} />,
   args: {
     label: 'SNS プロフィール URL',
     placeholder: 'https://social.example.com/profile',
-    onInputChange: (value: string, isValid: boolean) => {
+    value: '',
+    onChange: (value: string, isValid: boolean) => {
       console.log(`Value: ${value}, Is Valid: ${isValid}`);
     },
   },
 };
 
 export const InvalidUrl: Story = {
+  render: (args) => <InputUrlWrapper {...args} />,
   args: {
     label: 'ウェブサイト URL',
-    initialValue: 'not-a-valid-url',
+    value: 'not-a-valid-url',
     placeholder: 'https://example.com',
   },
 };
 
 export const MaxLengthEdgeCase: Story = {
+  render: (args) => <InputUrlWrapper {...args} />,
   args: {
     label: '長い URL',
-    initialValue: `https://example.com/${'a'.repeat(230)}`,
+    value: `https://example.com/${'a'.repeat(230)}`,
     placeholder: 'https://example.com',
   },
 };
 
 export const ExceedsMaxLength: Story = {
+  render: (args) => <InputUrlWrapper {...args} />,
   args: {
     label: '長すぎる URL',
-    initialValue: `https://example.com/${'a'.repeat(231)}`,
+    value: `https://example.com/${'a'.repeat(231)}`,
     placeholder: 'https://example.com',
   },
 };
 
 export const EmptyInput: Story = {
+  render: (args) => <InputUrlWrapper {...args} />,
   args: {
     label: '任意の URL',
-    initialValue: '',
+    value: '',
     placeholder: 'https://example.com（任意）',
   },
 };

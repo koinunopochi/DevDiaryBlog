@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import InputWithRequirements from '@components/atoms/form/inputWithRequirements/InputWithRequirements';
 
-interface InputUrlProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputUrlProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   label: string;
-  initialValue?: string;
-  onInputChange?: (value: string, isValid: boolean) => void;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
   placeholder?: string;
 }
 
 const InputUrl: React.FC<InputUrlProps> = ({
   label,
-  initialValue = '',
-  onInputChange,
+  value,
+  onChange,
   placeholder,
   ...props
 }) => {
@@ -36,19 +37,19 @@ const InputUrl: React.FC<InputUrlProps> = ({
     },
   ];
 
-  const validateUrl = (value: string): string | null => {
+  const validateUrl = useCallback((value: string): string | null => {
     if (value === '') return null;
     if (!urlRequirements[0].validator(value)) return 'URLが無効です。';
     if (!urlRequirements[1].validator(value))
       return 'URLは255文字以下で入力してください。';
     return null;
-  };
+  }, []);
 
   return (
     <InputWithRequirements
       label={label}
-      initialValue={initialValue}
-      onInputChange={onInputChange}
+      value={value}
+      onChange={onChange}
       requirements={urlRequirements}
       validate={validateUrl}
       placeholder={placeholder}
