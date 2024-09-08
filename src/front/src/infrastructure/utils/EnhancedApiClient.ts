@@ -12,7 +12,7 @@ export class EnhancedApiClient extends ApiClient {
   private static MAX_CSRF_RETRIES: number = 3;
 
   constructor(baseUrl: string, csrfTokenEndpoint: string) {
-    super(baseUrl);
+    super(baseUrl, true);
     this.csrfTokenEndpoint = csrfTokenEndpoint;
   }
 

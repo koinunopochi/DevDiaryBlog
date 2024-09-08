@@ -8,9 +8,11 @@ export interface RequestOptions {
 
 export class ApiClient {
   protected baseUrl: string;
+  protected isCredentialsInclude: boolean;
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, isCredentialsInclude: boolean = false) {
     this.baseUrl = baseUrl;
+    this.isCredentialsInclude = isCredentialsInclude;
   }
 
   protected async request<T>(
@@ -25,7 +27,7 @@ export class ApiClient {
 
     const config: RequestInit = {
       method: options.method,
-      credentials: 'include',
+      credentials: this.isCredentialsInclude ? 'include' : 'same-origin',
       headers,
       body: options.body ? JSON.stringify(options.body) : undefined,
     };
