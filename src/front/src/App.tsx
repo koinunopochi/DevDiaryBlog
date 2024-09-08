@@ -3,15 +3,64 @@ import { Page } from './views/pages/page/Page';
 import { Button } from './views/components/atoms/button/Button';
 import LoginPage from './views/pages/login/LoginPage';
 import RegisterPage from './views/pages/register/Register';
-
+import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
+import AuthService from '@/services/AuthService';
+import AccountPage from '@/views/pages/settings/account/AccountPage';
+import { AccountService } from '@/services/AccountService';
+import ProfilePage from '@/views/pages/settings/profile/ProfilePage';
+import { ProfileService } from '@/services/ProfileService';
+import { UserService } from '@/services/UserService';
 
 function App() {
+  const apiClient = new EnhancedApiClient(
+    'http://localhost:8080',
+    '/sanctum/csrf-cookie'
+  );
+  const authService = new AuthService(apiClient);
+  const accountService = new AccountService(apiClient);
+  const profileService = new ProfileService(apiClient);
+  const userService = new UserService(apiClient);
+
   return (
     <Routes>
-      <Route path="/" element={<Page />} />
+      <Route path="/" element={<Page authService={authService} />} />
       <Route path="/button" element={<Button label="Button" />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<LoginPage authService={authService} />} />
+      <Route
+        path="/register"
+        element={<RegisterPage authService={authService} />}
+      />
+
+      {/* Settings */}
+      <Route
+        path="/settings/account"
+        element={
+          <AccountPage
+            initialEmail={authService.getUserEmail()}
+            initialName={authService.getUsername()}
+            onNameSubmit={(name) => accountService.updateName(name)}
+            onEmailSubmit={(email) => accountService.updateEmail(email)}
+            onPasswordSubmit={(password) =>
+              accountService.updatePassword(password)
+            }
+            checkNameAvailability={(name) =>
+              accountService.checkNameAvailability(name)
+            }
+          />
+        }
+      />
+      <Route
+        path="/settings/profile"
+        element={
+          <ProfilePage
+            initialData={() =>
+              userService.getUserInfo(authService.getUsername())
+            }
+            defaultProfileIcons={() => profileService.getDefaultProfileIcons()}
+            onSubmit={(data) => profileService.saveProfile(data)}
+          />
+        }
+      />
     </Routes>
   );
 }

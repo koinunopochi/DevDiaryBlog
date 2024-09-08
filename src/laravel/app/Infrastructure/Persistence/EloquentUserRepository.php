@@ -116,4 +116,12 @@ class EloquentUserRepository implements UserRepositoryInterface
       $eloquentUser->delete();
     }
   }
+
+  /**
+   * @inheritDoc
+   */
+  public function existsByName(Username $username): bool
+  {
+    return EloquentUser::where('name', $username->toString())->exists();
+  }
 }

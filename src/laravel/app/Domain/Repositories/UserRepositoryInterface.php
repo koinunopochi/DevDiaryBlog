@@ -56,4 +56,11 @@ interface UserRepositoryInterface
    * @return void
    */
   public function delete(User $user): void;
+  /**
+   * Determine if a User exists by username
+   *
+   * @param Username $username
+   * @return bool
+   */
+  public function existsByName(Username $username): bool;
 }

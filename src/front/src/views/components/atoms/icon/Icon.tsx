@@ -30,6 +30,9 @@ const Icon: React.FC<IconProps> = ({
   const [imageSrc, setImageSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
 
+  const displayErrorMessage =
+    src === '' ? '画像が選択されていません' : errorMessage;
+
   useEffect(() => {
     const img = new Image();
     img.src = src;
@@ -61,7 +64,7 @@ const Icon: React.FC<IconProps> = ({
       />
       {hasError && (
         <p className="text-red-500 mt-2 text-sm text-center max-w-[200px]">
-          {errorMessage}
+          {displayErrorMessage}
         </p>
       )}
     </div>
