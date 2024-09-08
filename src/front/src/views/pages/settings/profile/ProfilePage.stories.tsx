@@ -6,7 +6,7 @@ import SettingsPageLayout from '@components/modules/settingsPageLayout/SettingsP
 import { ProfileFormData } from '@components/blocks/profileForm/ProfileForm';
 
 const meta: Meta<typeof ProfilePage> = {
-  title: 'pages/ProfilePage',
+  title: 'pages/settings/ProfilePage',
   component: ProfilePage,
   parameters: {
     layout: 'fullscreen',
@@ -56,6 +56,12 @@ export const Default: Story = {
 
 export const EmptyForm: Story = {
   args: {
+    initialData: {
+      displayName: '',
+      bio: '',
+      avatarUrl: '',
+      socialLinks: {},
+    },
     defaultProfileIcons: defaultProfileIcons,
   },
 };
@@ -95,11 +101,4 @@ const LoadingTemplate: React.FC<React.ComponentProps<typeof ProfilePage>> = (
   }
 
   return <ProfilePage {...args} />;
-};
-
-export const Loading: Story = {
-  render: (args) => <LoadingTemplate {...args} />,
-  args: {
-    defaultProfileIcons: defaultProfileIcons,
-  },
 };

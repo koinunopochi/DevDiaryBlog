@@ -8,6 +8,7 @@ import InputUrl from '@components/atoms/form/inputUrl/InputUrl';
 import InputBio from '@components/atoms/form/inputBio/InputBio';
 import InputAdditionalLinkName from '@components/atoms/form/inputAdditionalLinkName/InputAdditionalLinkName';
 import Input from '@components/atoms/form/input/Input';
+import { UserDetailsResponse } from '@/services/UserService';
 
 interface SocialLink {
   name: string;
@@ -26,8 +27,8 @@ export interface ProfileFormData {
 }
 
 interface ProfileFormProps {
-  initialData?: ProfileFormData;
-  defaultProfileIcons: Array<string> | (() => Promise<string[]>);
+  initialData: ProfileFormData | (() => Promise<UserDetailsResponse>);
+  defaultProfileIcons: string[] | (() => Promise<string[]>);
   onSubmit: (data: ProfileFormData) => void;
 }
 
@@ -35,25 +36,17 @@ const MAX_LINKS = 15;
 
 const ProfileForm: React.FC<ProfileFormProps> = React.memo(
   ({ initialData, defaultProfileIcons, onSubmit }) => {
-    const [formData, setFormData] = useState<ProfileFormData>(() => ({
-      displayName: initialData?.displayName || '',
-      bio: initialData?.bio || '',
-      avatarUrl: initialData?.avatarUrl || '',
+    const [formData, setFormData] = useState<ProfileFormData>({
+      displayName: '',
+      bio: '',
+      avatarUrl: '',
       socialLinks: {
-        twitter: initialData?.socialLinks.twitter || '',
-        github: initialData?.socialLinks.github || '',
+        twitter: '',
+        github: '',
       },
-    }));
-
-    const [additionalLinks, setAdditionalLinks] = useState<SocialLink[]>(() => {
-      if (initialData) {
-        return Object.entries(initialData.socialLinks)
-          .filter(([key]) => key !== 'twitter' && key !== 'github')
-          .map(([name, url]) => ({ name, url: url || '' }));
-      }
-      return [];
     });
 
+    const [additionalLinks, setAdditionalLinks] = useState<SocialLink[]>([]);
     const [isValid, setIsValid] = useState<Record<string, boolean>>({
       displayName: true,
       bio: true,
@@ -61,27 +54,56 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
       twitter: true,
       github: true,
     });
-
     const [showIconSelector, setShowIconSelector] = useState(false);
+    const [icons, setIcons] = useState<string[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-      if (initialData) {
-        setFormData({
-          displayName: initialData.displayName || '',
-          bio: initialData.bio || '',
-          avatarUrl: initialData.avatarUrl || '',
-          socialLinks: {
-            twitter: initialData.socialLinks.twitter || '',
-            github: initialData.socialLinks.github || '',
-          },
-        });
+      const fetchData = async () => {
+        try {
+          setIsLoading(true);
+          let userData: ProfileFormData;
+          let iconData: string[];
 
-        const otherLinks = Object.entries(initialData.socialLinks)
-          .filter(([key]) => key !== 'twitter' && key !== 'github')
-          .map(([name, url]) => ({ name, url: url || '' }));
-        setAdditionalLinks(otherLinks);
-      }
-    }, [initialData]);
+          if (typeof initialData === 'function') {
+            const response = await initialData();
+            userData = {
+              displayName: response.profile?.displayName || '',
+              bio: response.profile?.bio || '',
+              avatarUrl: response.profile?.avatarUrl || '',
+              socialLinks: response.profile?.socialLinks || {
+                twitter: '',
+                github: '',
+              },
+            };
+          } else {
+            userData = initialData;
+          }
+
+          if (typeof defaultProfileIcons === 'function') {
+            iconData = await defaultProfileIcons();
+          } else {
+            iconData = defaultProfileIcons;
+          }
+
+          setFormData(userData);
+          setIcons(iconData);
+
+          const otherLinks = Object.entries(userData.socialLinks)
+            .filter(([key]) => key !== 'twitter' && key !== 'github')
+            .map(([name, url]) => ({ name, url: url || '' }));
+          setAdditionalLinks(otherLinks);
+        } catch (err) {
+          console.error('Error fetching data:', err);
+          setError('データの取得中にエラーが発生しました。');
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
+    }, [initialData, defaultProfileIcons]);
 
     const handleIconChange = useCallback((newIconUrl: string) => {
       setFormData((prev) => ({ ...prev, avatarUrl: newIconUrl }));
@@ -303,7 +325,15 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
       [additionalLinks, handleAdditionalLinkChange, removeAdditionalLink]
     );
 
-    const totalLinks = additionalLinks.length + 2; // +2 for Twitter and GitHub
+    const totalLinks = additionalLinks.length + 2;
+
+    if (isLoading) {
+      return <div>読み込み中...</div>;
+    }
+
+    if (error) {
+      return <div>エラー: {error}</div>;
+    }
 
     return (
       <div className="min-w-[500px] max-w-[600px]: max-w-2xl mx-auto p-6">
@@ -337,14 +367,14 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
               {showIconSelector ? 'キャンセル' : '変更する'}
             </button>
           </div>
-            <div className="mt-4">
-              <ProfileIconSelector
-                icons={defaultProfileIcons}
-                selectedIcon={formData.avatarUrl}
-                onSelectIcon={handleIconChange}
-                isVisible={showIconSelector}
-              />
-            </div>
+          <div className="mt-4">
+            <ProfileIconSelector
+              icons={icons}
+              selectedIcon={formData.avatarUrl}
+              onSelectIcon={handleIconChange}
+              isVisible={showIconSelector}
+            />
+          </div>
           {memoizedInputDisplayName}
           {memoizedInputBio}
           {memoizedInputUrlTwitter}

@@ -1,5 +1,18 @@
 import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 
+export interface LoginResponse {
+  message: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    email_verified_at: string | null;
+    created_at: string;
+    updated_at: string;
+    status: string;
+  };
+}
+
 export default class AuthService {
   private apiClient: EnhancedApiClient;
 
@@ -7,12 +20,16 @@ export default class AuthService {
     this.apiClient = apiClient;
   }
 
-  async login(email: string, password: string): Promise<any> {
+  async login(email: string, password: string): Promise<LoginResponse> {
     try {
-      const data = await this.apiClient.post<any>('/api/login', {
+      const data = await this.apiClient.post<LoginResponse>('/api/login', {
         email,
         password,
       });
+
+      // ローカルストレージに保存
+      localStorage.setItem('user', JSON.stringify(data.user));
+
       return data;
     } catch (error) {
       console.error('ログインに失敗しました', error);
@@ -38,6 +55,7 @@ export default class AuthService {
   async logout(): Promise<void> {
     try {
       await this.apiClient.post<void>('/api/logout', {});
+      localStorage.clear();
     } catch (error) {
       console.error('ログアウトに失敗しました', error);
       throw error;
@@ -50,6 +68,33 @@ export default class AuthService {
     return Array.from({ length: 20 }, () =>
       characters.charAt(Math.floor(Math.random() * characters.length))
     ).join('');
+  }
+
+  public getUserId(): string {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return user.id;
+    }
+    return '';
+  }
+
+  public getUsername(): string {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return user.name;
+    }
+    return '';
+  }
+  
+  public getUserEmail(): string {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return user.email;
+    }
+    return '';
   }
 }
 
