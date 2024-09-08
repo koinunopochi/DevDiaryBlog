@@ -56,7 +56,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
     });
     const [showIconSelector, setShowIconSelector] = useState(false);
     const [icons, setIcons] = useState<string[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -65,7 +65,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
           setIsLoading(true);
           let userData: ProfileFormData;
           let iconData: string[];
-
+          
           if (typeof initialData === 'function') {
             const response = await initialData();
             userData = {
