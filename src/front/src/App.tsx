@@ -10,6 +10,8 @@ import { AccountService } from '@/services/AccountService';
 import ProfilePage from '@/views/pages/settings/profile/ProfilePage';
 import { ProfileService } from '@/services/ProfileService';
 import { UserService } from '@/services/UserService';
+import { ThemeProvider } from '@/views/components/providers/ThemeProvider';
+import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
 
 function App() {
   const apiClient = new EnhancedApiClient(
@@ -30,44 +32,54 @@ function App() {
   );
 
   return (
-    <Routes>
-      <Route path="/" element={<Page authService={authService} />} />
-      <Route path="/button" element={<Button label="Button" />} />
-      <Route path="/login" element={<LoginPage authService={authService} />} />
-      <Route
-        path="/register"
-        element={<RegisterPage authService={authService} />}
-      />
+    <ThemeProvider>
+      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+        <DarkModeToggle />
+        <Routes>
+          <Route path="/" element={<Page authService={authService} />} />
+          <Route path="/button" element={<Button label="Button" />} />
+          <Route
+            path="/login"
+            element={<LoginPage authService={authService} />}
+          />
+          <Route
+            path="/register"
+            element={<RegisterPage authService={authService} />}
+          />
 
-      {/* Settings */}
-      <Route
-        path="/settings/account"
-        element={
-          <AccountPage
-            initialEmail={authService.getUserEmail()}
-            initialName={authService.getUsername()}
-            onNameSubmit={(name) => accountService.updateName(name)}
-            onEmailSubmit={(email) => accountService.updateEmail(email)}
-            onPasswordSubmit={(password) =>
-              accountService.updatePassword(password)
-            }
-            checkNameAvailability={(name) =>
-              accountService.checkNameAvailability(name)
+          {/* Settings */}
+          <Route
+            path="/settings/account"
+            element={
+              <AccountPage
+                initialEmail={authService.getUserEmail()}
+                initialName={authService.getUsername()}
+                onNameSubmit={(name) => accountService.updateName(name)}
+                onEmailSubmit={(email) => accountService.updateEmail(email)}
+                onPasswordSubmit={(password) =>
+                  accountService.updatePassword(password)
+                }
+                checkNameAvailability={(name) =>
+                  accountService.checkNameAvailability(name)
+                }
+              />
             }
           />
-        }
-      />
-      <Route
-        path="/settings/profile"
-        element={
-          <ProfilePage
-            initialData={userService.getProfile()}
-            defaultProfileIcons={() => profileService.getDefaultProfileIcons()}
-            onSubmit={(data) => profileService.saveProfile(data)}
+          <Route
+            path="/settings/profile"
+            element={
+              <ProfilePage
+                initialData={userService.getProfile()}
+                defaultProfileIcons={() =>
+                  profileService.getDefaultProfileIcons()
+                }
+                onSubmit={(data) => profileService.saveProfile(data)}
+              />
+            }
           />
-        }
-      />
-    </Routes>
+        </Routes>
+      </div>
+    </ThemeProvider>
   );
 }
 
