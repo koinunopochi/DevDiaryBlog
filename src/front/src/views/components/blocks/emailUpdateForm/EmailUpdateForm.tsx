@@ -37,16 +37,16 @@ const EmailUpdateForm: React.FC<EmailUpdateFormProps> = React.memo(
     );
 
     return (
-      <div className="min-w-[300px] max-w-[500px] mx-auto p-6 text-gray-800 dark:text-gray-200">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="mx-auto p-1 sm:p-6 text-gray-800 dark:text-gray-200">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {memoizedInputEmail}
-          <div className="flex justify-end pt-4">
+          <div className="flex justify-end pt-2 sm:pt-4">
             <button
               type="submit"
-              className="flex items-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+              className="w-full sm:w-auto flex items-center justify-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 text-sm sm:text-base"
             >
-              <Save size={20} className="mr-2" />
-              メールアドレスを更新する
+              <Save size={18} className="mr-2" />
+              メールアドレスを更新
             </button>
           </div>
         </form>

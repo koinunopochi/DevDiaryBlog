@@ -21,11 +21,13 @@ const UserForm: React.FC<UserFormProps> = ({
   checkNameAvailability,
 }) => {
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-6">
-      <div className=" border border-gray-200 rounded-lg p-6 space-y-6">
+    <div className="max-w-3xl mx-auto p-1 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="border border-gray-200 rounded-lg p-4 sm:p-6 space-y-4 sm:space-y-6">
         <section>
-          <h2 className="text-xl font-semibold mb-2">ユーザー名の変更</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-lg sm:text-xl font-semibold mb-2">
+            ユーザー名の変更
+          </h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
             アカウントに利用される名前を設定します。
           </p>
           <NameUpdateForm
@@ -36,10 +38,12 @@ const UserForm: React.FC<UserFormProps> = ({
         </section>
       </div>
 
-      <div className="border border-gray-200 rounded-lg p-6 space-y-6">
+      <div className="border border-gray-200 rounded-lg p-4 sm:p-6 space-y-4 sm:space-y-6">
         <section>
-          <h2 className="text-xl font-semibold mb-2">メールアドレスの変更</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-lg sm:text-xl font-semibold mb-2">
+            メールアドレスの変更
+          </h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
             アカウントに関連付けられるメールアドレスを更新します。
           </p>
           <EmailUpdateForm
@@ -49,10 +53,12 @@ const UserForm: React.FC<UserFormProps> = ({
         </section>
       </div>
 
-      <div className="border border-gray-200 rounded-lg p-6 space-y-6">
+      <div className="border border-gray-200 rounded-lg p-4 sm:p-6 space-y-4 sm:space-y-6">
         <section>
-          <h2 className="text-xl font-semibold mb-2">パスワードの変更</h2>
-          <p className="text-gray-600 mb-4">
+          <h2 className="text-lg sm:text-xl font-semibold mb-2">
+            パスワードの変更
+          </h2>
+          <p className="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4">
             アカウントのセキュリティを保護するために、強力なパスワードを設定してください。
           </p>
           <PasswordUpdateForm onSubmit={onPasswordSubmit} />
