@@ -1,8 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
 import RegisterPage from './Register';
+import AuthService from '@/services/AuthService';
+import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 
-const meta = {
+const meta: Meta<typeof RegisterPage> = {
   title: 'pages/RegisterPage',
   component: RegisterPage,
   parameters: {
@@ -16,9 +18,15 @@ const meta = {
     ),
   ],
   tags: ['autodocs'],
-} satisfies Meta<typeof RegisterPage>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    authService: new AuthService(
+      new EnhancedApiClient('http://localhost:8080', '/sanctum/csrf-cookie')
+    ),
+  },
+};

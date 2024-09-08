@@ -2,23 +2,36 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { within, userEvent, expect } from '@storybook/test';
 
 import { Page } from './Page';
+import AuthService from '@/services/AuthService';
+import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 
-const meta = {
+const meta: Meta<typeof Page> = {
   title: 'Example/Page',
   component: Page,
   parameters: {
     // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof Page>;
+};
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LoggedOut: Story = {};
+export const LoggedOut: Story = {
+  args: {
+    authService: new AuthService(
+      new EnhancedApiClient('http://localhost:8080', '/sanctum/csrf-cookie')
+    ),
+  },
+};
 
 // More on interaction testing: https://storybook.js.org/docs/writing-tests/interaction-testing
 export const LoggedIn: Story = {
+  args: {
+    authService: new AuthService(
+      new EnhancedApiClient('http://localhost:8080', '/sanctum/csrf-cookie')
+    ),
+  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const loginButton = canvas.getByRole('button', { name: /Log in/i });
