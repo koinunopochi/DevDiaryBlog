@@ -20,7 +20,7 @@ const AccountPage: React.FC<AccountPageProps> = ({
   checkNameAvailability,
 }) => {
   return (
-    <SettingsPageLayout title="アカウント設定">
+    <SettingsPageLayout title="アカウント設定" activeItemName="アカウント">
       <UserForm
         initialEmail={initialEmail}
         initialName={initialName}
