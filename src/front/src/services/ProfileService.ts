@@ -1,5 +1,7 @@
 import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 import { ProfileFormData } from '@/views/components/blocks/profileForm/ProfileForm';
+import { UserService } from '@/services/UserService';
+import AuthService from '@/services/AuthService';
 
 interface DefaultIconsResponse {
   icons: {
@@ -10,14 +12,23 @@ interface DefaultIconsResponse {
 
 export class ProfileService {
   private apiClient: EnhancedApiClient;
+  private userService: UserService;
+  private authService: AuthService;
 
-  constructor(apiClient: EnhancedApiClient) {
+  constructor(
+    apiClient: EnhancedApiClient,
+    userService: UserService,
+    authService: AuthService
+  ) {
     this.apiClient = apiClient;
+    this.userService = userService;
+    this.authService = authService;
   }
 
   async saveProfile(profileData: ProfileFormData): Promise<void> {
     try {
       await this.apiClient.post('/api/profile', profileData);
+      await this.updateUserDetails();
     } catch (error) {
       console.error('プロフィールの保存に失敗しました', error);
       throw error;
@@ -38,5 +49,12 @@ export class ProfileService {
       );
       return [];
     }
+  }
+
+  private async updateUserDetails(): Promise<void> {
+    await this.userService.getUserInfo({
+      search_type: 'id',
+      value: this.authService.getUserId(),
+    });
   }
 }

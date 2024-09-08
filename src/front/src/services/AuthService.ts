@@ -1,23 +1,19 @@
 import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
+import { User, UserService } from '@/services/UserService';
 
 export interface LoginResponse {
   message: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    email_verified_at: string | null;
-    created_at: string;
-    updated_at: string;
-    status: string;
-  };
+  id: string;
+  user: User;
 }
 
 export default class AuthService {
   private apiClient: EnhancedApiClient;
+  private userService: UserService;
 
-  constructor(apiClient: EnhancedApiClient) {
+  constructor(apiClient: EnhancedApiClient, userService: UserService) {
     this.apiClient = apiClient;
+    this.userService = userService;
   }
 
   async login(email: string, password: string): Promise<LoginResponse> {
@@ -28,7 +24,10 @@ export default class AuthService {
       });
 
       // ローカルストレージに保存
+      localStorage.setItem('userId', data.id);
       localStorage.setItem('user', JSON.stringify(data.user));
+
+      await this.userService.getUserInfo({ search_type: 'id', value: data.id });
 
       return data;
     } catch (error) {
@@ -71,10 +70,9 @@ export default class AuthService {
   }
 
   public getUserId(): string {
-    const userStr = localStorage.getItem('user');
+    const userStr = localStorage.getItem('userId');
     if (userStr) {
-      const user = JSON.parse(userStr);
-      return user.id;
+      return userStr;
     }
     return '';
   }
@@ -87,7 +85,7 @@ export default class AuthService {
     }
     return '';
   }
-  
+
   public getUserEmail(): string {
     const userStr = localStorage.getItem('user');
     if (userStr) {
