@@ -26,6 +26,12 @@ const defaultIcons = [
 
 export const EmptyForm: Story = {
   args: {
+    initialData: {
+      displayName: '',
+      bio: '',
+      avatarUrl: '',
+      socialLinks: {},
+    },
     onSubmit: (data) => console.log('Submitted data:', data),
     defaultProfileIcons: defaultIcons,
   },

@@ -9,6 +9,7 @@ import AccountPage from '@/views/pages/settings/account/AccountPage';
 import { AccountService } from '@/services/AccountService';
 import ProfilePage from '@/views/pages/settings/profile/ProfilePage';
 import { ProfileService } from '@/services/ProfileService';
+import { UserService } from '@/services/UserService';
 
 function App() {
   const apiClient = new EnhancedApiClient(
@@ -18,6 +19,7 @@ function App() {
   const authService = new AuthService(apiClient);
   const accountService = new AccountService(apiClient);
   const profileService = new ProfileService(apiClient);
+  const userService = new UserService(apiClient);
 
   return (
     <Routes>
@@ -49,7 +51,10 @@ function App() {
         path="/settings/profile"
         element={
           <ProfilePage
-            defaultProfileIcons={()=>profileService.getDefaultProfileIcons()}
+            initialData={() =>
+              userService.getUserInfo(authService.getUsername())
+            }
+            defaultProfileIcons={() => profileService.getDefaultProfileIcons()}
             onSubmit={(data) => profileService.saveProfile(data)}
           />
         }
