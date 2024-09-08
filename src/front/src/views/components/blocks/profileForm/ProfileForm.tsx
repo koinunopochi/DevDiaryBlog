@@ -337,15 +337,14 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
               {showIconSelector ? 'キャンセル' : '変更する'}
             </button>
           </div>
-          {showIconSelector && (
             <div className="mt-4">
               <ProfileIconSelector
                 icons={defaultProfileIcons}
                 selectedIcon={formData.avatarUrl}
                 onSelectIcon={handleIconChange}
+                isVisible={showIconSelector}
               />
             </div>
-          )}
           {memoizedInputDisplayName}
           {memoizedInputBio}
           {memoizedInputUrlTwitter}
