@@ -16,10 +16,18 @@ function App() {
     'http://localhost:8080',
     '/sanctum/csrf-cookie'
   );
-  const authService = new AuthService(apiClient);
-  const accountService = new AccountService(apiClient);
-  const profileService = new ProfileService(apiClient);
   const userService = new UserService(apiClient);
+  const authService = new AuthService(apiClient, userService);
+  const profileService = new ProfileService(
+    apiClient,
+    userService,
+    authService
+  );
+  const accountService = new AccountService(
+    apiClient,
+    userService,
+    authService
+  );
 
   return (
     <Routes>
@@ -53,9 +61,7 @@ function App() {
         path="/settings/profile"
         element={
           <ProfilePage
-            initialData={() =>
-              userService.getUserInfo(authService.getUsername())
-            }
+            initialData={userService.getProfile()}
             defaultProfileIcons={() => profileService.getDefaultProfileIcons()}
             onSubmit={(data) => profileService.saveProfile(data)}
           />
