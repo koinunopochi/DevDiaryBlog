@@ -35,6 +35,6 @@ class MinioProfileIconRepositoryTest extends TestCase
     $icons = $repository->getDefaultAll()->toArray();
 
     // Then
-    $this->assertCount(10, $icons);
+    $this->assertCount(10, $icons["files"]);
   }
 }
