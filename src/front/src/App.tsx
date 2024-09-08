@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { Page } from './views/pages/page/Page';
 import { Button } from './views/components/atoms/button/Button';
 import LoginPage from './views/pages/login/LoginPage';
@@ -12,6 +12,13 @@ import { ProfileService } from '@/services/ProfileService';
 import { UserService } from '@/services/UserService';
 import { ThemeProvider } from '@/views/components/providers/ThemeProvider';
 import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
+
+const NotFound = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen">
+    <h1 className="text-4xl font-bold mb-4">404</h1>
+    <p className="text-xl">ページが見つかりません。</p>
+  </div>
+);
 
 function App() {
   const apiClient = new EnhancedApiClient(
@@ -49,6 +56,10 @@ function App() {
 
           {/* Settings */}
           <Route
+            path="/settings"
+            element={<Navigate to="/settings/account" replace />}
+          />
+          <Route
             path="/settings/account"
             element={
               <AccountPage
@@ -77,6 +88,9 @@ function App() {
               />
             }
           />
+
+          {/* 404 ページ */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </ThemeProvider>
