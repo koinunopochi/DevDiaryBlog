@@ -36,6 +36,8 @@ function App() {
         path="/settings/account"
         element={
           <AccountPage
+            initialEmail={authService.getUserEmail()}
+            initialName={authService.getUsername()}
             onNameSubmit={(name) => accountService.updateName(name)}
             onEmailSubmit={(email) => accountService.updateEmail(email)}
             onPasswordSubmit={(password) =>

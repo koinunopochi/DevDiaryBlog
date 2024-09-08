@@ -76,7 +76,7 @@ export default class AuthService {
       const user = JSON.parse(userStr);
       return user.id;
     }
-    return "";
+    return '';
   }
 
   public getUsername(): string {
@@ -85,7 +85,16 @@ export default class AuthService {
       const user = JSON.parse(userStr);
       return user.name;
     }
-    return "";
+    return '';
+  }
+  
+  public getUserEmail(): string {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return user.email;
+    }
+    return '';
   }
 }
 
