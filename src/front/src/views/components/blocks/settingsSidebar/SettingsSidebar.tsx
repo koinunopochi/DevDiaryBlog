@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from '@components/atoms/sidebar/Sidebar';
-import { UserCircle } from 'lucide-react';
+import { UserCircle, UserCog } from 'lucide-react';
 
 interface SidebarItem {
   name: string;
@@ -25,6 +25,11 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
       href: '/settings/account',
       icon: <UserCircle size={18} />,
     },
+    {
+      name:"プロフィール",
+      href:"/settings/profile",
+      icon:<UserCog size={18} />
+    }
   ];
 
   return (
