@@ -37,13 +37,13 @@ const BaseStatus: React.FC<BaseStatusProps> = ({
 function getColorClass(status: BaseStatusType): string {
   switch (status) {
     case 'initial':
-      return 'text-gray-300';
+      return 'text-gray-300 dark:text-gray-600';
     case 'loading':
-      return 'text-blue-500';
+      return 'text-blue-500 dark:text-blue-400';
     case 'error':
-      return 'text-red-500';
+      return 'text-red-500 dark:text-red-400';
     case 'success':
-      return 'text-green-500';
+      return 'text-green-500 dark:text-green-400';
     default:
       return '';
   }

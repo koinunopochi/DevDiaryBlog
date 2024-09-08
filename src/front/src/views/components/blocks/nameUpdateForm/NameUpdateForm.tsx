@@ -44,13 +44,13 @@ const NameUpdateForm: React.FC<NameUpdateFormProps> = React.memo(
     );
 
     return (
-      <div className="min-w-[300px] max-w-[500px] mx-auto p-6">
+      <div className="min-w-[300px] max-w-[500px] mx-auto p-6 text-gray-800 dark:text-gray-200">
         <form onSubmit={handleSubmit} className="space-y-6">
           {memoizedInputName}
           <div className="flex justify-end pt-4">
             <button
               type="submit"
-              className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+              className="flex items-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
             >
               <Save size={20} className="mr-2" />
               名前を更新

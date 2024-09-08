@@ -38,7 +38,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div
       className={twMerge(
-        'flex flex-col text-gray-800 transition-all duration-300 ease-in-out',
+        'flex flex-col text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-night-sky transition-all duration-300 ease-in-out',
         isOpen ? 'w-64' : 'w-20',
         className,
         !isOpen && collapsedClassName
@@ -47,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="flex justify-end p-4">
         <button
           onClick={toggleSidebar}
-          className="text-gray-500 hover:text-gray-700 transition-colors duration-200 rounded-full p-2 hover:bg-gray-200"
+          className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200 rounded-full p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
         >
           {isOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
         </button>
@@ -60,11 +60,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                 onClick={() => handleItemClick(item)}
                 className={twMerge(
                   'flex items-center w-full px-4 py-3 rounded-lg text-sm transition-all duration-200 ease-in-out',
-                  'hover:bg-white hover:shadow-md',
+                  'hover:bg-white dark:hover:bg-gray-700 hover:shadow-md dark:hover:shadow-gray-800',
                   activeItem === item.name
                     ? activeItemClassName ||
-                        'bg-blue-50 text-blue-600 shadow-inner'
-                    : 'text-gray-700 hover:text-blue-600',
+                        'bg-blue-50 dark:bg-cosmic-blue text-blue-600 dark:text-starlight shadow-inner dark:shadow-gray-800'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-starlight',
                   !isOpen && 'justify-center'
                 )}
               >

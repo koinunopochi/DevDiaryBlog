@@ -19,7 +19,11 @@ const RequirementItem: React.FC<RequirementItemProps> = ({
     />
     <span
       className={
-        isInitial ? 'text-gray-400' : met ? 'text-green-600' : 'text-gray-600'
+        isInitial
+          ? 'text-gray-400 dark:text-gray-500'
+          : met
+            ? 'text-green-600 dark:text-green-400'
+            : 'text-gray-600 dark:text-gray-300'
       }
     >
       {children}
