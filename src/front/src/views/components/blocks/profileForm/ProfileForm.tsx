@@ -55,18 +55,16 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
       github: true,
     });
     const [showIconSelector, setShowIconSelector] = useState(false);
-    const [icons, setIcons] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
       const fetchData = async () => {
         try {
-          setIsLoading(true);
           let userData: ProfileFormData;
-          let iconData: string[];
           
           if (typeof initialData === 'function') {
+            setIsLoading(true);
             const response = await initialData();
             userData = {
               displayName: response.profile?.displayName || '',
@@ -81,15 +79,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
             userData = initialData;
           }
 
-          if (typeof defaultProfileIcons === 'function') {
-            iconData = await defaultProfileIcons();
-          } else {
-            iconData = defaultProfileIcons;
-          }
-
           setFormData(userData);
-          setIcons(iconData);
-
           const otherLinks = Object.entries(userData.socialLinks)
             .filter(([key]) => key !== 'twitter' && key !== 'github')
             .map(([name, url]) => ({ name, url: url || '' }));
@@ -369,7 +359,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
           </div>
           <div className="mt-4">
             <ProfileIconSelector
-              icons={icons}
+              icons={defaultProfileIcons}
               selectedIcon={formData.avatarUrl}
               onSelectIcon={handleIconChange}
               isVisible={showIconSelector}
