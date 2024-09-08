@@ -10,6 +10,7 @@ interface SidebarItem {
 
 interface SettingsSidebarProps {
   className?: string;
+  activeItemName?: string;
   activeItemClassName?: string;
   collapsedClassName?: string;
 }
@@ -18,6 +19,7 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
   className = '',
   activeItemClassName = '',
   collapsedClassName = '',
+  activeItemName,
 }) => {
   const items: SidebarItem[] = [
     {
@@ -26,15 +28,16 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
       icon: <UserCircle size={18} />,
     },
     {
-      name:"プロフィール",
-      href:"/settings/profile",
-      icon:<UserCog size={18} />
-    }
+      name: 'プロフィール',
+      href: '/settings/profile',
+      icon: <UserCog size={18} />,
+    },
   ];
 
   return (
     <Sidebar
       items={items}
+      activeItemName={activeItemName}
       className={className}
       activeItemClassName={activeItemClassName}
       collapsedClassName={collapsedClassName}
