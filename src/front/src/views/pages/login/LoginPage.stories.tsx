@@ -1,10 +1,15 @@
-import { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
 import LoginPage from './LoginPage';
+import AuthService from '@/services/AuthService';
+import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 
-export default {
-  title: 'Components/LoginPage',
+const meta: Meta<typeof LoginPage> = {
+  title: 'pages/LoginPage',
   component: LoginPage,
+  parameters: {
+    layout: 'fullscreen',
+  },
   decorators: [
     (Story) => (
       <MemoryRouter>
@@ -12,9 +17,16 @@ export default {
       </MemoryRouter>
     ),
   ],
-} as Meta;
+  tags: ['autodocs'],
+};
 
-const Template: StoryFn<typeof LoginPage> = () => <LoginPage />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default = Template.bind({});
-Default.args = {};
+export const Default: Story = {
+  args: {
+    authService: new AuthService(
+      new EnhancedApiClient('http://localhost:8080', '/sanctum/csrf-cookie')
+    ),
+  },
+};

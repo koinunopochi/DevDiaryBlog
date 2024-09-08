@@ -2,6 +2,8 @@
 
 namespace App\Domain\ValueObjects;
 
+use Illuminate\Support\Facades\Log;
+
 class Username
 {
   private string $value;
@@ -11,6 +13,7 @@ class Username
    */
   public function __construct(string $name)
   {
+    Log::debug('class : Username - method : construct - $name : ' . $name);
     $this->validate($name);
     $this->value = $name;
   }

@@ -20,11 +20,12 @@ class LoginController extends Controller
 
       return new JsonResponse([
         'message' => 'ログインしました。',
+        'user' => Auth::user(),
       ]);
     }
 
     return new JsonResponse([
       'message' => 'ログインに失敗しました。',
-    ]);
+    ], 401);
   }
 }

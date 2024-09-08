@@ -1,20 +1,46 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../../../services/AuthService';
+import AuthService from '@/services/AuthService';
+import InputEmail from '@components/atoms/form/inputEmail/InputEmail';
+import InputPassword from '@components/atoms/form/inputPassword/InputPassword';
 
-const RegisterPage = () => {
+interface RegisterPageProps {
+  authService: AuthService;
+}
+
+const RegisterPage: React.FC<RegisterPageProps> = ({ authService }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
+  const handleEmailChange = (value: string, isValid: boolean) => {
+    setEmail(value);
+    setIsEmailValid(isValid);
+  };
+
+  const handlePasswordChange = (value: string, isValid: boolean) => {
+    setPassword(value);
+    setIsPasswordValid(isValid);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      await AuthService.register(email, password);
-      navigate('/');
-    } catch (error: any) {
-      setErrorMessage(error.message);
+    if (isEmailValid && isPasswordValid) {
+      try {
+        await authService.register(email, password);
+        navigate('/');
+      } catch (error) {
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
+            : '予期しないエラーが発生しました。'
+        );
+      }
+    } else {
+      setErrorMessage('メールアドレスまたはパスワードが無効です。');
     }
   };
 
@@ -25,39 +51,16 @@ const RegisterPage = () => {
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              メールアドレス
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <InputEmail value={email} onChange={handleEmailChange} />
           </div>
           <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              パスワード
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <InputPassword value={password} onChange={handlePasswordChange} />
           </div>
           <div className="flex items-center justify-between">
             <button
               type="submit"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              disabled={!isEmailValid || !isPasswordValid}
             >
               登録
             </button>
