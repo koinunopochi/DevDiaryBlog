@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../../../services/AuthService';
+import AuthService from '@/services/AuthService';
 import InputEmail from '@components/atoms/form/inputEmail/InputEmail';
 import InputPassword from '@components/atoms/form/inputPassword/InputPassword';
 
-const RegisterPage: React.FC = () => {
+interface RegisterPageProps {
+  authService: AuthService;
+}
+
+const RegisterPage: React.FC<RegisterPageProps> = ({ authService }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
@@ -26,10 +30,14 @@ const RegisterPage: React.FC = () => {
     event.preventDefault();
     if (isEmailValid && isPasswordValid) {
       try {
-        await AuthService.register(email, password);
+        await authService.register(email, password);
         navigate('/');
-      } catch (error: any) {
-        setErrorMessage(error.message);
+      } catch (error) {
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
+            : '予期しないエラーが発生しました。'
+        );
       }
     } else {
       setErrorMessage('メールアドレスまたはパスワードが無効です。');
@@ -43,16 +51,10 @@ const RegisterPage: React.FC = () => {
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <InputEmail
-              value={email}
-              onChange={handleEmailChange}
-            />
+            <InputEmail value={email} onChange={handleEmailChange} />
           </div>
           <div className="mb-6">
-            <InputPassword
-              value={password}
-              onChange={handlePasswordChange}
-            />
+            <InputPassword value={password} onChange={handlePasswordChange} />
           </div>
           <div className="flex items-center justify-between">
             <button
