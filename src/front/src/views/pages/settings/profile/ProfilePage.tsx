@@ -4,7 +4,7 @@ import ProfileForm, { ProfileFormData } from '@components/blocks/profileForm/Pro
 
 interface ProfilePageProps {
   initialData?: ProfileFormData;
-  defaultProfileIcons: Array<string>;
+  defaultProfileIcons: Array<string> | (() => Promise<string[]>);
   onSubmit: (data: ProfileFormData) => void;
 }
 

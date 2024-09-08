@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Icon from '@components/atoms/icon/Icon';
 
 interface ProfileIconSelectorProps {
-  icons: string[];
+  icons: Array<string> | (() => Promise<string[]>);
   selectedIcon?: string;
   onSelectIcon: (icon: string) => void;
 }
@@ -12,22 +12,52 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
   selectedIcon,
   onSelectIcon,
 }) => {
-  const [internalSelectedIcon, setInternalSelectedIcon] = useState<
-    string | undefined
-  >(selectedIcon);
+  const [internalSelectedIcon, setInternalSelectedIcon] = useState<string | undefined>(selectedIcon);
+  const [loadedIcons, setLoadedIcons] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     setInternalSelectedIcon(selectedIcon);
   }, [selectedIcon]);
+
+  useEffect(() => {
+    const loadIcons = async () => {
+      setIsLoading(true);
+      try {
+        let resolvedIcons: string[];
+        if (Array.isArray(icons)) {
+          resolvedIcons = icons;
+        } else {
+          resolvedIcons = await icons();
+        }
+        setLoadedIcons(resolvedIcons);
+      } catch (error) {
+        console.error('アイコンの読み込みに失敗しました', error);
+        setLoadedIcons([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadIcons();
+  }, [icons]);
 
   const handleIconClick = (icon: string) => {
     setInternalSelectedIcon(icon);
     onSelectIcon(icon);
   };
 
+  if (isLoading) {
+    return <div>アイコンを読み込んでいます...</div>;
+  }
+
+  if (loadedIcons.length === 0) {
+    return <div>アイコンが見つかりませんでした。</div>;
+  }
+
   return (
     <div className="grid grid-cols-4 gap-4">
-      {icons.map((icon:string, index:number) => (
+      {loadedIcons.map((icon: string, index: number) => (
         <div
           key={index}
           className="relative w-24 h-24 flex items-center justify-center"

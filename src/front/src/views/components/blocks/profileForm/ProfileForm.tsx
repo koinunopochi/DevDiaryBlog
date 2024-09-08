@@ -27,7 +27,7 @@ export interface ProfileFormData {
 
 interface ProfileFormProps {
   initialData?: ProfileFormData;
-  defaultProfileIcons: Array<string>;
+  defaultProfileIcons: Array<string> | (() => Promise<string[]>);
   onSubmit: (data: ProfileFormData) => void;
 }
 
