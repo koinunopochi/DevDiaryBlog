@@ -11,9 +11,10 @@ const meta = {
   argTypes: {
     label: { control: 'text' },
     placeholder: { control: 'text' },
-    initialValue: { control: 'text' },
+    value: { control: 'text' },
     disabled: { control: 'boolean' },
     rows: { control: 'number' },
+    debounceTime: { control: 'number' },
   },
 } satisfies Meta<typeof Textarea>;
 
@@ -24,6 +25,8 @@ export const Default: Story = {
   args: {
     placeholder: 'テキストを入力してください',
     rows: 4,
+    value: '',
+    onChange: (value: string, isValid: boolean) => console.log(value, isValid),
   },
 };
 
@@ -32,6 +35,8 @@ export const WithLabel: Story = {
     label: 'コメント',
     placeholder: 'コメントを入力してください',
     rows: 4,
+    value: '',
+    onChange: (value: string, isValid: boolean) => console.log(value, isValid),
   },
 };
 
@@ -39,8 +44,9 @@ export const WithInitialValue: Story = {
   args: {
     label: '自己紹介',
     placeholder: '自己紹介を入力してください',
-    initialValue: 'こんにちは、私は...',
+    value: 'こんにちは、私は...',
     rows: 5,
+    onChange: (value: string, isValid: boolean) => console.log(value, isValid),
   },
 };
 
@@ -49,6 +55,8 @@ export const WithMaxLengthValidation: Story = {
     label: '短いメッセージ',
     placeholder: '最大100文字で入力してください',
     rows: 3,
+    value: '',
+    onChange: (value: string, isValid: boolean) => console.log(value, isValid),
     validate: (value: string) => {
       return value.length <= 100 ? null : '最大100文字までです';
     },
@@ -60,7 +68,8 @@ export const WithCustomValidation: Story = {
     label: 'キーワード入力',
     placeholder: 'カンマ区切りで3つ以上のキーワードを入力してください',
     rows: 2,
-    onTextareaChange: (value: string, isValid: boolean) => {
+    value: '',
+    onChange: (value: string, isValid: boolean) => {
       console.log(`Value: ${value}, Is Valid: ${isValid}`);
     },
     validate: (value: string) => {
@@ -77,6 +86,19 @@ export const CustomStyle: Story = {
     label: 'カスタムスタイル',
     placeholder: 'カスタムスタイル',
     rows: 3,
-    className:"border-2 border-pink-400 rounded-md p-2"
+    value: '',
+    onChange: (value: string, isValid: boolean) => console.log(value, isValid),
+    className: 'border-2 border-pink-400 rounded-md p-2',
+  },
+};
+
+export const WithDebounce: Story = {
+  args: {
+    label: 'デバウンス付き',
+    placeholder: '入力してください（500ms遅延）',
+    rows: 3,
+    value: '',
+    onChange: (value: string, isValid: boolean) => console.log(value, isValid),
+    debounceTime: 500,
   },
 };

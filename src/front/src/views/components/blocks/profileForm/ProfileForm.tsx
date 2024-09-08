@@ -241,8 +241,8 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
     const memoizedInputBio = useMemo(
       () => (
         <InputBio
-          initialValue={formData.bio}
-          onInputChange={(value, valid) =>
+          value={formData.bio}
+          onChange={(value, valid) =>
             handleInputChange('bio', value, valid)
           }
         />
