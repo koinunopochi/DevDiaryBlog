@@ -12,6 +12,7 @@ interface SidebarItem {
 interface SidebarProps {
   items: SidebarItem[];
   className?: string;
+  activeItemName?: string;
   activeItemClassName?: string;
   collapsedClassName?: string;
 }
@@ -21,9 +22,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   className = '',
   activeItemClassName = '',
   collapsedClassName = '',
+  activeItemName = null,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [activeItem, setActiveItem] = useState<string | null>(null);
+  const [activeItem, setActiveItem] = useState<string | null>(activeItemName);
   const navigate = useNavigate();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
