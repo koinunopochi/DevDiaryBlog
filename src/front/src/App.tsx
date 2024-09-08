@@ -33,7 +33,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+      <div className="min-h-screen bg-white dark:bg-night-sky text-gray-900 dark:text-white">
         <DarkModeToggle />
         <Routes>
           <Route path="/" element={<Page authService={authService} />} />

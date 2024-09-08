@@ -4,6 +4,12 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      colors: {
+        'night-sky': '#080808',
+        moonlight: '#CCCCCC',
+        starlight: '#E0E0E0',
+        'cosmic-blue': '#1E3A8A',
+      },
       keyframes: {
         ripple: {
           '0%': { transform: 'scale(0)', opacity: 0.5 },

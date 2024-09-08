@@ -62,7 +62,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
       const fetchData = async () => {
         try {
           let userData: ProfileFormData;
-          
+
           if (typeof initialData === 'function') {
             setIsLoading(true);
             const response = await initialData();
@@ -242,9 +242,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
       () => (
         <InputBio
           value={formData.bio}
-          onChange={(value, valid) =>
-            handleInputChange('bio', value, valid)
-          }
+          onChange={(value, valid) => handleInputChange('bio', value, valid)}
         />
       ),
       [formData.bio, handleInputChange]
@@ -326,7 +324,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
     }
 
     return (
-      <div className="min-w-[500px] max-w-[600px]: max-w-2xl mx-auto p-6">
+      <div className="min-w-[500px] max-w-[600px]: max-w-2xl mx-auto p-6 text-gray-800 dark:text-gray-200">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="flex flex-col items-center">
             <div className="relative mb-2">
@@ -336,7 +334,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
                 size="w-20 h-20"
                 shape="rounded-full"
                 defaultSrc={formData.avatarUrl ? undefined : unKnownUser}
-                className="border-2 border-gray-200"
+                className="border-2 border-gray-200 dark:border-gray-600"
               />
               <div className="sr-only">
                 <Input
@@ -352,7 +350,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
             <button
               type="button"
               onClick={() => setShowIconSelector(!showIconSelector)}
-              className="text-sm text-gray-600 hover:text-gray-800 transition-colors duration-200 underline"
+              className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-200 underline"
             >
               {showIconSelector ? 'キャンセル' : '変更する'}
             </button>
@@ -375,7 +373,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
               <button
                 type="button"
                 onClick={addAdditionalLink}
-                className={`flex items-center text-blue-600 hover:text-blue-800 transition-colors duration-200 mr-4 ${
+                className={`flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-200 mr-4 ${
                   totalLinks >= MAX_LINKS ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
                 disabled={totalLinks >= MAX_LINKS}
@@ -384,14 +382,14 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
                 他のリンクを追加
               </button>
               {totalLinks >= MAX_LINKS && (
-                <span className="text-red-500 text-sm mt-1">
+                <span className="text-red-500 dark:text-red-400 text-sm mt-1">
                   リンクの数は15個までです
                 </span>
               )}
             </div>
             <button
               type="submit"
-              className="flex items-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+              className="flex items-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
             >
               <Save size={20} className="mr-2" />
               保存

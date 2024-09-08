@@ -42,7 +42,7 @@ const Profile: React.FC<ProfileProps> = ({
 }) => {
   const profileEditButton = (
     <button
-      className="mt-4 w-full bg-gray-200 text-gray-800 py-2 rounded-md hover:bg-gray-300 transition-colors"
+      className="mt-4 w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
       onClick={onEditProfile}
     >
       プロフィールを編集する
@@ -51,8 +51,8 @@ const Profile: React.FC<ProfileProps> = ({
 
   if (!userData.profile) {
     return (
-      <div className="bg-white p-4 rounded-lg shadow-md min-w-[280px] max-w-[400px] w-full mx-auto">
-        <p className="mt-4 text-sm text-gray-600 text-center">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md min-w-[280px] max-w-[400px] w-full mx-auto">
+        <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
           プロフィールが設定されていません
         </p>
         {isEditable && profileEditButton}
@@ -63,7 +63,7 @@ const Profile: React.FC<ProfileProps> = ({
   const { displayName, bio, avatarUrl, socialLinks } = userData.profile;
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md min-w-[280px] max-w-[400px] w-full mx-auto">
+    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md min-w-[280px] max-w-[400px] w-full mx-auto">
       <div className="flex flex-col items-center">
         <Icon
           src={avatarUrl}
@@ -74,8 +74,12 @@ const Profile: React.FC<ProfileProps> = ({
             console.log('ユーザーを編集する');
           }}
         />
-        <h2 className="mt-4 text-xl font-bold">{displayName}</h2>
-        <p className="text-gray-600">@{userData.user.name}</p>
+        <h2 className="mt-4 text-xl font-bold dark:text-white">
+          {displayName}
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400">
+          @{userData.user.name}
+        </p>
 
         <div className="flex mt-2 space-x-2">
           {socialLinks.github && (
@@ -100,22 +104,24 @@ const Profile: React.FC<ProfileProps> = ({
           )}
         </div>
 
-        <p className="mt-4 text-sm text-gray-600 text-center">{bio}</p>
+        <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
+          {bio}
+        </p>
       </div>
 
       {isEditable && profileEditButton}
 
-      <div className="mt-4 text-sm text-gray-600 space-y-2">
+      <div className="mt-4 text-sm text-gray-600 dark:text-gray-400 space-y-2">
         <p className="flex items-center">
-          <Mail className="w-4 h-4 mr-2 text-gray-800" />
+          <Mail className="w-4 h-4 mr-2 text-gray-800 dark:text-gray-200" />
           <span className="truncate">{userData.user.email}</span>
         </p>
         <p className="flex items-center">
-          <Calendar className="w-4 h-4 mr-2 text-gray-800" />
+          <Calendar className="w-4 h-4 mr-2 text-gray-800 dark:text-gray-200" />
           <span>{new Date(userData.user.createdAt).toLocaleDateString()}</span>
         </p>
         <p className="flex items-center">
-          <Tag className="w-4 h-4 mr-2 text-gray-800" />
+          <Tag className="w-4 h-4 mr-2 text-gray-800 dark:text-gray-200" />
           <span>{userData.user.status}</span>
         </p>
         {Object.entries(socialLinks).map(([key, value]) => {
@@ -126,9 +132,9 @@ const Profile: React.FC<ProfileProps> = ({
                 href={value}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-gray-600 hover:text-gray-800"
+                className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
               >
-                <Link className="w-4 h-4 mr-2 text-gray-800" />
+                <Link className="w-4 h-4 mr-2 text-gray-800 dark:text-gray-200" />
                 <span>{key}</span>
               </a>
             );
@@ -141,3 +147,4 @@ const Profile: React.FC<ProfileProps> = ({
 };
 
 export default Profile;
+

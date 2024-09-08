@@ -53,7 +53,7 @@ const Icon: React.FC<IconProps> = ({
   const icon = (
     <div className="flex flex-col items-center">
       <div
-        className={`${baseStyles} ${buttonStyles} ${rippleStyles} relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-white after:opacity-0 after:rounded-full ${className}`}
+        className={`${baseStyles} ${buttonStyles} ${rippleStyles} relative overflow-hidden after:content-[''] after:absolute after:inset-0 after:bg-white dark:after:bg-night-sky after:opacity-0 after:rounded-full ${className}`}
         style={{ backgroundImage: `url(${imageSrc})` }}
         onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
@@ -63,7 +63,7 @@ const Icon: React.FC<IconProps> = ({
         aria-label={alt}
       />
       {hasError && (
-        <p className="text-red-500 mt-2 text-sm text-center max-w-[200px]">
+        <p className="text-red-500 dark:text-red-400 mt-2 text-sm text-center max-w-[200px]">
           {displayErrorMessage}
         </p>
       )}

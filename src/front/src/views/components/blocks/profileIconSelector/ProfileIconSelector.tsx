@@ -60,11 +60,19 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
   }
 
   if (isLoading) {
-    return <div>アイコンを読み込んでいます...</div>;
+    return (
+      <div className="text-gray-700 dark:text-gray-300">
+        アイコンを読み込んでいます...
+      </div>
+    );
   }
 
   if (loadedIcons.length === 0) {
-    return <div>アイコンが見つかりませんでした。</div>;
+    return (
+      <div className="text-gray-700 dark:text-gray-300">
+        アイコンが見つかりませんでした。
+      </div>
+    );
   }
 
   return (
@@ -77,8 +85,8 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
           <div
             className={`absolute inset-0 rounded-lg transition-all duration-200 ${
               internalSelectedIcon === icon
-                ? 'bg-blue-100 shadow-lg'
-                : 'hover:bg-gray-100'
+                ? 'bg-blue-100 dark:bg-blue-800 shadow-lg'
+                : 'hover:bg-gray-100 dark:hover:bg-gray-700'
             }`}
           />
           <Icon
@@ -89,7 +97,9 @@ const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
             isButton={true}
             onClick={() => handleIconClick(icon)}
             className={`relative z-10 transition-transform duration-200 hover:scale-105 ${
-              internalSelectedIcon === icon ? 'ring-2 ring-blue-500' : ''
+              internalSelectedIcon === icon
+                ? 'ring-2 ring-blue-500 dark:ring-blue-400'
+                : ''
             }`}
           />
         </div>
