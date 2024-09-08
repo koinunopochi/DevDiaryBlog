@@ -5,6 +5,8 @@ import LoginPage from './views/pages/login/LoginPage';
 import RegisterPage from './views/pages/register/Register';
 import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 import AuthService from '@/services/AuthService';
+import AccountPage from './views/pages/settings/account/AccountPage';
+import { AccountService } from './services/AccountService';
 
 function App() {
   const apiClient = new EnhancedApiClient(
@@ -12,6 +14,7 @@ function App() {
     '/sanctum/csrf-cookie'
   );
   const authService = new AuthService(apiClient);
+  const accountService = new AccountService(apiClient);
 
   return (
     <Routes>
@@ -21,6 +24,23 @@ function App() {
       <Route
         path="/register"
         element={<RegisterPage authService={authService} />}
+      />
+
+      {/* Settings */}
+      <Route
+        path="/settings/account"
+        element={
+          <AccountPage
+            onNameSubmit={(name) => accountService.updateName(name)}
+            onEmailSubmit={(email) => accountService.updateEmail(email)}
+            onPasswordSubmit={(password) =>
+              accountService.updatePassword(password)
+            }
+            checkNameAvailability={(name) =>
+              accountService.checkNameAvailability(name)
+            }
+          />
+        }
       />
     </Routes>
   );
