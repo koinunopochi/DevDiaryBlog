@@ -11,7 +11,6 @@ use App\Domain\ValueObjects\Username;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class SaveUserController extends Controller
 {
@@ -41,16 +40,6 @@ class SaveUserController extends Controller
     $nameValueObject = $name ? new Username($name) : null;
     $emailValueObject = $email ? new Email($email) : null;
     $passwordValueObject = $password ? new Password($password) : null;
-
-    Log::debug(
-      'class : SaveUserController - method : execute - $nameValueObject : ' . $nameValueObject->toString()
-    );
-    Log::debug(
-      'class : SaveUserController - method : execute - $emailValueObject : ' . $emailValueObject->toString()
-    );
-    Log::debug(
-      'class : SaveUserController - method : execute - $passwordValueObject : ' . $passwordValueObject->toString()
-    );
 
     $dto = new SaveUserDTO(
       $nameValueObject,

@@ -6,6 +6,7 @@ interface TextareaProps
   initialValue?: string;
   onTextareaChange?: (value: string, isValid: boolean) => void;
   validate?: (value: string) => string | null;
+  className?:string;
 }
 
 const Textarea: React.FC<TextareaProps> = ({
@@ -14,6 +15,7 @@ const Textarea: React.FC<TextareaProps> = ({
   onTextareaChange,
   validate,
   required,
+  className='',
   ...props
 }) => {
   const [value, setValue] = useState(initialValue);
@@ -68,7 +70,7 @@ const Textarea: React.FC<TextareaProps> = ({
         required={required}
         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
           error && !isInitialRender ? 'border-red-500' : ''
-        }`}
+        } ${className}`}
       />
       {error && !isInitialRender && (
         <p className="text-red-500 text-xs italic">{error}</p>
