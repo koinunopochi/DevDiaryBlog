@@ -31,7 +31,7 @@ export class UserService {
   async getUserInfo(name:string): Promise<UserDetailsResponse> {
     try {
       const response = await this.apiClient.get<UserDetailsResponse>(
-        `/api/user?search_type=name&value${name}`
+        `/api/user?search_type=name&value=${name}`
       );
       return response;
     } catch (error) {
