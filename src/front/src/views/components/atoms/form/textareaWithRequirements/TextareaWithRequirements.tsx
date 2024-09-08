@@ -9,89 +9,77 @@ interface Requirement {
 }
 
 interface TextareaWithRequirementsProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
   label: string;
-  initialValue?: string;
-  onTextareaChange?: (value: string, isValid: boolean) => void;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
   requirements: Requirement[];
-  placeholder?: string;
   validate: (value: string) => string | null;
+  debounceTime?: number;
 }
 
 const TextareaWithRequirements: React.FC<TextareaWithRequirementsProps> = ({
   label,
-  initialValue = '',
-  onTextareaChange,
+  value,
+  onChange,
   requirements,
-  placeholder,
   validate,
-  className = '',
+  debounceTime = 300,
+  placeholder,
   ...props
 }) => {
-  const [textareaValue, setTextareaValue] = useState(initialValue);
   const [requirementStates, setRequirementStates] = useState<
     Record<string, boolean>
   >({});
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const validateTextarea = useCallback(
-    (value: string) => {
+    (inputValue: string) => {
       const newRequirementStates = requirements.reduce(
         (acc, req) => {
-          acc[req.key] = req.validator(value);
+          acc[req.key] = req.validator(inputValue);
           return acc;
         },
         {} as Record<string, boolean>
       );
       setRequirementStates(newRequirementStates);
-      return validate(value);
+      return validate(inputValue);
     },
     [requirements, validate]
   );
 
   const handleTextareaChange = useCallback(
-    (value: string, isValid: boolean) => {
-      setTextareaValue(value);
-      validateTextarea(value);
-      if (onTextareaChange) {
-        onTextareaChange(value, isValid);
-      }
-      if (!hasInteracted && value !== '') {
+    (newValue: string, isValid: boolean) => {
+      validateTextarea(newValue);
+      onChange(newValue, isValid);
+      if (!hasInteracted && newValue !== '') {
         setHasInteracted(true);
       }
     },
-    [onTextareaChange, validateTextarea, hasInteracted]
+    [onChange, validateTextarea, hasInteracted]
   );
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-
-      // カーソル位置に改行を挿入
       const textarea = event.currentTarget;
       const cursorPosition = textarea.selectionStart;
       const textBeforeCursor = textarea.value.substring(0, cursorPosition);
       const textAfterCursor = textarea.value.substring(cursorPosition);
-
       const newValue = textBeforeCursor + '\n' + textAfterCursor;
-      setTextareaValue(newValue);
-
-      // カーソル位置を更新
+      onChange(newValue, true);
       setTimeout(() => {
         textarea.selectionStart = textarea.selectionEnd = cursorPosition + 1;
       }, 0);
-
-      // 値の変更をトリガー
-      handleTextareaChange(newValue, true);
     }
   };
 
   useEffect(() => {
-    validateTextarea(initialValue);
-    if (initialValue !== '') {
+    validateTextarea(value);
+    if (value !== '') {
       setHasInteracted(true);
     }
-  }, [initialValue, validateTextarea]);
+  }, [value, validateTextarea]);
 
   const isInitial = !hasInteracted;
 
@@ -99,12 +87,12 @@ const TextareaWithRequirements: React.FC<TextareaWithRequirementsProps> = ({
     <div className="relative">
       <Textarea
         label={label}
-        initialValue={textareaValue}
-        onTextareaChange={handleTextareaChange}
+        value={value}
+        onChange={handleTextareaChange}
         validate={validateTextarea}
         placeholder={placeholder}
-        className={`${className} ${props.required ? 'required' : ''}`}
         onKeyDown={handleKeyDown}
+        debounceTime={debounceTime}
         {...props}
       />
       <ul

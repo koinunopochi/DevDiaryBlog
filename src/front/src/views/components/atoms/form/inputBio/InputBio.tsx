@@ -2,14 +2,11 @@ import React from 'react';
 import TextareaWithRequirements from '@components/atoms/form/textareaWithRequirements/TextareaWithRequirements';
 
 interface InputBioProps {
-  initialValue?: string;
-  onInputChange?: (value: string, isValid: boolean) => void;
+  value: string;
+  onChange: (value: string, isValid: boolean) => void;
 }
 
-const InputBio: React.FC<InputBioProps> = ({
-  initialValue = '',
-  onInputChange,
-}) => {
+const InputBio: React.FC<InputBioProps> = ({ value, onChange }) => {
   const bioRequirements = [
     {
       key: 'maxLength',
@@ -27,8 +24,8 @@ const InputBio: React.FC<InputBioProps> = ({
   return (
     <TextareaWithRequirements
       label="経歴・自己紹介"
-      initialValue={initialValue}
-      onTextareaChange={onInputChange}
+      value={value}
+      onChange={onChange}
       requirements={bioRequirements}
       validate={validateBio}
       placeholder="○○に興味があります！"
