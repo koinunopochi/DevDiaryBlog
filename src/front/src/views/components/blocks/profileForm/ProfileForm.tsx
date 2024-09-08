@@ -14,7 +14,7 @@ interface SocialLink {
   url: string;
 }
 
-interface ProfileFormData {
+export interface ProfileFormData {
   displayName: string;
   bio: string;
   avatarUrl: string;
