@@ -1,51 +1,63 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Icon from '@components/atoms/icon/Icon';
 
 interface ProfileIconSelectorProps {
   icons: Array<string> | (() => Promise<string[]>);
   selectedIcon?: string;
   onSelectIcon: (icon: string) => void;
+  isVisible?: boolean;
 }
 
 const ProfileIconSelector: React.FC<ProfileIconSelectorProps> = ({
   icons,
   selectedIcon,
   onSelectIcon,
+  isVisible = true,
 }) => {
-  const [internalSelectedIcon, setInternalSelectedIcon] = useState<string | undefined>(selectedIcon);
+  const [internalSelectedIcon, setInternalSelectedIcon] = useState<
+    string | undefined
+  >(selectedIcon);
   const [loadedIcons, setLoadedIcons] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setInternalSelectedIcon(selectedIcon);
   }, [selectedIcon]);
 
-  useEffect(() => {
-    const loadIcons = async () => {
-      setIsLoading(true);
-      try {
-        let resolvedIcons: string[];
-        if (Array.isArray(icons)) {
-          resolvedIcons = icons;
-        } else {
-          resolvedIcons = await icons();
-        }
-        setLoadedIcons(resolvedIcons);
-      } catch (error) {
-        console.error('アイコンの読み込みに失敗しました', error);
-        setLoadedIcons([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const loadIcons = useCallback(async () => {
+    if (loadedIcons.length > 0) return; // アイコンが既にロードされている場合は何もしない
 
-    loadIcons();
-  }, [icons]);
+    setIsLoading(true);
+    try {
+      let resolvedIcons: string[];
+      if (Array.isArray(icons)) {
+        resolvedIcons = icons;
+      } else {
+        resolvedIcons = await icons();
+      }
+      setLoadedIcons(resolvedIcons);
+    } catch (error) {
+      console.error('アイコンの読み込みに失敗しました', error);
+      setLoadedIcons([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [icons, loadedIcons]);
+
+  useEffect(() => {
+    if (isVisible && loadedIcons.length === 0) {
+      loadIcons();
+    }
+  }, [isVisible, loadIcons, loadedIcons.length]);
 
   const handleIconClick = (icon: string) => {
     setInternalSelectedIcon(icon);
     onSelectIcon(icon);
   };
+
+  if (!isVisible) {
+    return null; // コンポーネントが非表示の場合は何もレンダリングしない
+  }
 
   if (isLoading) {
     return <div>アイコンを読み込んでいます...</div>;
