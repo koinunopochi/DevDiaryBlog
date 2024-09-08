@@ -45,10 +45,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ authService }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4">ログイン</h2>
-        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 ">
+      <div className="p-8 rounded-lg border border-gray-300 dark:border-gray-700 w-96 bg-white dark:bg-gray-800">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+          ログイン
+        </h2>
+        {errorMessage && (
+          <p className="text-red-500 dark:text-red-400 mb-4">{errorMessage}</p>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <InputEmail value={email} onChange={handleEmailChange} />
@@ -59,7 +63,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ authService }) => {
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200"
               disabled={!isEmailValid || !isPasswordValid}
             >
               ログイン
