@@ -172,4 +172,28 @@ class EloquentUserRepositoryTest extends TestCase
       'id' => $user->getUserId()->toString()
     ]);
   }
+
+  public function test_existsByName(): void
+  {
+    // Given
+    $user = EloquentUser::factory()->create();
+
+    // When
+    $result = $this->repository->existsByName(new Username($user->name));
+
+    // Then
+    $this->assertTrue($result);
+  }
+
+  public function test_existsByName_notExists(): void
+  {
+    // Given
+    $username = new Username('nonexisting_user');
+
+    // When
+    $result = $this->repository->existsByName($username);
+
+    // Then
+    $this->assertFalse($result);
+  }
 }
