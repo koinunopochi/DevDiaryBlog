@@ -36,7 +36,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   return (
     <div
       className={twMerge(
-        'flex flex-col h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800 transition-all duration-300 ease-in-out shadow-lg',
+        'flex flex-col text-gray-800 transition-all duration-300 ease-in-out',
         isOpen ? 'w-64' : 'w-20',
         className,
         !isOpen && collapsedClassName
