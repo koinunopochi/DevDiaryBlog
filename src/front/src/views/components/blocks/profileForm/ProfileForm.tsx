@@ -324,14 +324,14 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
     }
 
     return (
-      <div className="min-w-[500px] max-w-[600px]: max-w-2xl mx-auto p-6 text-gray-800 dark:text-gray-200">
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="max-w-2xl mx-auto p-4 sm:p-6 text-gray-800 dark:text-gray-200">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <div className="flex flex-col items-center">
             <div className="relative mb-2">
               <Icon
                 src={formData.avatarUrl}
                 alt="プロフィールのアイコン"
-                size="w-20 h-20"
+                size="w-16 h-16 sm:w-20 sm:h-20"
                 shape="rounded-full"
                 defaultSrc={formData.avatarUrl ? undefined : unKnownUser}
                 className="border-2 border-gray-200 dark:border-gray-600"
@@ -350,7 +350,7 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
             <button
               type="button"
               onClick={() => setShowIconSelector(!showIconSelector)}
-              className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-200 underline"
+              className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-200 underline"
             >
               {showIconSelector ? 'キャンセル' : '変更する'}
             </button>
@@ -368,8 +368,8 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
           {memoizedInputUrlTwitter}
           {memoizedInputUrlGithub}
           {memoizedAdditionalLinks}
-          <div className="flex justify-between items-center pt-4">
-            <div className="flex flex-col">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-4">
+            <div className="flex flex-col mb-4 sm:mb-0">
               <button
                 type="button"
                 onClick={addAdditionalLink}
@@ -378,20 +378,20 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
                 }`}
                 disabled={totalLinks >= MAX_LINKS}
               >
-                <Plus size={20} className="mr-1" />
-                他のリンクを追加
+                <Plus size={18} className="mr-1" />
+                <span className="text-sm sm:text-base">他のリンクを追加</span>
               </button>
               {totalLinks >= MAX_LINKS && (
-                <span className="text-red-500 dark:text-red-400 text-sm mt-1">
+                <span className="text-red-500 dark:text-red-400 text-xs sm:text-sm mt-1">
                   リンクの数は15個までです
                 </span>
               )}
             </div>
             <button
               type="submit"
-              className="flex items-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200"
+              className="w-full sm:w-auto flex items-center justify-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 text-sm sm:text-base"
             >
-              <Save size={20} className="mr-2" />
+              <Save size={18} className="mr-2" />
               保存
             </button>
           </div>

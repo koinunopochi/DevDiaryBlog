@@ -87,26 +87,26 @@ const InputWithRequirements: React.FC<InputWithRequirementsProps> = ({
         validate={validateInput}
         type={toggleVisibility ? (showPassword ? 'text' : 'password') : type}
         placeholder={placeholder}
-        className={toggleVisibility ? 'pr-10' : ''}
+        className={`${toggleVisibility ? 'pr-10' : ''} text-sm sm:text-base`}
       />
       {toggleVisibility && (
         <div className="absolute top-0 right-0 mt-0.5 mr-1">
           <button
             type="button"
             onClick={toggleShowPassword}
-            className="absolute right-2 top-9 text-gray-500 hover:text-gray-700 focus:outline-none"
+            className="absolute right-2 top-8 sm:top-9 text-gray-500 hover:text-gray-700 focus:outline-none"
           >
             {showPassword ? (
-              <EyeOff className="h-5 w-5" />
+              <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" />
             ) : (
-              <Eye className="h-5 w-5" />
+              <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
             )}
           </button>
         </div>
       )}
       <ul
         className={`
-          text-xs mt-2 space-y-1
+          text-xs sm:text-sm mt-2 space-y-1
           transition-all duration-300 ease-in-out
           ${isInitial ? 'opacity-0 max-h-0 overflow-hidden' : 'opacity-100 max-h-96'}
         `}
