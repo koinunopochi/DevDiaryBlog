@@ -15,6 +15,8 @@ interface SidebarProps {
   activeItemName?: string;
   activeItemClassName?: string;
   collapsedClassName?: string;
+  showOpenButton?: boolean;
+  isOpenProp?: boolean;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -23,8 +25,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   activeItemClassName = '',
   collapsedClassName = '',
   activeItemName = null,
+  showOpenButton = true,
+  isOpenProp = true,
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(isOpenProp);
   const [activeItem, setActiveItem] = useState<string | null>(activeItemName);
   const navigate = useNavigate();
 
@@ -44,14 +48,16 @@ const Sidebar: React.FC<SidebarProps> = ({
         !isOpen && collapsedClassName
       )}
     >
-      <div className="flex justify-end p-2 sm:p-3 lg:p-4">
-        <button
-          onClick={toggleSidebar}
-          className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200 rounded-full p-1 sm:p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
-        </button>
-      </div>
+      {showOpenButton && (
+        <div className="flex justify-end p-2 sm:p-3 lg:p-4">
+          <button
+            onClick={toggleSidebar}
+            className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200 rounded-full p-1 sm:p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+          >
+            {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+          </button>
+        </div>
+      )}
       <nav className="flex-1 overflow-y-auto">
         <ul className="space-y-1 sm:space-y-2 px-2 sm:px-3">
           {items.map((item) => (
