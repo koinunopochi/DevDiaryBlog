@@ -45,25 +45,27 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ authService }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-lg border border-gray-300 dark:border-gray-700 w-96">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 px-4 sm:px-6 lg:px-8">
+      <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 md:p-8 rounded-lg border border-gray-300 dark:border-gray-700 w-full max-w-md">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200 text-center">
           登録
         </h2>
         {errorMessage && (
-          <p className="text-red-500 dark:text-red-400 mb-4">{errorMessage}</p>
+          <p className="text-red-500 dark:text-red-400 mb-4 text-center">
+            {errorMessage}
+          </p>
         )}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div>
             <InputEmail value={email} onChange={handleEmailChange} />
           </div>
-          <div className="mb-6">
+          <div>
             <InputPassword value={password} onChange={handlePasswordChange} />
           </div>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200"
+              className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200"
               disabled={!isEmailValid || !isPasswordValid}
             >
               登録
