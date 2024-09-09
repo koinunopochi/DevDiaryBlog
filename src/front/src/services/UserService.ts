@@ -5,13 +5,18 @@ export interface UserDetailsResponse {
   id: string;
   profile: null | Profile;
   user: User;
+  auth:Auth;
+}
+
+export interface Auth {
+  canUpdate: boolean;
 }
 
 export interface Profile {
-  avatarUrl?: string;
-  bio?: string;
-  displayName?: string;
-  socialLinks?: { [key: string]: string };
+  avatarUrl: string;
+  bio: string;
+  displayName: string;
+  socialLinks: { [key: string]: string };
 }
 
 export interface User {
