@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { Page } from './views/pages/page/Page';
 import { Button } from './views/components/atoms/button/Button';
 import LoginPage from './views/pages/login/LoginPage';
@@ -12,6 +12,7 @@ import { ProfileService } from '@/services/ProfileService';
 import { UserService } from '@/services/UserService';
 import { ThemeProvider } from '@/views/components/providers/ThemeProvider';
 import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
+import NotFound from '@/views/components/atoms/notFound/NotFound';
 
 function App() {
   const apiClient = new EnhancedApiClient(
@@ -33,7 +34,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-night-sky text-gray-900 dark:text-white">
+      <div className="min-h-screen bg-white dark:bg-night-sky text-gray-900 dark:text-white max-w-full px-4">
         <DarkModeToggle />
         <Routes>
           <Route path="/" element={<Page authService={authService} />} />
@@ -48,6 +49,10 @@ function App() {
           />
 
           {/* Settings */}
+          <Route
+            path="/settings"
+            element={<Navigate to="/settings/account" replace />}
+          />
           <Route
             path="/settings/account"
             element={
@@ -77,6 +82,9 @@ function App() {
               />
             }
           />
+
+          {/* 404 ページ */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </ThemeProvider>

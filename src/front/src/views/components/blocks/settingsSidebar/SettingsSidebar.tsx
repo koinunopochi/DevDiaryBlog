@@ -13,6 +13,7 @@ interface SettingsSidebarProps {
   activeItemName?: string;
   activeItemClassName?: string;
   collapsedClassName?: string;
+  showOpenButton?: boolean;
 }
 
 const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
@@ -20,6 +21,7 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
   activeItemClassName = '',
   collapsedClassName = '',
   activeItemName,
+  showOpenButton,
 }) => {
   const items: SidebarItem[] = [
     {
@@ -41,6 +43,7 @@ const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
       className={className}
       activeItemClassName={activeItemClassName}
       collapsedClassName={collapsedClassName}
+      showOpenButton={showOpenButton}
     />
   );
 };

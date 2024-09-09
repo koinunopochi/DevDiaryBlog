@@ -66,7 +66,7 @@ const Input: React.FC<InputProps> = React.memo(
     return (
       <div className="mb-4">
         {label && (
-          <label className="block text-gray-700 dark:text-moonlight text-sm font-bold mb-2">
+          <label className="block text-gray-700 dark:text-moonlight text-sm sm:text-base font-bold mb-1 sm:mb-2">
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -77,19 +77,21 @@ const Input: React.FC<InputProps> = React.memo(
           onChange={handleChange}
           onBlur={handleBlur}
           required={required}
-          className={`shadow appearance-none border rounded w-full py-2 px-3 
-          text-gray-700 dark:text-starlight 
-          bg-white dark:bg-night-sky
-          leading-tight focus:outline-none 
-          focus:shadow-outline focus:border-cosmic-blue dark:focus:border-starlight
-          box-border ${
-            error && isTouched
-              ? 'border-red-500 dark:border-red-400'
-              : 'border-gray-300 dark:border-gray-600'
-          } ${className}`}
+          className={`shadow appearance-none border rounded w-full 
+        py-2 px-3 sm:py-2.5 sm:px-4
+        text-sm sm:text-base
+        text-gray-700 dark:text-starlight 
+        bg-white dark:bg-night-sky
+        leading-tight focus:outline-none 
+        focus:shadow-outline focus:border-cosmic-blue dark:focus:border-starlight
+        box-border ${
+          error && isTouched
+            ? 'border-red-500 dark:border-red-400'
+            : 'border-gray-300 dark:border-gray-600'
+        } ${className}`}
         />
         {error && isTouched && (
-          <p className="text-red-500 dark:text-red-400 text-xs italic mt-1">
+          <p className="text-red-500 dark:text-red-400 text-xs sm:text-sm italic mt-1">
             {error}
           </p>
         )}
