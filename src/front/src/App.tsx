@@ -12,13 +12,7 @@ import { ProfileService } from '@/services/ProfileService';
 import { UserService } from '@/services/UserService';
 import { ThemeProvider } from '@/views/components/providers/ThemeProvider';
 import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
-
-const NotFound = () => (
-  <div className="flex flex-col items-center justify-center min-h-screen">
-    <h1 className="text-4xl font-bold mb-4">404</h1>
-    <p className="text-xl">ページが見つかりません。</p>
-  </div>
-);
+import NotFound from '@/views/components/atoms/notFound/NotFound';
 
 function App() {
   const apiClient = new EnhancedApiClient(
