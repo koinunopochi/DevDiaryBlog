@@ -13,6 +13,7 @@ import { UserService } from '@/services/UserService';
 import { ThemeProvider } from '@/views/components/providers/ThemeProvider';
 import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
 import NotFound from '@/views/components/atoms/notFound/NotFound';
+import UsernamePage from '@/views/pages/username/UsernamePage';
 
 function App() {
   const apiClient = new EnhancedApiClient(
@@ -81,6 +82,12 @@ function App() {
                 onSubmit={(data) => profileService.saveProfile(data)}
               />
             }
+          />
+
+          {/* Profile */}
+          <Route
+            path=":username"
+            element={<UsernamePage apiClient={apiClient} />}
           />
 
           {/* 404 ページ */}

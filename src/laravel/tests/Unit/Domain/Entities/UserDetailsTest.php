@@ -92,4 +92,34 @@ class UserDetailsTest extends TestCase
       'profile' => null,
     ], $result);
   }
+
+  /** @test */
+  public function testCanUpdate()
+  {
+    // Given
+    $userId = new UserId();
+    $user = new User(
+      $userId,
+      new Username("hogehoge"),
+      new Email("hogehoge@example.com"),
+      new Password("1234567890aA*"),
+      new UserStatus(UserStatus::STATUS_ACTIVE),
+      new DateTime(),
+      new DateTime()
+    );
+    $profile = new Profile(
+      $userId,
+      new DisplayName("hogehoge"),
+      new UserBio("hogehoge"),
+      new Url("https://hogehoge.com"),
+      new SocialLinkCollection([])
+    );
+    $userDetails = new UserDetails($user, $profile);
+
+    // When
+    $result = $userDetails->canUpdate($userId);
+
+    // Then
+    $this->assertTrue($result);
+  }
 }

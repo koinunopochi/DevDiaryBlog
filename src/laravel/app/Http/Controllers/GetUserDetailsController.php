@@ -9,6 +9,7 @@ use App\Domain\ValueObjects\Username;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class GetUserDetailsController extends Controller
 {
@@ -41,7 +42,24 @@ class GetUserDetailsController extends Controller
         return new JsonResponse(['error' => 'User not found'], 404);
       }
 
-      return new JsonResponse($userDetails->toArray());
+      $canUpdate =false;
+      try{
+        // note: 未認証・同じユーザー出なない場合はfalse
+        // TODO: 今後ポリシーで切るように変更する
+
+        $canUpdate = $userDetails->canUpdate(new UserId(Auth::id()));
+      }catch(Exception $e){
+        $canUpdate = false;
+      }
+
+      return new JsonResponse(array_merge(
+        $userDetails->toArray(),
+        [
+          'auth'=>[
+            'canUpdate' => $canUpdate,
+          ]
+        ]
+      ));
     } catch (Exception $e) {
       if ($e instanceof \InvalidArgumentException) {
         return new JsonResponse(['error' => $e->getMessage()], 400);
