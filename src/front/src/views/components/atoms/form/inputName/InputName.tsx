@@ -160,7 +160,7 @@ const InputName: React.FC<InputNameProps> = ({
         required
         placeholder="user_name"
       />
-      <div className="absolute top-0 right-0 mt-9 mr-2">
+      <div className="absolute top-0 right-0 mt-11 mr-2">
         {isChecking && (
           <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
         )}
