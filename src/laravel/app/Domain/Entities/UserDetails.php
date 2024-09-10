@@ -2,6 +2,8 @@
 
 namespace App\Domain\Entities;
 
+use App\Domain\ValueObjects\UserId;
+
 class UserDetails
 {
   private User $user;
@@ -28,5 +30,14 @@ class UserDetails
       'user' => $userArray,
       'profile' => $profileArray,
     ];
+  }
+
+  // TODO:ポリシーを作成したタイミングで消す
+  /**
+   * @deprecated 近いうちに削除される予定（ポリシーを作成したタイミングで消す）
+   */
+  public function canUpdate(UserId $userId): bool
+  {
+  return $userId->equals($this->user->getUserId());
   }
 }
