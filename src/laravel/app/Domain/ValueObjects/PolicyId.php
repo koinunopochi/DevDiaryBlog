@@ -37,4 +37,9 @@ class PolicyId
   {
     return $this->policyId;
   }
+
+  public function equals(PolicyId $other): bool
+  {
+    return $this->policyId === $other->policyId;
+  }
 }
