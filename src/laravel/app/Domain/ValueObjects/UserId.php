@@ -39,4 +39,9 @@ class UserId
     Log::info('class : UserId - method : toString - $userId : ' . $this->userId);
     return $this->userId;
   }
+
+  public function equals(UserId $other): bool
+  {
+    return $other->userId === $this->userId;
+  }
 }
