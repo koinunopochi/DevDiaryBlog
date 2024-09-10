@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import AuthService from '@/services/AuthService';
 import InputEmail from '@components/atoms/form/inputEmail/InputEmail';
 import InputPassword from '@components/atoms/form/inputPassword/InputPassword';
+import SubmitButton from '@/views/components/atoms/submitButton/SubmitButton';
+import Toast from '@components/atoms/toast/Toast';
+import { Send } from 'lucide-react';
 
 interface LoginPageProps {
   authService: AuthService;
@@ -13,7 +16,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ authService }) => {
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'custom';
+  } | null>(null);
   const navigate = useNavigate();
 
   const handleEmailChange = (value: string, isValid: boolean) => {
@@ -30,17 +37,26 @@ const LoginPage: React.FC<LoginPageProps> = ({ authService }) => {
     event.preventDefault();
     if (isEmailValid && isPasswordValid) {
       try {
+        setIsLoading(true);
         await authService.login(email, password);
-        navigate('/');
+        setIsLoading(false);
+        setToast({ message: 'ログインに成功しました。', type: 'success' });
+        setTimeout(() => navigate('/'), 1500);
       } catch (error) {
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : '予期しないエラーが発生しました。'
-        );
+        setIsLoading(false);
+        setToast({
+          message:
+            error instanceof Error
+              ? error.message
+              : '予期しないエラーが発生しました。',
+          type: 'error',
+        });
       }
     } else {
-      setErrorMessage('メールアドレスまたはパスワードが無効です。');
+      setToast({
+        message: 'メールアドレスまたはパスワードが無効です。',
+        type: 'error',
+      });
     }
   };
 
@@ -50,11 +66,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ authService }) => {
         <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200 text-center">
           ログイン
         </h2>
-        {errorMessage && (
-          <p className="text-red-500 dark:text-red-400 mb-4 text-center">
-            {errorMessage}
-          </p>
-        )}
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <div>
             <InputEmail value={email} onChange={handleEmailChange} />
@@ -63,16 +74,26 @@ const LoginPage: React.FC<LoginPageProps> = ({ authService }) => {
             <InputPassword value={password} onChange={handlePasswordChange} />
           </div>
           <div className="flex items-center justify-center">
-            <button
-              type="submit"
-              className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200"
-              disabled={!isEmailValid || !isPasswordValid}
-            >
-              ログイン
-            </button>
+            <div className="flex justify-end pt-2 sm:pt-4">
+              <SubmitButton
+                icon={Send}
+                disabled={!isEmailValid || !isPasswordValid}
+                isLoading={isLoading}
+              >
+                Login
+              </SubmitButton>
+            </div>
           </div>
         </form>
       </div>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          duration={5000}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 };

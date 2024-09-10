@@ -1,10 +1,12 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Save } from 'lucide-react';
 import InputName from '@components/atoms/form/inputName/InputName';
+import SubmitButton from '@components/atoms/submitButton/SubmitButton';
+import Toast from '@components/atoms/toast/Toast';
 
 interface NameUpdateFormProps {
   initialName?: string;
-  onSubmit: (name: string) => void;
+  onSubmit: (name: string) => Promise<void>;
   checkNameAvailability: (name: string) => Promise<boolean>;
 }
 
@@ -12,6 +14,11 @@ const NameUpdateForm: React.FC<NameUpdateFormProps> = React.memo(
   ({ initialName = '', onSubmit, checkNameAvailability }) => {
     const [name, setName] = useState<string>(initialName);
     const [isValid, setIsValid] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [toast, setToast] = useState<{
+      message: string;
+      type: 'success' | 'error' | 'custom';
+    } | null>(null);
 
     const handleInputChange = useCallback((value: string, valid: boolean) => {
       setName(value);
@@ -19,17 +26,42 @@ const NameUpdateForm: React.FC<NameUpdateFormProps> = React.memo(
     }, []);
 
     const handleSubmit = useCallback(
-      (e: React.FormEvent) => {
+      async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!isValid) {
-          alert('有効な名前を入力してください。');
+          setToast({
+            message: '有効な名前を入力してください。',
+            type: 'error',
+          });
           return;
         }
 
-        onSubmit(name);
+        setIsLoading(true);
+        try {
+          const isAvailable = await checkNameAvailability(name);
+          if (!isAvailable) {
+            setToast({
+              message: 'この名前は既に使用されています。',
+              type: 'error',
+            });
+            setIsLoading(false);
+            return;
+          }
+
+          await onSubmit(name);
+          setToast({
+            message: '名前が正常に更新されました。',
+            type: 'success',
+          });
+        } catch (error: any) {
+          console.warn('エラーが発生しました', error.message);
+          setToast({ message: `エラー: ${error.message}`, type: 'error' });
+        } finally {
+          setIsLoading(false);
+        }
       },
-      [name, isValid, onSubmit]
+      [name, isValid, onSubmit, checkNameAvailability]
     );
 
     const memoizedInputName = useMemo(
@@ -48,15 +80,19 @@ const NameUpdateForm: React.FC<NameUpdateFormProps> = React.memo(
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {memoizedInputName}
           <div className="flex justify-end pt-2 sm:pt-4">
-            <button
-              type="submit"
-              className="w-full sm:w-auto flex items-center justify-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 text-sm sm:text-base"
-            >
-              <Save size={18} className="mr-2" />
+            <SubmitButton icon={Save} disabled={!isValid} isLoading={isLoading}>
               名前を更新
-            </button>
+            </SubmitButton>
           </div>
         </form>
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            duration={5000}
+            onClose={() => setToast(null)}
+          />
+        )}
       </div>
     );
   }

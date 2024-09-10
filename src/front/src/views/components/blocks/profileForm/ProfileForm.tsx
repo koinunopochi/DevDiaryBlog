@@ -9,6 +9,8 @@ import InputBio from '@components/atoms/form/inputBio/InputBio';
 import InputAdditionalLinkName from '@components/atoms/form/inputAdditionalLinkName/InputAdditionalLinkName';
 import Input from '@components/atoms/form/input/Input';
 import { UserDetailsResponse } from '@/services/UserService';
+import SubmitButton from '@components/atoms/submitButton/SubmitButton';
+import Toast from '@components/atoms/toast/Toast'; // Toastコンポーネントをインポート
 
 interface SocialLink {
   name: string;
@@ -29,7 +31,7 @@ export interface ProfileFormData {
 interface ProfileFormProps {
   initialData: ProfileFormData | (() => Promise<UserDetailsResponse>);
   defaultProfileIcons: string[] | (() => Promise<string[]>);
-  onSubmit: (data: ProfileFormData) => void;
+  onSubmit: (data: ProfileFormData) => Promise<void>;
 }
 
 const MAX_LINKS = 15;
@@ -56,7 +58,11 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
     });
     const [showIconSelector, setShowIconSelector] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
+    const [toast, setToast] = useState<{
+      message: string;
+      type: 'success' | 'error' | 'custom';
+    } | null>(null);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -86,7 +92,10 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
           setAdditionalLinks(otherLinks);
         } catch (err) {
           console.error('Error fetching data:', err);
-          setError('データの取得中にエラーが発生しました。');
+          setToast({
+            message: 'データの取得中にエラーが発生しました。',
+            type: 'error',
+          });
         } finally {
           setIsLoading(false);
         }
@@ -176,8 +185,9 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
     );
 
     const handleSubmit = useCallback(
-      (e: React.FormEvent) => {
+      async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitLoading(true);
 
         const isFormValid = Object.entries(isValid).every(([key, valid]) => {
           if (key.startsWith('additionalLink')) {
@@ -189,9 +199,12 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
         });
 
         if (!isFormValid) {
-          alert(
-            'エラーがあるため保存できません。必須項目や入力内容を確認してください。'
-          );
+          setToast({
+            message:
+              'エラーがあるため保存できません。必須項目や入力内容を確認してください。',
+            type: 'error',
+          });
+          setIsSubmitLoading(false);
           return;
         }
 
@@ -220,10 +233,23 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
             ];
           }
         });
-
-        onSubmit(submitData);
+        try {
+          await onSubmit(submitData);
+          setToast({
+            message: 'プロフィールが正常に更新されました。',
+            type: 'success',
+          });
+        } catch (error) {
+          console.error('Submit error:', error);
+          setToast({
+            message: '保存中にエラーが発生しました。',
+            type: 'error',
+          });
+        } finally {
+          setIsSubmitLoading(false);
+        }
       },
-      [formData, additionalLinks, isValid, onSubmit]
+      [formData, additionalLinks, isValid, onSubmit, setIsSubmitLoading]
     );
 
     const memoizedInputDisplayName = useMemo(
@@ -319,10 +345,6 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
       return <div>読み込み中...</div>;
     }
 
-    if (error) {
-      return <div>エラー: {error}</div>;
-    }
-
     return (
       <div className="max-w-2xl mx-auto p-4 sm:p-6 text-gray-800 dark:text-gray-200">
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -387,15 +409,27 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
                 </span>
               )}
             </div>
-            <button
-              type="submit"
-              className="w-full sm:w-auto flex items-center justify-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 text-sm sm:text-base"
-            >
-              <Save size={18} className="mr-2" />
-              保存
-            </button>
+            <div className="flex justify-end pt-2 sm:pt-4">
+              <SubmitButton
+                icon={Save}
+                disabled={
+                  !Object.values(isValid).every(Boolean) || isSubmitLoading
+                }
+                isLoading={isSubmitLoading}
+              >
+                保存する
+              </SubmitButton>
+            </div>
           </div>
         </form>
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            duration={5000}
+            onClose={() => setToast(null)}
+          />
+        )}
       </div>
     );
   }

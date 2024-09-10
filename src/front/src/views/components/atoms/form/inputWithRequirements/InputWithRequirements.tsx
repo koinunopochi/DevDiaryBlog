@@ -94,7 +94,7 @@ const InputWithRequirements: React.FC<InputWithRequirementsProps> = ({
           <button
             type="button"
             onClick={toggleShowPassword}
-            className="absolute right-2 top-8 sm:top-9 text-gray-500 hover:text-gray-700 focus:outline-none"
+            className="absolute right-2 top-8 sm:top-11 text-gray-500 hover:text-gray-700 focus:outline-none"
           >
             {showPassword ? (
               <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" />
