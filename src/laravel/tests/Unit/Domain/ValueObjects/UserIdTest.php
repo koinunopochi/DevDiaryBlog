@@ -4,7 +4,6 @@ namespace Tests\Unit\Domain\ValueObjects;
 
 use Tests\TestCase;
 use App\Domain\ValueObjects\UserId;
-use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
 class UserIdTest extends TestCase
@@ -79,5 +78,20 @@ class UserIdTest extends TestCase
 
     // Then
     $this->assertStringStartsWith('user0000-', $userIdValueObject->toString());
+  }
+
+
+  /**
+   * @test
+   */
+  public function testCanUpdate(): void
+  {
+    // Given
+    $userId = new UserId();
+    $otherUserId = new UserId();
+
+    // When & Then
+    $this->assertTrue($userId->equals($userId));
+    $this->assertFalse($userId->equals($otherUserId));
   }
 }

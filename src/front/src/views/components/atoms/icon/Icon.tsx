@@ -4,7 +4,13 @@ import defaultIconError from '@img/default-icon-error.png';
 interface IconProps {
   src: string;
   alt: string;
-  size?: 'w-6 h-6' | 'w-8 h-8' | 'w-10 h-10' | 'w-20 h-20';
+  size?:
+    | 'w-6 h-6'
+    | 'w-8 h-8'
+    | 'w-10 h-10'
+    | 'w-20 h-20'
+    | 'w-5 h-5 sm:w-6 sm:h-6'
+    | 'w-16 h-16 sm:w-20 sm:h-20';
   shape?: 'rounded-full' | 'rounded-lg' | '';
   isButton?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
