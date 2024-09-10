@@ -74,4 +74,24 @@ class PolicyIdTest extends TestCase
     // Then
     $this->assertStringStartsWith($this->prefix, $policyIdValueObject->toString());
   }
+
+ /**
+   * @test
+   */
+  public function testEquals(): void
+  {
+    // Given
+    $policyIdString = $this->prefix . substr(Uuid::uuid4()->toString(), 8);
+    $policyId1 = new PolicyId($policyIdString);
+    $policyId2 = new PolicyId($policyIdString);
+    $policyId3 = new PolicyId();
+
+    // When
+    $result1 = $policyId1->equals($policyId2);
+    $result2 = $policyId1->equals($policyId3);
+
+    // Then
+    $this->assertTrue($result1);
+    $this->assertFalse($result2);
+  }
 }
