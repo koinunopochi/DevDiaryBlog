@@ -8,7 +8,7 @@ import { UserDetailsResponse } from '@/services/UserService';
 interface ProfilePageProps {
   initialData: ProfileFormData | (() => Promise<UserDetailsResponse>);
   defaultProfileIcons: Array<string> | (() => Promise<string[]>);
-  onSubmit: (data: ProfileFormData) => void;
+  onSubmit: (data: ProfileFormData) => Promise<void>;
 }
 
 const ProfilePage: React.FC<ProfilePageProps> = ({
@@ -16,9 +16,9 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
   defaultProfileIcons,
   onSubmit,
 }) => {
-  const handleSubmit = (data: ProfileFormData) => {
+  const handleSubmit = async(data: ProfileFormData) => {
     // ここで必要に応じてデータの処理や検証を行うことができます
-    onSubmit(data);
+    await onSubmit(data);
   };
 
   return (

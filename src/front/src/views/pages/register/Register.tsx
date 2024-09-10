@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import AuthService from '@/services/AuthService';
 import InputEmail from '@components/atoms/form/inputEmail/InputEmail';
 import InputPassword from '@components/atoms/form/inputPassword/InputPassword';
+import SubmitButton from '@/views/components/atoms/submitButton/SubmitButton';
+import Toast from '@components/atoms/toast/Toast';
+import { UserPlus } from 'lucide-react';
 
 interface RegisterPageProps {
   authService: AuthService;
@@ -13,7 +16,11 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ authService }) => {
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'custom';
+  } | null>(null);
   const navigate = useNavigate();
 
   const handleEmailChange = (value: string, isValid: boolean) => {
@@ -30,31 +37,35 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ authService }) => {
     event.preventDefault();
     if (isEmailValid && isPasswordValid) {
       try {
+        setIsLoading(true);
         await authService.register(email, password);
-        navigate('/');
+        setIsLoading(false);
+        setToast({ message: '登録に成功しました。', type: 'success' });
+        setTimeout(() => navigate('/'), 1500); // 成功メッセージを表示した後にリダイレクト
       } catch (error) {
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : '予期しないエラーが発生しました。'
-        );
+        setIsLoading(false);
+        setToast({
+          message:
+            error instanceof Error
+              ? error.message
+              : '予期しないエラーが発生しました。',
+          type: 'error',
+        });
       }
     } else {
-      setErrorMessage('メールアドレスまたはパスワードが無効です。');
+      setToast({
+        message: 'メールアドレスまたはパスワードが無効です。',
+        type: 'error',
+      });
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2 px-4 sm:px-6 lg:px-8">
-      <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 md:p-8 rounded-lg border border-gray-300 dark:border-gray-700 w-full max-w-md">
+      <div className="p-4 sm:p-6 md:p-8 rounded-lg border border-gray-300 dark:border-gray-700 w-full max-w-md bg-white dark:bg-gray-800">
         <h2 className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200 text-center">
           登録
         </h2>
-        {errorMessage && (
-          <p className="text-red-500 dark:text-red-400 mb-4 text-center">
-            {errorMessage}
-          </p>
-        )}
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <div>
             <InputEmail value={email} onChange={handleEmailChange} />
@@ -63,16 +74,26 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ authService }) => {
             <InputPassword value={password} onChange={handlePasswordChange} />
           </div>
           <div className="flex items-center justify-center">
-            <button
-              type="submit"
-              className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200"
-              disabled={!isEmailValid || !isPasswordValid}
-            >
-              登録
-            </button>
+            <div className="flex justify-end pt-2 sm:pt-4">
+              <SubmitButton
+                icon={UserPlus}
+                disabled={!isEmailValid || !isPasswordValid}
+                isLoading={isLoading}
+              >
+                登録
+              </SubmitButton>
+            </div>
           </div>
         </form>
       </div>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          duration={5000}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 };
