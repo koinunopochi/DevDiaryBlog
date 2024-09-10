@@ -8,6 +8,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -48,6 +49,9 @@ class RegisterController extends Controller
         'email' => $request->email,
         'password' => Hash::make($request->password),
       ]);
+
+      // 登録後、ログイン状態にする
+      Auth::login($user);
 
       $user = $this->findUserByIdUseCase->execute($userId);
       $removedIdArray = collect($user->toArray())->except('id')->toArray();
