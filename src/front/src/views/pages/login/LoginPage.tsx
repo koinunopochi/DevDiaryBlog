@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import AuthService from '@/services/AuthService';
 import InputEmail from '@components/atoms/form/inputEmail/InputEmail';
 import InputPassword from '@components/atoms/form/inputPassword/InputPassword';
+import SubmitButton from '@/views/components/atoms/submitButton/SubmitButton';
+import { Send } from 'lucide-react';
 
 interface LoginPageProps {
   authService: AuthService;
@@ -13,6 +15,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ authService }) => {
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
@@ -30,9 +33,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ authService }) => {
     event.preventDefault();
     if (isEmailValid && isPasswordValid) {
       try {
+        setIsLoading(true);
         await authService.login(email, password);
+        setIsLoading(false);
         navigate('/');
       } catch (error) {
+        setIsLoading(false);
         setErrorMessage(
           error instanceof Error
             ? error.message
@@ -63,13 +69,15 @@ const LoginPage: React.FC<LoginPageProps> = ({ authService }) => {
             <InputPassword value={password} onChange={handlePasswordChange} />
           </div>
           <div className="flex items-center justify-center">
-            <button
-              type="submit"
-              className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-200"
-              disabled={!isEmailValid || !isPasswordValid}
-            >
-              ログイン
-            </button>
+            <div className="flex justify-end pt-2 sm:pt-4">
+              <SubmitButton
+                icon={Send}
+                disabled={!isEmailValid && !isPasswordValid}
+                isLoading={isLoading}
+              >
+                Login
+              </SubmitButton>
+            </div>
           </div>
         </form>
       </div>

@@ -1,15 +1,17 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Save } from 'lucide-react';
 import InputPassword from '@components/atoms/form/inputPassword/InputPassword';
+import SubmitButton from '@components/atoms/submitButton/SubmitButton';
 
 interface PasswordUpdateFormProps {
-  onSubmit: (password: string) => void;
+  onSubmit: (email: string) => Promise<void>;
 }
 
 const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = React.memo(
   ({ onSubmit }) => {
     const [password, setPassword] = useState<string>('');
     const [isValid, setIsValid] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleInputChange = useCallback((value: string, valid: boolean) => {
       setPassword(value);
@@ -17,7 +19,7 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = React.memo(
     }, []);
 
     const handleSubmit = useCallback(
-      (e: React.FormEvent) => {
+      async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!isValid) {
@@ -25,7 +27,9 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = React.memo(
           return;
         }
 
-        onSubmit(password);
+        setIsLoading(true);
+        await onSubmit(password);
+        setIsLoading(false);
       },
       [password, isValid, onSubmit]
     );
@@ -40,13 +44,9 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = React.memo(
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           {memoizedInputPassword}
           <div className="flex justify-end pt-2 sm:pt-4">
-            <button
-              type="submit"
-              className="w-full sm:w-auto flex items-center justify-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 text-sm sm:text-base"
-            >
-              <Save size={18} className="mr-2" />
+            <SubmitButton icon={Save} disabled={!isValid} isLoading={isLoading}>
               パスワードを更新
-            </button>
+            </SubmitButton>
           </div>
         </form>
       </div>
