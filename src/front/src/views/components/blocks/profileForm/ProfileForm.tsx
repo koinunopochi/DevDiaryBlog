@@ -10,6 +10,7 @@ import InputAdditionalLinkName from '@components/atoms/form/inputAdditionalLinkN
 import Input from '@components/atoms/form/input/Input';
 import { UserDetailsResponse } from '@/services/UserService';
 import SubmitButton from '@components/atoms/submitButton/SubmitButton';
+import Toast from '@components/atoms/toast/Toast'; // Toastコンポーネントをインポート
 
 interface SocialLink {
   name: string;
@@ -58,7 +59,10 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
     const [showIconSelector, setShowIconSelector] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isSubmitLoading, setIsSubmitLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const [toast, setToast] = useState<{
+      message: string;
+      type: 'success' | 'error' | 'custom';
+    } | null>(null);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -88,7 +92,10 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
           setAdditionalLinks(otherLinks);
         } catch (err) {
           console.error('Error fetching data:', err);
-          setError('データの取得中にエラーが発生しました。');
+          setToast({
+            message: 'データの取得中にエラーが発生しました。',
+            type: 'error',
+          });
         } finally {
           setIsLoading(false);
         }
@@ -192,9 +199,11 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
         });
 
         if (!isFormValid) {
-          alert(
-            'エラーがあるため保存できません。必須項目や入力内容を確認してください。'
-          );
+          setToast({
+            message:
+              'エラーがあるため保存できません。必須項目や入力内容を確認してください。',
+            type: 'error',
+          });
           setIsSubmitLoading(false);
           return;
         }
@@ -226,9 +235,16 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
         });
         try {
           await onSubmit(submitData);
+          setToast({
+            message: 'プロフィールが正常に更新されました。',
+            type: 'success',
+          });
         } catch (error) {
           console.error('Submit error:', error);
-          alert('保存中にエラーが発生しました。');
+          setToast({
+            message: '保存中にエラーが発生しました。',
+            type: 'error',
+          });
         } finally {
           setIsSubmitLoading(false);
         }
@@ -329,10 +345,6 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
       return <div>読み込み中...</div>;
     }
 
-    if (error) {
-      return <div>エラー: {error}</div>;
-    }
-
     return (
       <div className="max-w-2xl mx-auto p-4 sm:p-6 text-gray-800 dark:text-gray-200">
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -410,6 +422,14 @@ const ProfileForm: React.FC<ProfileFormProps> = React.memo(
             </div>
           </div>
         </form>
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            duration={5000}
+            onClose={() => setToast(null)}
+          />
+        )}
       </div>
     );
   }

@@ -2,9 +2,10 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { Save } from 'lucide-react';
 import InputPassword from '@components/atoms/form/inputPassword/InputPassword';
 import SubmitButton from '@components/atoms/submitButton/SubmitButton';
+import Toast from '@components/atoms/toast/Toast';
 
 interface PasswordUpdateFormProps {
-  onSubmit: (email: string) => Promise<void>;
+  onSubmit: (password: string) => Promise<void>;
 }
 
 const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = React.memo(
@@ -12,6 +13,10 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = React.memo(
     const [password, setPassword] = useState<string>('');
     const [isValid, setIsValid] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [toast, setToast] = useState<{
+      message: string;
+      type: 'success' | 'error' | 'custom';
+    } | null>(null);
 
     const handleInputChange = useCallback((value: string, valid: boolean) => {
       setPassword(value);
@@ -23,13 +28,28 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = React.memo(
         e.preventDefault();
 
         if (!isValid) {
-          alert('有効なパスワードを入力してください。');
+          setToast({
+            message: '有効なパスワードを入力してください。',
+            type: 'error',
+          });
           return;
         }
 
         setIsLoading(true);
-        await onSubmit(password);
-        setIsLoading(false);
+        try {
+          await onSubmit(password);
+          setToast({
+            message: 'パスワードが正常に更新されました。',
+            type: 'success',
+          });
+          setPassword(''); // パスワードをリセット
+          setIsValid(false); // バリデーション状態をリセット
+        } catch (error: any) {
+          console.warn('エラーが発生しました', error.message);
+          setToast({ message: `エラー: ${error.message}`, type: 'error' });
+        } finally {
+          setIsLoading(false);
+        }
       },
       [password, isValid, onSubmit]
     );
@@ -49,6 +69,14 @@ const PasswordUpdateForm: React.FC<PasswordUpdateFormProps> = React.memo(
             </SubmitButton>
           </div>
         </form>
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            duration={5000}
+            onClose={() => setToast(null)}
+          />
+        )}
       </div>
     );
   }
