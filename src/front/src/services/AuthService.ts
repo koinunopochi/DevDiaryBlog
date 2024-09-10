@@ -7,6 +7,12 @@ export interface LoginResponse {
   user: User;
 }
 
+export interface RegisterResponse {
+  message: string;
+  id: string;
+  user: User;
+}
+
 export default class AuthService {
   private apiClient: EnhancedApiClient;
   private userService: UserService;
@@ -36,14 +42,21 @@ export default class AuthService {
     }
   }
 
-  async register(email: string, password: string): Promise<any> {
+  async register(email: string, password: string): Promise<RegisterResponse> {
     try {
-      const data = await this.apiClient.post<any>('/api/register', {
-        email,
-        password,
-        name: this.randomUserNameGenerate(),
-      });
-      // 登録成功時の処理
+      const data = await this.apiClient.post<RegisterResponse>(
+        '/api/register',
+        {
+          email,
+          password,
+          name: this.randomUserNameGenerate(),
+        }
+      );
+
+      // ローカルストレージに保存
+      localStorage.setItem('userId', data.id);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
       return data;
     } catch (error) {
       console.error('登録に失敗しました', error);
