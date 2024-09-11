@@ -23,10 +23,6 @@ class EloquentUserRole extends Model
     'assigned_by',
   ];
 
-  protected $casts = [
-    'assigned_at' => 'datetime',
-  ];
-
   /**
    * IDの自動生成を無効化
    */

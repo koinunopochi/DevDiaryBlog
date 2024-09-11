@@ -9,7 +9,7 @@ use App\Domain\ValueObjects\RoleId;
 use App\Models\EloquentUserRole;
 use Illuminate\Support\Collection;
 use App\Domain\Repositories\UserRoleRepositoryInterface;
-use DateTime;
+use App\Domain\ValueObjects\DateTime;
 
 class EloquentUserRoleRepository implements UserRoleRepositoryInterface
 {
@@ -51,7 +51,7 @@ class EloquentUserRoleRepository implements UserRoleRepositoryInterface
 
     $eloquentUserRole->user_id = $userRole->getUserId()->toString();
     $eloquentUserRole->role_id = $userRole->getRoleId()->toString();
-    $eloquentUserRole->assigned_at = $userRole->getAssignedAt();
+    $eloquentUserRole->assigned_at = $userRole->getAssignedAt()->toString();
     $eloquentUserRole->assigned_by = $userRole->getAssignedBy()->toString();
 
     $eloquentUserRole->save();
@@ -64,7 +64,7 @@ class EloquentUserRoleRepository implements UserRoleRepositoryInterface
 
   public function findByAssignedDateRange(DateTime $startDate, DateTime $endDate): Collection
   {
-    return EloquentUserRole::whereBetween('assigned_at', [$startDate, $endDate])->get()->map(function (EloquentUserRole $eloquentUserRole) {
+    return EloquentUserRole::whereBetween('assigned_at', [$startDate->toString(), $endDate->toString()])->get()->map(function (EloquentUserRole $eloquentUserRole) {
       return $this->toDomainEntity($eloquentUserRole);
     });
   }
@@ -89,7 +89,7 @@ class EloquentUserRoleRepository implements UserRoleRepositoryInterface
       new UserRoleId($eloquentUserRole->id),
       new UserId($eloquentUserRole->user_id),
       new RoleId($eloquentUserRole->role_id),
-      $eloquentUserRole->assigned_at,
+      new DateTime($eloquentUserRole->assigned_at),
       new UserId($eloquentUserRole->assigned_by)
     );
   }
