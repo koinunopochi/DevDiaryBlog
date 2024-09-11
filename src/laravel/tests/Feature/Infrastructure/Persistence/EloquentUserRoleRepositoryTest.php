@@ -12,7 +12,7 @@ use App\Models\User as EloquentUser;
 use App\Models\EloquentRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use DateTime;
+use App\Domain\ValueObjects\DateTime;
 
 class EloquentUserRoleRepositoryTest extends TestCase
 {
@@ -128,11 +128,12 @@ class EloquentUserRoleRepositoryTest extends TestCase
   public function test_findByAssignedDateRange(): void
   {
     // Given
-    $startDate = new DateTime('2023-01-01');
-    $endDate = new DateTime('2023-12-31');
-    EloquentUserRole::factory()->create(['assigned_at' => '2023-06-15']);
-    EloquentUserRole::factory()->create(['assigned_at' => '2023-12-31']);
-    EloquentUserRole::factory()->create(['assigned_at' => '2024-01-01']);
+    $startDate = new DateTime('2024-01-01T00:00:00+09:00');
+    $endDate = new DateTime('2024-12-31T00:00:00+09:00');
+
+    EloquentUserRole::factory()->create(['assigned_at' => '2024-01-01T00:00:00+09:00']);
+    EloquentUserRole::factory()->create(['assigned_at' => '2024-09-08T16:52:07+09:00']);
+    EloquentUserRole::factory()->create(['assigned_at' => '2025-01-01T00:00:00+09:00']);
 
     // When
     $userRoles = $this->repository->findByAssignedDateRange($startDate, $endDate);

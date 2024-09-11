@@ -6,7 +6,7 @@ use App\Domain\Entities\UserRole;
 use App\Domain\ValueObjects\RoleId;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\UserRoleId;
-use DateTime;
+use App\Domain\ValueObjects\DateTime;
 use Tests\TestCase;
 
 class UserRoleTest extends TestCase

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Domain\ValueObjects\DateTime;
 use App\Models\EloquentUserRole;
 use App\Models\User as EloquentUser;
 use App\Models\EloquentRole;
@@ -18,7 +19,7 @@ class EloquentUserRoleFactory extends Factory
       'id' => (new UserRoleId())->toString(),
       'user_id' => EloquentUser::factory(),
       'role_id' => EloquentRole::factory(),
-      'assigned_at' => $this->faker->dateTimeBetween('-1 year', 'now'),
+      'assigned_at' => (new DateTime())->toString(),
       'assigned_by' => EloquentUser::factory(),
     ];
   }

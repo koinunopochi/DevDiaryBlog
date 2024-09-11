@@ -7,7 +7,7 @@ use App\Domain\ValueObjects\UserRoleId;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\RoleId;
 use Illuminate\Support\Collection;
-use DateTime;
+use App\Domain\ValueObjects\DateTime;
 
 interface UserRoleRepositoryInterface
 {
