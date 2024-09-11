@@ -11,26 +11,26 @@ class PolicyDocumentTest extends TestCase
   public function testCreateInstance()
   {
     // Given
-    $policyDocumentString = '{"statement": [{"effect": "allow"}]}';
+    $policyDocumentArray = ['statement' => [['effect' => 'allow']]];
 
     // When
-    $policyDocument = new PolicyDocument($policyDocumentString);
+    $policyDocument = new PolicyDocument($policyDocumentArray);
 
     // Then
     $this->assertInstanceOf(PolicyDocument::class, $policyDocument);
   }
 
   /** @test */
-  public function testToString()
+  public function testToArray()
   {
     // Given
-    $policyDocumentString = '{"statement": [{"effect": "allow"}]}';
-    $policyDocument = new PolicyDocument($policyDocumentString);
+    $policyDocumentArray = ['statement' => [['effect' => 'allow']]];
+    $policyDocument = new PolicyDocument($policyDocumentArray);
 
     // When
-    $result = $policyDocument->toString();
+    $result = $policyDocument->toArray();
 
     // Then
-    $this->assertEquals($policyDocumentString, $result);
+    $this->assertEquals($policyDocumentArray, $result);
   }
 }
