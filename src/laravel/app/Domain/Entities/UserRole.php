@@ -5,7 +5,7 @@ namespace App\Domain\Entities;
 use App\Domain\ValueObjects\RoleId;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\UserRoleId;
-use DateTime;
+use App\Domain\ValueObjects\DateTime;
 
 class UserRole
 {
