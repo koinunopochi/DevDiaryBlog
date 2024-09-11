@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Application\UseCases\FindUserByIdUseCase;
 use App\Domain\ValueObjects\UserId;
+use Database\Seeders\SystemUserSeeder;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,8 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
   private FindUserByIdUseCase $findUserByIdUseCase;
-  public function __construct(FindUserByIdUseCase $findUserByIdUseCase){
+  public function __construct(FindUserByIdUseCase $findUserByIdUseCase)
+  {
     $this->findUserByIdUseCase = $findUserByIdUseCase;
   }
   public function authenticate(Request $request): JsonResponse
@@ -21,6 +23,12 @@ class LoginController extends Controller
       'password' => ['required'],
     ]);
 
+    if (SystemUserSeeder::SYSTEM_USER_EMAIL === $credentials['email']) {
+      return new JsonResponse([
+        'message' => 'ログインに失敗しました。',
+      ], 401);
+    }
+
     if (Auth::attempt($credentials)) {
       $request->session()->regenerate();
 
@@ -29,7 +37,7 @@ class LoginController extends Controller
       return new JsonResponse([
         'message' => 'ログインしました。',
         'user' => $removedIdArray,
-        'id'=>Auth::id()
+        'id' => Auth::id()
       ]);
     }
 

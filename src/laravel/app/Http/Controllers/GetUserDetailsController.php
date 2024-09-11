@@ -6,6 +6,7 @@ use App\Application\Services\GetUserDetailsByNameService;
 use App\Application\Services\GetUserDetailsByUserIdService;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\Username;
+use Database\Seeders\SystemUserSeeder;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -26,13 +27,22 @@ class GetUserDetailsController extends Controller
 
   public function execute(Request $request): JsonResponse
   {
+    // note: SystemUserの場合は、存在しないとしてアクセスさせない
     try {
       $searchType = $request->query('search_type');
       $searchValue = $request->query('value');
 
       if ($searchType === 'id') {
+        if (SystemUserSeeder::SYSTEM_USER_UUID === $searchValue) {
+          return new JsonResponse(['error' => 'User not found'], 404);
+        }
+
         $userDetails = $this->getUserDetailsByUserIdService->execute(new UserId($searchValue));
       } elseif ($searchType === 'name') {
+        if (SystemUserSeeder::SYSTEM_USER_NAME === $searchValue) {
+          return new JsonResponse(['error' => 'User not found'], 404);
+        }
+
         $userDetails = $this->getUserDetailsByNameService->execute(new Username($searchValue));
       } else {
         return new JsonResponse(['error' => 'Invalid search type'], 400);
@@ -42,20 +52,20 @@ class GetUserDetailsController extends Controller
         return new JsonResponse(['error' => 'User not found'], 404);
       }
 
-      $canUpdate =false;
-      try{
+      $canUpdate = false;
+      try {
         // note: 未認証・同じユーザー出なない場合はfalse
         // TODO: 今後ポリシーで切るように変更する
 
         $canUpdate = $userDetails->canUpdate(new UserId(Auth::id()));
-      }catch(Exception $e){
+      } catch (Exception $e) {
         $canUpdate = false;
       }
 
       return new JsonResponse(array_merge(
         $userDetails->toArray(),
         [
-          'auth'=>[
+          'auth' => [
             'canUpdate' => $canUpdate,
           ]
         ]

@@ -8,7 +8,7 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SaveProfileController;
 use App\Http\Controllers\SaveUserController;
-use Illuminate\Http\Request;
+use App\Http\Middleware\RejectSystemUserAccess;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,19 +22,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// 認証不要のパブリックルート
 Route::post('/login', [LoginController::class, 'authenticate']);
-Route::post('/logout', [LogoutController::class, 'logout']);
 Route::post('/register', [RegisterController::class, 'register']);
+Route::get('/profile-icons/defaults', [GetAllDefaultProfileIconsController::class, 'execute']);
+Route::post('/user/check-name', [ExistsByNameController::class, 'execute']);
+Route::post('/logout', [LogoutController::class, 'logout']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-  return $request->user();
-});
-
-Route::get('/user', [GetUserDetailsController::class, 'execute']);
-Route::get('/profile-icons/defaults', [GetAllDefaultProfileIconsController::class,'execute']);
-Route::post('/user/check-name',[ExistsByNameController::class,'execute']);
-
-Route::group(['middleware' => 'auth:sanctum'], function () {
+// 認証が必要なルート
+Route::middleware(['auth:sanctum',RejectSystemUserAccess::class])->group(function () {
+  Route::get('/user', [GetUserDetailsController::class, 'execute']);
   Route::post('/profile', [SaveProfileController::class, 'execute']);
-  Route::post('/user',[SaveUserController::class, 'execute']);
+  Route::post('/user', [SaveUserController::class, 'execute']);
 });

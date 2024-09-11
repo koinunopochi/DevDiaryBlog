@@ -2,6 +2,7 @@
 
 namespace App\Domain\ValueObjects;
 
+use Database\Seeders\SystemUserSeeder;
 use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Uuid;
 
@@ -25,6 +26,11 @@ class UserId
 
   public function validate(string $userId): void
   {
+    // note: SystemUserの場合は、例外的に許可する
+    if (SystemUserSeeder::SYSTEM_USER_UUID === $userId) {
+      Log::warning('SystemUser Id is called.' . $userId);
+      return;
+    }
     // UUID v4 の形式で、最初の8文字が 'user0000' であることを確認
     $uuidRegex = '/^' . $this->prefix . '-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/';
     if (!preg_match($uuidRegex, $userId)) {
