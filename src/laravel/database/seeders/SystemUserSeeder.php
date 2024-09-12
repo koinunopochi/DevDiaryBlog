@@ -14,7 +14,7 @@ class SystemUserSeeder extends Seeder
 
   public function run()
   {
-    $password = $this->generateComplexPassword();
+    $password = self::generateComplexPassword();
 
     User::create([
       'id' => self::SYSTEM_USER_UUID,
@@ -35,7 +35,7 @@ class SystemUserSeeder extends Seeder
    * @return string
    * @deprecated Passwordの生成はValueObjectで行うように移行する予定である。移行後削除する
    */
-  public function generateComplexPassword(): string
+  public static function generateComplexPassword(): string
   {
     $lowercase = 'abcdefghijklmnopqrstuvwxyz';
     $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -68,7 +68,7 @@ class SystemUserSeeder extends Seeder
       || !preg_match('/[!@#$%^&*()\-_=+{};:,<.>]/', $password)
     ) {
       // 要件を満たさない場合は再帰的に再生成
-      return $this->generateComplexPassword();
+      return self::generateComplexPassword();
     }
 
     return $password;
