@@ -30,7 +30,7 @@ class SystemUserSeeder extends Seeder
     // $this->command->warn('WARNING: This password is displayed for testing purposes only. In a production environment, never log or display passwords.');
   }
 
-  private function generateComplexPassword(): string
+  public function generateComplexPassword(): string
   {
     $lowercase = 'abcdefghijklmnopqrstuvwxyz';
     $uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
