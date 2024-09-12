@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
     $this->call(UserPolicySeeder::class);
     $this->call(UserPolicyGroupSeeder::class);
     $this->call(UserRolePolicyGroupSeeder::class);
+    $this->call(RootAdminSeeder::class);
   }
 }
