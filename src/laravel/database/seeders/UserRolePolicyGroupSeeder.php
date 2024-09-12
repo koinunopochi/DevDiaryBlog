@@ -11,6 +11,7 @@ use App\Domain\ValueObjects\RoleDescription;
 
 class UserRolePolicyGroupSeeder extends Seeder
 {
+  public const ADMIN_USER_ROLE_ID = 'role0000-cf39-44eb-94ad-9e2c31ffeb30';
   public function run()
   {
     $roles = [
@@ -24,7 +25,7 @@ class UserRolePolicyGroupSeeder extends Seeder
         ],
       ],
       [
-        'id' => 'role0000-cf39-44eb-94ad-9e2c31ffeb30',
+        'id' => self::ADMIN_USER_ROLE_ID,
         'name' => '管理者',
         'description' => 'システム管理者権限を持つロール',
         'policyGroups' => [
