@@ -6,6 +6,7 @@ use App\Domain\ValueObjects\PolicyId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class EloquentPolicy extends Model
 {
@@ -52,5 +53,21 @@ class EloquentPolicy extends Model
   public function getStatementsAttribute()
   {
     return $this->document['Statement'] ?? [];
+  }
+
+  /**
+   * ポリシーに関連付けられたポリシーグループを取得
+   */
+  public function policyGroups(): BelongsToMany
+  {
+    return $this->belongsToMany(EloquentPolicyGroup::class, 'policy_group_policy', 'policy_id', 'policy_group_id');
+  }
+
+  /**
+   * ポリシーに直接関連付けられたロールを取得
+   */
+  public function roles(): BelongsToMany
+  {
+    return $this->belongsToMany(EloquentRole::class, 'role_policy', 'policy_id', 'role_id');
   }
 }
