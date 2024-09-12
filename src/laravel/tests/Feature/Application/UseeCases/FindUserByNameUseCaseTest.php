@@ -7,10 +7,12 @@ use App\Models\User as EloquentUser;
 use App\Domain\Entities\User;
 use App\Domain\ValueObjects\Username;
 use App\Infrastructure\Persistence\EloquentUserRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class FindUserByNameUseCaseTest extends TestCase
 {
+  use RefreshDatabase;
   private FindUserByNameUseCase $findUserByNameUseCase;
 
   protected function setUp(): void
@@ -25,7 +27,7 @@ class FindUserByNameUseCaseTest extends TestCase
     $user = EloquentUser::factory()->create();
 
     // When
-    $result =$this->findUserByNameUseCase->execute(new Username($user->name));
+    $result = $this->findUserByNameUseCase->execute(new Username($user->name));
 
     // Then
     $this->assertInstanceOf(User::class, $result);
