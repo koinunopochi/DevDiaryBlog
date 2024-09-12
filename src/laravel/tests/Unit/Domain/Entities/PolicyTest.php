@@ -18,7 +18,7 @@ class PolicyTest extends TestCase
     $policyId = new PolicyId();
     $policyName = new PolicyName('テストポリシー名');
     $policyDescription = new PolicyDescription('テストポリシーの説明');
-    $policyDocument = new PolicyDocument('{"statement": "example"}');
+    $policyDocument = new PolicyDocument(['Statement' => 'sample']);
 
     // When
     $policy = new Policy(
