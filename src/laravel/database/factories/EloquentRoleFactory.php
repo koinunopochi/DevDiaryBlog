@@ -7,6 +7,7 @@ use App\Models\EloquentRole;
 use App\Domain\ValueObjects\RoleId;
 use App\Domain\ValueObjects\RoleName;
 use App\Models\EloquentPolicy;
+use App\Models\EloquentPolicyGroup;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EloquentRoleFactory extends Factory
@@ -40,6 +41,27 @@ class EloquentRoleFactory extends Factory
   {
     return $this->afterCreating(function (EloquentRole $role) use ($policyIds) {
       $role->policies()->attach($policyIds);
+    });
+  }
+
+  /**
+   * ロールに指定した数のポリシーグループを関連付ける
+   */
+  public function withPolicyGroups(int $count = 1)
+  {
+    return $this->afterCreating(function (EloquentRole $role) use ($count) {
+      $policyGroups = EloquentPolicyGroup::factory()->count($count)->create();
+      $role->policyGroups()->attach($policyGroups);
+    });
+  }
+
+  /**
+   * ロールに既存のポリシーグループを関連付ける
+   */
+  public function withExistingPolicyGroups(array $policyGroupIds)
+  {
+    return $this->afterCreating(function (EloquentRole $role) use ($policyGroupIds) {
+      $role->policyGroups()->attach($policyGroupIds);
     });
   }
 }
