@@ -2,6 +2,7 @@
 
 namespace App\Domain\Entities;
 
+use App\Domain\ValueObjects\PolicyGroupIdCollection;
 use App\Domain\ValueObjects\PolicyIdCollection;
 use App\Domain\ValueObjects\RoleDescription;
 use App\Domain\ValueObjects\RoleId;
@@ -13,13 +14,20 @@ class Role
   private RoleName $name;
   private RoleDescription $description;
   private PolicyIdCollection $policies;
+  private PolicyGroupIdCollection $policyGroups;
 
-  public function __construct(RoleId $id, RoleName $name, RoleDescription $description, PolicyIdCollection $policies)
-  {
+  public function __construct(
+    RoleId $id,
+    RoleName $name,
+    RoleDescription $description,
+    PolicyIdCollection $policies,
+    PolicyGroupIdCollection $policyGroups
+  ) {
     $this->id = $id;
     $this->name = $name;
     $this->description = $description;
     $this->policies = $policies;
+    $this->policyGroups = $policyGroups;
   }
 
   public function getId(): RoleId
@@ -40,5 +48,10 @@ class Role
   public function getPolicies(): PolicyIdCollection
   {
     return $this->policies;
+  }
+
+  public function getPolicyGroups(): PolicyGroupIdCollection
+  {
+    return $this->policyGroups;
   }
 }

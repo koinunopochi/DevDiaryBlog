@@ -3,6 +3,7 @@
 namespace Tests\Feature\Infrastructure\Persistence;
 
 use App\Domain\Entities\Role;
+use App\Domain\ValueObjects\PolicyGroupIdCollection;
 use App\Domain\ValueObjects\RoleId;
 use App\Domain\ValueObjects\RoleName;
 use App\Domain\ValueObjects\RoleDescription;
@@ -73,7 +74,8 @@ class EloquentRoleRepositoryTest extends TestCase
       new RoleId(),
       new RoleName('New Role'),
       new RoleDescription('New Description'),
-      new PolicyIdCollection([])
+      new PolicyIdCollection([]),
+      new PolicyGroupIdCollection([]),
     );
 
     // When
@@ -85,7 +87,22 @@ class EloquentRoleRepositoryTest extends TestCase
     $this->assertNotNull($roleFromDatabase);
     $this->assertEquals($newRole->getName()->toString(), $roleFromDatabase->name);
     $this->assertEquals($newRole->getDescription()->toString(), $roleFromDatabase->description);
+
+    // PolicyIdCollection と EloquentRole のポリシーを比較
+    $this->assertCount(0, $roleFromDatabase->policies);
+    $this->assertEquals(
+      $newRole->getPolicies()->toArray(),
+      $roleFromDatabase->policies->pluck('id')->toArray()
+    );
+
+    // PolicyGroupIdCollection と EloquentRole のポリシーグループを比較
+    $this->assertCount(0, $roleFromDatabase->policyGroups);
+    $this->assertEquals(
+      $newRole->getPolicyGroups()->toArray(),
+      $roleFromDatabase->policyGroups->pluck('id')->toArray()
+    );
   }
+
 
   public function test_save_update_existing(): void
   {
@@ -97,7 +114,8 @@ class EloquentRoleRepositoryTest extends TestCase
       new RoleId($existingRole->id),
       new RoleName('Updated Name'),
       new RoleDescription('Updated Description'),
-      new PolicyIdCollection([])
+      new PolicyIdCollection([]),
+      new PolicyGroupIdCollection([]),
     );
 
     $this->repository->save($updatedRole);
@@ -108,6 +126,24 @@ class EloquentRoleRepositoryTest extends TestCase
     $this->assertNotNull($roleFromDatabase);
     $this->assertEquals($updatedRole->getName()->toString(), $roleFromDatabase->name);
     $this->assertEquals($updatedRole->getDescription()->toString(), $roleFromDatabase->description);
+
+    // PolicyIdCollection と EloquentRole のポリシーを比較
+    $this->assertCount(0, $roleFromDatabase->policies);
+    $this->assertEquals(
+      $updatedRole->getPolicies()->toArray(),
+      $roleFromDatabase->policies->pluck('id')->toArray()
+    );
+
+    // PolicyGroupIdCollection と EloquentRole のポリシーグループを比較
+    $this->assertCount(0, $roleFromDatabase->policyGroups);
+    $this->assertEquals(
+      $updatedRole->getPolicyGroups()->toArray(),
+      $roleFromDatabase->policyGroups->pluck('id')->toArray()
+    );
+
+    // 更新前と更新後で、名前と説明が変更されていることを確認
+    $this->assertNotEquals($existingRole->name, $roleFromDatabase->name);
+    $this->assertNotEquals($existingRole->description, $roleFromDatabase->description);
   }
 
   public function test_delete(): void
