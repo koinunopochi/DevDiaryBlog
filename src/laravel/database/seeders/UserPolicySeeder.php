@@ -8,11 +8,21 @@ use App\Domain\ValueObjects\PolicyId;
 
 class UserPolicySeeder extends Seeder
 {
+  public const USER_SELF_READ = 'policy00-3dcb-4d6b-99cb-f2d91c1f6f08';
+  public const USER_SELF_UPDATE = 'policy00-7d2d-4fdf-9c06-48cc8019acd4';
+  public const ADMIN_CREATE_USER = 'policy00-1648-45eb-9fa5-c367382306fb';
+  public const ADMIN_READ_USER = 'policy00-4da7-4f01-97a0-6bf83ff38461';
+  public const ADMIN_UPDATE_USER = 'policy00-e684-4929-b890-2ed0876a5488';
+  public const ADMIN_DELETE_USER = 'policy00-37bf-46a7-9229-b3156782e177';
+  public const ADMIN_LIST_USERS = 'policy00-96bc-4cfd-8b50-c013da891f93';
+  public const USER_CHANGE_PASSWORD = 'policy00-25e8-441a-814b-38b6db46c79c';
+  public const READ_PUBLIC_USER_INFO = 'policy00-6584-4d8a-86bb-a954652ec511';
+  public const DENY_INACCESSIBLE_USER = 'policy00-1c1a-406d-8847-e9ab41238f50';
   public function run()
   {
     $policies = [
       [
-        'id'=> 'policy00-3dcb-4d6b-99cb-f2d91c1f6f08',
+        'id' => self::USER_SELF_READ,
         'name' => 'ユーザー自己情報読み取り',
         'description' => 'ユーザーが自分自身の情報を読み取ることを許可します。',
         'document' => [
@@ -31,7 +41,7 @@ class UserPolicySeeder extends Seeder
         ]
       ],
       [
-        'id' => 'policy00-7d2d-4fdf-9c06-48cc8019acd4',
+        'id' => self::USER_SELF_UPDATE,
         'name' => 'ユーザー自己情報更新',
         'description' => 'ユーザーが自分自身の情報を更新することを許可します。',
         'document' => [
@@ -50,7 +60,7 @@ class UserPolicySeeder extends Seeder
         ]
       ],
       [
-        'id' => 'policy00-1648-45eb-9fa5-c367382306fb',
+        'id' => self::ADMIN_CREATE_USER,
         'name' => '管理者によるユーザー作成',
         'description' => '管理者がユーザーを作成することを許可します。',
         'document' => [
@@ -69,7 +79,7 @@ class UserPolicySeeder extends Seeder
         ]
       ],
       [
-        'id' => 'policy00-4da7-4f01-97a0-6bf83ff38461',
+        'id' => self::ADMIN_READ_USER,
         'name' => '管理者によるユーザー読み取り',
         'description' => '管理者が任意のユーザーの情報を読み取ることを許可します。',
         'document' => [
@@ -88,7 +98,7 @@ class UserPolicySeeder extends Seeder
         ]
       ],
       [
-        'id' => 'policy00-e684-4929-b890-2ed0876a5488',
+        'id' => self::ADMIN_UPDATE_USER,
         'name' => '管理者によるユーザー更新',
         'description' => '管理者が任意のユーザーの情報を更新することを許可します。',
         'document' => [
@@ -107,7 +117,7 @@ class UserPolicySeeder extends Seeder
         ]
       ],
       [
-        'id' => 'policy00-37bf-46a7-9229-b3156782e177',
+        'id' => self::ADMIN_DELETE_USER,
         'name' => '管理者によるユーザー削除',
         'description' => '管理者がユーザーを削除することを許可します。',
         'document' => [
@@ -126,7 +136,7 @@ class UserPolicySeeder extends Seeder
         ]
       ],
       [
-        'id' => 'policy00-96bc-4cfd-8b50-c013da891f93',
+        'id' => self::ADMIN_LIST_USERS,
         'name' => '管理者によるユーザー一覧表示',
         'description' => '管理者がユーザー一覧を表示することを許可します。',
         'document' => [
@@ -145,7 +155,7 @@ class UserPolicySeeder extends Seeder
         ]
       ],
       [
-        'id' => 'policy00-25e8-441a-814b-38b6db46c79c',
+        'id' => self::USER_CHANGE_PASSWORD,
         'name' => 'ユーザーのパスワード変更',
         'description' => 'ユーザーが自分自身のパスワードを変更することを許可します。',
         'document' => [
@@ -164,7 +174,7 @@ class UserPolicySeeder extends Seeder
         ]
       ],
       [
-        'id' => 'policy00-6584-4d8a-86bb-a954652ec511',
+        'id' => self::READ_PUBLIC_USER_INFO,
         'name' => '公開ユーザー情報の読み取り',
         'description' => '誰でも公開されているユーザー情報を読み取ることを許可します。',
         'document' => [
@@ -178,7 +188,7 @@ class UserPolicySeeder extends Seeder
         ]
       ],
       [
-        'id' => 'policy00-1c1a-406d-8847-e9ab41238f50',
+        'id' => self::DENY_INACCESSIBLE_USER,
         'name' => 'ユーザーアクセス不可（管理者例外あり）',
         'description' => 'このポリシーが適用されたユーザーへのアクセスを拒否します。ただし、root管理者と特定の管理者ロールは例外とします。',
         'document' => [
