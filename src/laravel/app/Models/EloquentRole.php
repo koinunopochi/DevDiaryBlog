@@ -47,4 +47,12 @@ class EloquentRole extends Model
   {
     return $this->belongsToMany(EloquentPolicy::class, 'role_policy', 'role_id', 'policy_id');
   }
+
+  /**
+   * ロールに関連付けられたポリシーグループを取得
+   */
+  public function policyGroups(): BelongsToMany
+  {
+    return $this->belongsToMany(EloquentPolicyGroup::class, 'role_policy_group', 'role_id', 'policy_group_id');
+  }
 }

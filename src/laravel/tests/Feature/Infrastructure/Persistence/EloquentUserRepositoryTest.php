@@ -26,6 +26,7 @@ class EloquentUserRepositoryTest extends TestCase
     parent::setUp();
     $this->repository = new EloquentUserRepository();
     config(['app.timezone' => 'Asia/Tokyo']);
+    config()->set('logging.default', 'stderr'); 
   }
 
   public function test_all(): void
@@ -35,6 +36,7 @@ class EloquentUserRepositoryTest extends TestCase
 
     // When
     $users = $this->repository->all();
+    dump($users);
 
     // Then
     $this->assertCount(3, $users);

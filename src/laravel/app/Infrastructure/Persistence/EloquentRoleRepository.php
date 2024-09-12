@@ -11,6 +11,8 @@ use App\Domain\ValueObjects\PolicyId;
 use App\Models\EloquentRole;
 use Illuminate\Support\Collection;
 use App\Domain\Repositories\RoleRepositoryInterface;
+use App\Domain\ValueObjects\PolicyGroupId;
+use App\Domain\ValueObjects\PolicyGroupIdCollection;
 
 class EloquentRoleRepository implements RoleRepositoryInterface
 {
@@ -84,11 +86,16 @@ class EloquentRoleRepository implements RoleRepositoryInterface
       return new PolicyId($id);
     })->toArray();
 
+    $policyGroupIds = $eloquentRole->policyGroups->pluck('id')->map(function ($id) {
+      return new PolicyGroupId($id);
+    })->toArray();
+
     return new Role(
       new RoleId($eloquentRole->id),
       new RoleName($eloquentRole->name),
       new RoleDescription($eloquentRole->description),
-      new PolicyIdCollection($policyIds)
+      new PolicyIdCollection($policyIds),
+      new PolicyGroupIdCollection($policyGroupIds)
     );
   }
 }

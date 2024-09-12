@@ -10,10 +10,13 @@ use App\Models\User as EloquentUser;
 use App\Domain\ValueObjects\UserId;
 use App\Infrastructure\Persistence\EloquentUserProfileRepository;
 use App\Infrastructure\Persistence\EloquentUserRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class GetUserDetailsByUserIdServiceTest extends TestCase
 {
+  use RefreshDatabase;
+
   /** @test */
   public function testExistsUser()
   {
