@@ -29,6 +29,8 @@
      - ID: RoleId (値オブジェクト)
      - Name: RoleName (値オブジェクト)
      - Description: RoleDescription (値オブジェクト)
+     - Policies: PolicyIdCollection (値オブジェクト)
+     - PolicyGroups: PolicyGroupIdCollection (値オブジェクト)
 
 4. Policy（ポリシー）
 
@@ -45,6 +47,13 @@
      - RoleId: RoleId (値オブジェクト)
      - AssignedAt: DateTime
      - AssignedBy: UserId (値オブジェクト)
+
+6. PolicyGroup（ポリシーグループ）
+   - 属性:
+     - ID: PolicyGroupId (値オブジェクト)
+     - Name: PolicyGroupName (値オブジェクト)
+     - Description: PolicyGroupDescription (値オブジェクト)
+     - Policies: PolicyIdCollection (値オブジェクト)
 
 ## 値オブジェクト
 
@@ -133,13 +142,32 @@
     - userRoleから始まるUUIDv4
     - example: userRole-e89b-12d3-a456-426614174000
 
+18. PolicyGroupId
+    - policyGroup から始まる UUIDv4
+    - example: policyGroup-e89b-12d3-a456-426614174000
+    - 一意制約
+
+19. PolicyGroupName
+    - 文字列（1文字以上50文字以下）
+
+20. PolicyGroupDescription
+    - 文字列（0文字以上255文字以下）
+
+21. PolicyIdCollection
+    - PolicyId の配列
+    - 重複を許可しない
+
+22. PolicyGroupIdCollection
+    - PolicyGroupId の配列
+    - 重複を許可しない
+
 ## 集約
 
 1. User 集約
 
-   - ルートエンティティ: User
-   - 含まれるエンティティ: Profile
-   - 含まれる値オブジェクト: UserId, Username, EmailAddress, HashedPassword, UserStatus
+   - ルートエンティティ: Role
+   - 含まれるエンティティ: なし
+   - 含まれる値オブジェクト: RoleId, RoleName, RoleDescription, PolicyIdCollection, PolicyGroupIdCollection
 
 2. Role 集約
 
@@ -152,8 +180,15 @@
    - 含まれるエンティティ: なし
    - 含まれる値オブジェクト: PolicyId, PolicyName, PolicyDescription, PolicyDocument
 
+4. PolicyGroup 集約
+   - ルートエンティティ: PolicyGroup
+   - 含まれるエンティティ: なし
+   - 含まれる値オブジェクト: PolicyGroupId, PolicyGroupName, PolicyGroupDescription, PolicyIdCollection
+
 ## リレーションシップ
 
 1. User - Profile: 一対一
-2. User - Role: 多対多
+2. User - Role: 多対多 (UserRole エンティティを介して)
 3. Role - Policy: 多対多
+4. Role - PolicyGroup: 多対多
+5. PolicyGroup - Policy: 多対多
