@@ -2,6 +2,8 @@
 
 namespace App\Domain\ValueObjects;
 
+use Illuminate\Support\Facades\Log;
+
 class PolicyName
 {
   private string $name;
@@ -14,11 +16,15 @@ class PolicyName
 
   private function validate(string $name): void
   {
+    Log::debug('class : PolicyName - method : validate - $name :' . $name);
+
     if (empty($name)) {
+      Log::debug('class : PolicyName - method : validate - message : empty($name) = ' . (empty($name)));
       throw new \InvalidArgumentException('PolicyNameは1文字以上50文字以下である必要があります。');
     }
 
-    if (strlen($name) > 50) {
+    if (mb_strlen($name) > 50) {
+      Log::debug('class : PolicyName - method : validate - message : mb_strwidth($name) > 50 = ' . (mb_strwidth($name) > 50));
       throw new \InvalidArgumentException('PolicyNameは50文字以下である必要があります。');
     }
   }
