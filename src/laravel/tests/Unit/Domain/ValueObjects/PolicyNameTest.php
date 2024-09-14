@@ -7,6 +7,12 @@ use Tests\TestCase;
 
 class PolicyNameTest extends TestCase
 {
+  protected function setUp(): void
+  {
+    parent::setUp();
+    config()->set('logging.default', 'stderr');
+  }
+  
   /** @test */
   public function testCreateInstance()
   {
