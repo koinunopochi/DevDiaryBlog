@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Application\UseCases\FindUserByIdUseCase;
+use App\Domain\ValueObjects\Email;
+use App\Domain\ValueObjects\Password;
 use App\Domain\ValueObjects\UserId;
+use App\Domain\ValueObjects\Username;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -45,9 +48,9 @@ class RegisterController extends Controller
       // ユーザーを作成
       $user = User::factory()->create([
         'id' => $userId->toString(),
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
+        'name' => (new Username($request->name))->toString(),
+        'email' => (new Email($request->email))->toString(),
+        'password' => (new Password($request->password))->toString(),
       ]);
 
       // 登録後、ログイン状態にする
