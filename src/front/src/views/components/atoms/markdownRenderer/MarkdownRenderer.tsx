@@ -3,6 +3,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+import remarkCodeTitle from 'remark-code-title';
 import rehypeKatex from 'rehype-katex';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -22,7 +23,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   return (
     <div className={`markdown-body ${className}`}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath]}
+        remarkPlugins={[remarkGfm, remarkMath, remarkCodeTitle]}
         rehypePlugins={[rehypeKatex]}
         components={{
           code({ node, className, children, ...props }) {
@@ -33,7 +34,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
                 style={oneDark}
                 language={match[1]}
                 PreTag="div"
-                className="rounded-md"
+                className="rounded-md !mt-0"
               >
                 {String(children).replace(/\n$/, '')}
               </SyntaxHighlighter>

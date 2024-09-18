@@ -150,7 +150,7 @@ const great = () => {
 
 **ファイル名を表示する**
 
-\`\`\`js:fooBar.js
+\`\`\`js title="example.js"
 const great = () => {
   console.log("Awesome");
 };
