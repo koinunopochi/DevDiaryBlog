@@ -89,3 +89,116 @@ export const EmptyContent: Story = {
     content: '',
   },
 };
+
+const comprehensiveMarkdown = `
+## 見出し2から始めます
+
+### 見出し3
+#### 見出し4
+
+**リスト**
+
+- Hello!
+- Hola!
+  - Bonjour!
+  * Hi!
+
+**番号付きリスト**
+
+1. First
+2. Second
+
+**テキストリンク**
+
+[アンカーテキスト](https://example.com)
+
+**画像**
+
+![サンプル画像](https://via.placeholder.com/150)
+
+**画像の横幅を指定する**
+
+![](https://via.placeholder.com/250x100 =200x)
+
+**Altテキストを指定する**
+
+![代替テキスト](https://via.placeholder.com/150)
+
+**キャプションをつける**
+
+![](https://via.placeholder.com/150)
+*キャプション*
+
+**画像にリンクを貼る**
+
+[![](https://via.placeholder.com/150)](https://example.com)
+
+**テーブル**
+
+| Head | Head | Head |
+| ---- | ---- | ---- |
+| Text | Text | Text |
+| Text | Text | Text |
+
+**コードブロック**
+
+\`\`\`js
+const great = () => {
+  console.log("Awesome");
+};
+\`\`\`
+
+**ファイル名を表示する**
+
+\`\`\`js:fooBar.js
+const great = () => {
+  console.log("Awesome");
+};
+\`\`\`
+
+**diff のシンタックスハイライト**
+
+\`\`\`diff js
+@@ -4,6 +4,5 @@
++    const foo = bar.baz([1, 2, 3]) + 1;
+-    let foo = bar.baz([1, 2, 3]);
+\`\`\`
+
+**数式**
+
+インラインの数式: $a \\ne 0$
+
+ブロックの数式:
+
+$$
+e^{i\\theta} = \\cos\\theta + i\\sin\\theta
+$$
+
+**引用**
+
+> 引用文
+> 引用文
+
+**脚注**
+
+脚注の例[^1]です。脚注は文末に表示されます。
+
+[^1]: 脚注の内容その1
+
+**区切り線**
+
+-----
+
+**インラインスタイル**
+
+*イタリック* **太字** ~~打ち消し線~~ インラインで\`code\`を挿入する
+
+<!-- これはコメントです -->
+
+`;
+
+export const ComprehensiveExample: Story = {
+  args: {
+    content: comprehensiveMarkdown,
+  },
+};
