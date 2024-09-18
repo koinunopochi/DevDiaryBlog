@@ -44,3 +44,16 @@ p {
   word-break: keep-all;
   overflow-wrap: break-word;
 }
+
+/* markdown用のグローバルスタイル */
+.markdown-body {
+  @apply text-gray-800 dark:text-gray-200;
+}
+
+.markdown-body pre {
+  @apply my-4;
+}
+
+.markdown-body img {
+  @apply max-w-full h-auto;
+}
