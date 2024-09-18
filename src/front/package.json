@@ -21,6 +21,7 @@
     "react-router-dom": "^6.26.1",
     "react-syntax-highlighter": "^15.5.0",
     "rehype-katex": "^7.0.1",
+    "remark-code-title": "^0.2.5",
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
     "tailwind-merge": "^2.5.2"
