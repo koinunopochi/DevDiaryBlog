@@ -38,11 +38,21 @@ This is a longer piece of Markdown content to demonstrate how the MarkdownRender
 - [Links](https://example.com)
 
 ### Code Block
+
+#### 一つ目の書き方
 \`\`\`javascript
 function hello() {
   console.log('Hello, world!');
 }
 \`\`\`
+
+#### 二つ目の書き方
+
+~~~js
+function hello() {
+  console.log('Hello, world!');
+}
+~~~
 
 ## Conclusion
 This demonstrates various Markdown features.
