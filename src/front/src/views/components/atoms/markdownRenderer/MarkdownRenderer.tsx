@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
 
 interface MarkdownRendererProps {
   content: string;
@@ -23,10 +24,10 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             const match = /language-(\w+)/.exec(className || '');
             return match ? (
               <SyntaxHighlighter
+                {...(props as SyntaxHighlighterProps)}
                 style={oneDark}
                 language={match[1]}
                 PreTag="div"
-                {...props}
                 className="rounded-md"
               >
                 {String(children).replace(/\n$/, '')}
