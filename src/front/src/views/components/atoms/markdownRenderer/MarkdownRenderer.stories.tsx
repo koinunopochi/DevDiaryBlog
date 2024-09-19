@@ -207,6 +207,17 @@ if you chose xxx, you should also use yyy somewhere…
 :::alert
 if you chose xxx, you should also use yyy somewhere…
 :::
+
+**シンタックスシュガー**
+:::I
+if you chose xxx, you should also use yyy somewhere…
+:::
+:::W
+if you chose xxx, you should also use yyy somewhere…
+:::
+:::A
+if you chose xxx, you should also use yyy somewhere…
+:::
 `;
 
 export const ComprehensiveExample: Story = {

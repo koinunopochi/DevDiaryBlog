@@ -30,15 +30,24 @@ const remarkCustomNotesPlugin = () => {
         node.type === 'leafDirective' ||
         node.type === 'textDirective'
       ) {
+        // シンタックスシュガーの変換
+        const nameMap: { [key: string]: string } = {
+          I: 'info',
+          W: 'warn',
+          A: 'alert',
+        };
+
+        if (node.name in nameMap) {
+          node.name = nameMap[node.name];
+        }
+
         if (!['info', 'warn', 'alert'].includes(node.name)) return;
 
         const data = node.data || (node.data = {});
         const tagName = node.type === 'textDirective' ? 'span' : 'div';
 
         let className = 'custom-note';
-        if (node.name === 'info') className += ' info';
-        if (node.name === 'warn') className += ' warn';
-        if (node.name === 'alert') className += ' alert';
+        className += ` ${node.name}`;
 
         data.hName = tagName;
         data.hProperties = h(tagName, { className }).properties;
