@@ -198,8 +198,13 @@ $$
 ~~~
 
 ### Note
-
-:::note{.warning}
+:::info
+if you chose xxx, you should also use yyy somewhere…
+:::
+:::warn
+if you chose xxx, you should also use yyy somewhere…
+:::
+:::alert
 if you chose xxx, you should also use yyy somewhere…
 :::
 `;

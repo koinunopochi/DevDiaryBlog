@@ -13,6 +13,7 @@ import { h } from 'hastscript';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
+import { Info, AlertTriangle, AlertOctagon } from 'lucide-react';
 
 import 'katex/dist/katex.min.css';
 
@@ -21,7 +22,7 @@ interface MarkdownRendererProps {
   className?: string;
 }
 
-const remarkNotePlugin = () => {
+const remarkCustomNotesPlugin = () => {
   return (tree: any) => {
     visit(tree, (node) => {
       if (
@@ -29,16 +30,47 @@ const remarkNotePlugin = () => {
         node.type === 'leafDirective' ||
         node.type === 'textDirective'
       ) {
-        if (node.name !== 'note') return;
+        if (!['info', 'warn', 'alert'].includes(node.name)) return;
 
         const data = node.data || (node.data = {});
         const tagName = node.type === 'textDirective' ? 'span' : 'div';
 
+        let className = 'custom-note';
+        if (node.name === 'info') className += ' info';
+        if (node.name === 'warn') className += ' warn';
+        if (node.name === 'alert') className += ' alert';
+
         data.hName = tagName;
-        data.hProperties = h(tagName, node.attributes || {}).properties;
+        data.hProperties = h(tagName, { className }).properties;
       }
     });
   };
+};
+
+interface CustomNoteProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
+
+const CustomNote: React.FC<CustomNoteProps> = ({
+  className = '',
+  children,
+  ...props
+}) => {
+  let Icon = Info;
+  if (className.includes('warn')) Icon = AlertTriangle;
+  if (className.includes('alert')) Icon = AlertOctagon;
+
+  return (
+    <div
+      className={`custom-note ${className} flex items-start p-4 my-4 rounded-md`}
+      {...props}
+    >
+      <div className="flex-shrink-0 self-center mr-3">
+        <Icon className="w-5 h-5" />
+      </div>
+      <div className="flex-grow">{children}</div>
+    </div>
+  );
 };
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
@@ -53,7 +85,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           remarkMath,
           remarkCodeTitle,
           remarkDirective,
-          remarkNotePlugin,
+          remarkCustomNotesPlugin,
         ]}
         rehypePlugins={[rehypeKatex, rehypeRaw]}
         components={{
@@ -129,6 +161,12 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
               {...props}
             />
           ),
+          div: ({ node, ...props }) => {
+            if (props.className && props.className.includes('custom-note')) {
+              return <CustomNote {...props} />;
+            }
+            return <div {...props} />;
+          },
         }}
       >
         {content}
