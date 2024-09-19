@@ -116,10 +116,6 @@ const comprehensiveMarkdown = `
 
 ![サンプル画像](https://via.placeholder.com/150)
 
-**画像の横幅を指定する**
-
-![](https://via.placeholder.com/250x100 =200x)
-
 **Altテキストを指定する**
 
 ![代替テキスト](https://via.placeholder.com/150)
