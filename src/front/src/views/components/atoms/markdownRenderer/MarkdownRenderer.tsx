@@ -132,12 +132,44 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             <p className="my-2 leading-7" {...props} />
           ),
           ul: ({ node, ...props }) => (
-            <ul className="list-disc list-inside my-3" {...props} />
+            <ul className="list-disc pl-5 space-y-2 my-4" {...props} />
           ),
           ol: ({ node, ...props }) => (
-            <ol className="list-decimal list-inside my-3" {...props} />
+            <ol className="list-decimal pl-5 space-y-2 my-4" {...props} />
           ),
-          li: ({ node, ...props }) => <li className="my-1" {...props} />,
+          li: ({ node, children, ...props }) => {
+            if (
+              React.Children.toArray(children).some(
+                (child) =>
+                  React.isValidElement(child) &&
+                  (child.type === 'ul' || child.type === 'ol')
+              )
+            ) {
+              return (
+                <li className="mb-2" {...props}>
+                  {React.Children.map(children, (child) => {
+                    if (
+                      React.isValidElement(child) &&
+                      (child.type === 'ul' || child.type === 'ol')
+                    ) {
+                      return React.cloneElement(
+                        child as React.ReactElement<any>,
+                        {
+                          className: 'mt-2 space-y-2',
+                        }
+                      );
+                    }
+                    return child;
+                  })}
+                </li>
+              );
+            }
+            return (
+              <li className="mb-2" {...props}>
+                {children}
+              </li>
+            );
+          },
           a: ({ node, ...props }) => (
             <a
               className="text-blue-600 hover:underline dark:text-blue-400"
