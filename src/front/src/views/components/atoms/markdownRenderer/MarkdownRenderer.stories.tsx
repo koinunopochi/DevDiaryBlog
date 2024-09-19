@@ -193,8 +193,15 @@ $$
 
 *イタリック* **太字** ~~打ち消し線~~ インラインで\`code\`を挿入する
 
+~~~html
 <!-- これはコメントです -->
+~~~
 
+### Note
+
+:::note{.warning}
+if you chose xxx, you should also use yyy somewhere…
+:::
 `;
 
 export const ComprehensiveExample: Story = {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -5,6 +6,10 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import remarkCodeTitle from 'remark-code-title';
 import rehypeKatex from 'rehype-katex';
+import remarkDirective from 'remark-directive';
+import rehypeRaw from 'rehype-raw';
+import { visit } from 'unist-util-visit';
+import { h } from 'hastscript';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
@@ -16,6 +21,26 @@ interface MarkdownRendererProps {
   className?: string;
 }
 
+const remarkNotePlugin = () => {
+  return (tree: any) => {
+    visit(tree, (node) => {
+      if (
+        node.type === 'containerDirective' ||
+        node.type === 'leafDirective' ||
+        node.type === 'textDirective'
+      ) {
+        if (node.name !== 'note') return;
+
+        const data = node.data || (node.data = {});
+        const tagName = node.type === 'textDirective' ? 'span' : 'div';
+
+        data.hName = tagName;
+        data.hProperties = h(tagName, node.attributes || {}).properties;
+      }
+    });
+  };
+};
+
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   content,
   className = '',
@@ -23,8 +48,14 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   return (
     <div className={`markdown-body ${className}`}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkMath, remarkCodeTitle]}
-        rehypePlugins={[rehypeKatex]}
+        remarkPlugins={[
+          remarkGfm,
+          remarkMath,
+          remarkCodeTitle,
+          remarkDirective,
+          remarkNotePlugin,
+        ]}
+        rehypePlugins={[rehypeKatex, rehypeRaw]}
         components={{
           code({ node, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || '');
