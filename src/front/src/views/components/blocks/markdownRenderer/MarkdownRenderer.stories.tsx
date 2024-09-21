@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import MarkdownRenderer from './MarkdownRenderer';
 
 const meta: Meta<typeof MarkdownRenderer> = {
-  title: 'atoms/MarkdownRenderer',
+  title: 'blocks/MarkdownRenderer',
   component: MarkdownRenderer,
   parameters: {
     layout: 'centered',
