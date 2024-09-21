@@ -12,6 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@uiw/react-md-editor": "^4.0.4",
     "framer-motion": "^11.5.4",
     "hastscript": "^9.0.0",
     "katex": "^0.16.11",
