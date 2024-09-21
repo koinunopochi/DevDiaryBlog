@@ -13,7 +13,7 @@ import { h } from 'hastscript';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
-import { Info, AlertTriangle, AlertOctagon } from 'lucide-react';
+import CustomNote from '@components/atoms/customNote/CustomNote';
 
 import 'katex/dist/katex.min.css';
 
@@ -54,32 +54,6 @@ const remarkCustomNotesPlugin = () => {
       }
     });
   };
-};
-
-interface CustomNoteProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
-}
-
-const CustomNote: React.FC<CustomNoteProps> = ({
-  className = '',
-  children,
-  ...props
-}) => {
-  let Icon = Info;
-  if (className.includes('warn')) Icon = AlertTriangle;
-  if (className.includes('alert')) Icon = AlertOctagon;
-
-  return (
-    <div
-      className={`custom-note ${className} flex items-start p-4 my-4 rounded-md`}
-      {...props}
-    >
-      <div className="flex-shrink-0 self-center mr-3">
-        <Icon className="w-5 h-5" />
-      </div>
-      <div className="flex-grow">{children}</div>
-    </div>
-  );
 };
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
