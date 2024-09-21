@@ -5,19 +5,26 @@
 @tailwind utilities;
 
 :root {
-  --font-family-sans: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-family-sans: 'Noto Sans JP', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
 body {
   font-family: var(--font-family-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: "palt";
+  font-feature-settings: 'palt';
   line-height: 1.8;
   letter-spacing: 0.03em;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
   line-height: 1.5;
   margin-bottom: 0.5em;
@@ -43,4 +50,51 @@ p {
 .jp-en-spacing {
   word-break: keep-all;
   overflow-wrap: break-word;
+}
+
+/* markdown用のグローバルスタイル */
+.markdown-body {
+  @apply text-gray-800 dark:text-gray-200;
+}
+
+.markdown-body pre {
+  @apply mb-4 mt-0;
+}
+
+.markdown-body img {
+  @apply max-w-full h-auto;
+}
+
+/* コードタイトルのスタイル */
+[data-remark-code-title] {
+  background-color: #1e2937;
+  color: #e2e8f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.7rem;
+  font-weight: 400;
+  padding: 0.25rem 1rem;
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+  border: 1px solid #374151;
+  border-bottom: none;
+  display: inline-block;
+  margin-bottom: -1px;
+}
+
+[data-remark-code-title] + pre .rounded-md {
+  @apply rounded-tl-none !important;
+}
+
+
+.custom-note.info {
+  @apply bg-blue-100 text-blue-800 border-blue-500;
+}
+
+.custom-note.warn {
+  @apply bg-yellow-100 text-yellow-800 border-yellow-500;
+}
+
+.custom-note.alert {
+  @apply bg-red-100 text-red-800 border-red-500;
 }

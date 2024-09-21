@@ -4,14 +4,14 @@ namespace App\Domain\ValueObjects;
 
 class PolicyDocument
 {
-  private string $policyDocument;
+  private array $policyDocument;
 
-  public function __construct(string $policyDocument)
+  public function __construct(array $policyDocument)
   {
     $this->policyDocument = $policyDocument;
   }
 
-  public function toString(): string
+  public function toArray(): array
   {
     return $this->policyDocument;
   }

@@ -31,4 +31,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    's3'=>[
+      'default_icon' => env('DEFAULT_USER_ICON_URL'),
+    ],
+
 ];
