@@ -3,7 +3,6 @@ import MDEditor from '@uiw/react-md-editor';
 
 const SimpleMarkdownEditor: React.FC = () => {
   const [value, setValue] = useState<string | undefined>('');
-  const [previewEnabled, setPreviewEnabled] = useState(false);
 
   const handleChange = useCallback((val: string | undefined) => {
     setValue(val);
@@ -43,20 +42,19 @@ const SimpleMarkdownEditor: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="markdown-editor-container w-full min-w-full">
       <MDEditor
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        preview={previewEnabled ? 'live' : 'edit'}
-        height={400}
         textareaProps={{
           onPaste: handlePaste,
         }}
+        preview="edit"
+        hideToolbar={true}
+        height={400}
+        style={{ width: '100%', minWidth: '100%' }}
       />
-      <button onClick={() => setPreviewEnabled(!previewEnabled)}>
-        {previewEnabled ? 'プレビューを無効にする' : 'プレビューを有効にする'}
-      </button>
     </div>
   );
 };
