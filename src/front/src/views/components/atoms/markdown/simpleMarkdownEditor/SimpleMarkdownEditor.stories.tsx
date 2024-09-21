@@ -11,19 +11,33 @@ const meta: Meta<typeof SimpleMarkdownEditor> = {
   argTypes: {
     value: { control: 'text' },
     onChange: { action: 'onChange' },
+    onImageUpload: { action: 'onImageUpload' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// モックの画像アップロード関数
+const mockImageUpload = async (file: File): Promise<string> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(`https://example.com/images/${file.name}`);
+    }, 1000);
+  });
+};
+
 export const Default: Story = {
-  args: {},
+  args: {
+    onImageUpload: mockImageUpload,
+  },
 };
 
 export const WithInitialValue: Story = {
   args: {
-    value: '# Welcome to SimpleMarkdownEditor\n\nThis is a **simple** markdown editor.',
+    value:
+      '# Welcome to SimpleMarkdownEditor\n\nThis is a **simple** markdown editor.',
+    onImageUpload: mockImageUpload,
   },
 };
 
@@ -32,30 +46,38 @@ export const WithCustomOnChange: Story = {
     onChange: (value: string | undefined) => {
       console.log(`New value: ${value}`);
     },
-  },
-};
-
-export const WithPreviewEnabled: Story = {
-  args: {
-    value: '# Preview Mode\n\nThis story starts with preview mode enabled.',
-    previewEnabled: true,
+    onImageUpload: mockImageUpload,
   },
 };
 
 export const WithLongContent: Story = {
   args: {
     value: '# Long Content\n\n' + 'Lorem ipsum '.repeat(100),
+    onImageUpload: mockImageUpload,
   },
 };
 
 export const WithCodeBlock: Story = {
   args: {
-    value: '# Code Block Example\n\n```javascript\nconst greeting = "Hello, world!";\nconsole.log(greeting);\n```',
+    value:
+      '# Code Block Example\n\n```javascript\nconst greeting = "Hello, world!";\nconsole.log(greeting);\n```',
+    onImageUpload: mockImageUpload,
   },
 };
 
 export const WithImagePlaceholder: Story = {
   args: {
     value: '# Image Example\n\n![Example Image](https://example.com/image.jpg)',
+    onImageUpload: mockImageUpload,
+  },
+};
+
+export const WithCustomImageUpload: Story = {
+  args: {
+    onImageUpload: async (file: File) => {
+      console.log(`Uploading file: ${file.name}`);
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // 2秒の遅延をシミュレート
+      return `https://custom-example.com/images/${file.name}`;
+    },
   },
 };
