@@ -8,53 +8,18 @@ import remarkCodeTitle from 'remark-code-title';
 import rehypeKatex from 'rehype-katex';
 import remarkDirective from 'remark-directive';
 import rehypeRaw from 'rehype-raw';
-import { visit } from 'unist-util-visit';
-import { h } from 'hastscript';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import CustomNote from '@components/atoms/customNote/CustomNote';
 
 import 'katex/dist/katex.min.css';
+import remarkCustomNotes from '@/infrastructure/remarkPlugins/remarkCustomNotes';
 
 interface MarkdownRendererProps {
   content: string;
   className?: string;
 }
-
-const remarkCustomNotesPlugin = () => {
-  return (tree: any) => {
-    visit(tree, (node) => {
-      if (
-        node.type === 'containerDirective' ||
-        node.type === 'leafDirective' ||
-        node.type === 'textDirective'
-      ) {
-        // シンタックスシュガーの変換
-        const nameMap: { [key: string]: string } = {
-          I: 'info',
-          W: 'warn',
-          A: 'alert',
-        };
-
-        if (node.name in nameMap) {
-          node.name = nameMap[node.name];
-        }
-
-        if (!['info', 'warn', 'alert'].includes(node.name)) return;
-
-        const data = node.data || (node.data = {});
-        const tagName = node.type === 'textDirective' ? 'span' : 'div';
-
-        let className = 'custom-note';
-        className += ` ${node.name}`;
-
-        data.hName = tagName;
-        data.hProperties = h(tagName, { className }).properties;
-      }
-    });
-  };
-};
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   content,
@@ -68,7 +33,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           remarkMath,
           remarkCodeTitle,
           remarkDirective,
-          remarkCustomNotesPlugin,
+          remarkCustomNotes,
         ]}
         rehypePlugins={[rehypeKatex, rehypeRaw]}
         components={{
