@@ -7,14 +7,12 @@ import remarkCodeTitle from 'remark-code-title';
 import rehypeKatex from 'rehype-katex';
 import remarkDirective from 'remark-directive';
 import rehypeRaw from 'rehype-raw';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import CustomNote from '@components/atoms/customNote/CustomNote';
 
 import 'katex/dist/katex.min.css';
 import remarkCustomNotes from '@/infrastructure/remarkPlugins/remarkCustomNotes';
 import MarkdownListItem from '@components/atoms/markdown/markdownListItem/MarkdownListItem';
+import CodeBlock from '@components/atoms/markdown/codeBlock/CodeBlock';
 
 interface MarkdownRendererProps {
   content: string;
@@ -37,25 +35,9 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
         ]}
         rehypePlugins={[rehypeKatex, rehypeRaw]}
         components={{
-          code({ node, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || '');
-            return match ? (
-              <SyntaxHighlighter
-                {...(props as SyntaxHighlighterProps)}
-                style={oneDark}
-                language={match[1]}
-                PreTag="div"
-                className="rounded-md !mt-0"
-              >
-                {String(children).replace(/\n$/, '')}
-              </SyntaxHighlighter>
-            ) : (
-              <code
-                className={`${className} px-1 py-0.5 rounded-sm bg-gray-100 dark:bg-gray-800`}
-                {...props}
-              >
-                {children}
-              </code>
+          code: ({ node, className, children, ...props }) => {
+            return (
+              <CodeBlock children={children} className={className} {...props} />
             );
           },
           h1: ({ node, ...props }) => (
