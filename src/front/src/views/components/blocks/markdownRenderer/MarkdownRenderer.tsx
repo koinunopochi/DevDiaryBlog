@@ -96,6 +96,8 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             return (
               <a
                 className="text-blue-600 hover:underline dark:text-blue-400"
+                target="_blank"
+                rel="noopener noreferrer"
                 href={href}
                 {...props}
               >
