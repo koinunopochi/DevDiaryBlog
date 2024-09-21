@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -15,6 +14,7 @@ import CustomNote from '@components/atoms/customNote/CustomNote';
 
 import 'katex/dist/katex.min.css';
 import remarkCustomNotes from '@/infrastructure/remarkPlugins/remarkCustomNotes';
+import MarkdownListItem from '@components/atoms/markdown/markdownListItem/MarkdownListItem';
 
 interface MarkdownRendererProps {
   content: string;
@@ -77,37 +77,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             <ol className="list-decimal pl-5 space-y-2 my-4" {...props} />
           ),
           li: ({ node, children, ...props }) => {
-            if (
-              React.Children.toArray(children).some(
-                (child) =>
-                  React.isValidElement(child) &&
-                  (child.type === 'ul' || child.type === 'ol')
-              )
-            ) {
-              return (
-                <li className="mb-2" {...props}>
-                  {React.Children.map(children, (child) => {
-                    if (
-                      React.isValidElement(child) &&
-                      (child.type === 'ul' || child.type === 'ol')
-                    ) {
-                      return React.cloneElement(
-                        child as React.ReactElement<any>,
-                        {
-                          className: 'mt-2 space-y-2',
-                        }
-                      );
-                    }
-                    return child;
-                  })}
-                </li>
-              );
-            }
-            return (
-              <li className="mb-2" {...props}>
-                {children}
-              </li>
-            );
+            return <MarkdownListItem children={children} {...props} />;
           },
           a: ({ node, ...props }) => (
             <a
