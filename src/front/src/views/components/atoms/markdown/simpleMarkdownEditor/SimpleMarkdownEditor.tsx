@@ -5,14 +5,17 @@ interface SimpleMarkdownEditorProps {
   onImageUpload: (file: File) => Promise<string>;
   value?: string;
   onChange?: (value: string | undefined) => void;
+  onUnusedImagesDetected?: (unusedImages: string[]) => void;
 }
 
 const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
   onImageUpload,
   value: initialValue,
   onChange,
+  onUnusedImagesDetected,
 }) => {
   const [value, setValue] = useState<string | undefined>(initialValue);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
 
   useEffect(() => {
     setValue(initialValue);
@@ -24,6 +27,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
       if (onChange) {
         onChange(val);
       }
+      detectUnusedImages(val);
     },
     [onChange]
   );
@@ -56,13 +60,13 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
           if (file) {
             try {
               const imageUrl = await onImageUpload(file);
+              setUploadedImages((prev) => [...prev, imageUrl]);
               const imageMarkdown = `![uploaded-image](${imageUrl})`;
               handleChange(
                 value ? `${value}\n${imageMarkdown}` : imageMarkdown
               );
             } catch (error) {
               console.error('画像のアップロードに失敗しました:', error);
-              // ここでエラーハンドリングを行う（例：ユーザーへの通知）
             }
           }
         }
@@ -70,6 +74,27 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     },
     [onImageUpload, value, handleChange]
   );
+
+  const detectUnusedImages = useCallback(
+    (currentValue: string | undefined) => {
+      if (currentValue && onUnusedImagesDetected) {
+        const currentImages = (currentValue.match(/!\[.*?\]\((.*?)\)/g) || [])
+          .map((img) => img.match(/\((.*?)\)/)?.[1])
+          .filter((url): url is string => url !== undefined);
+
+        const unusedImages = uploadedImages.filter(
+          (url) => !currentImages.includes(url)
+        );
+
+        onUnusedImagesDetected(unusedImages);
+      }
+    },
+    [uploadedImages, onUnusedImagesDetected]
+  );
+
+  useEffect(() => {
+    detectUnusedImages(value);
+  }, [value, detectUnusedImages]);
 
   return (
     <div className="markdown-editor-container w-full min-w-full">

@@ -12,6 +12,7 @@ const meta: Meta<typeof SimpleMarkdownEditor> = {
     value: { control: 'text' },
     onChange: { action: 'onChange' },
     onImageUpload: { action: 'onImageUpload' },
+    onUnusedImagesDetected: { action: 'onUnusedImagesDetected' },
   },
 };
 
@@ -30,6 +31,9 @@ const mockImageUpload = async (file: File): Promise<string> => {
 export const Default: Story = {
   args: {
     onImageUpload: mockImageUpload,
+    onUnusedImagesDetected: (unusedImages: string[]) => {
+      console.log('Unused images:', unusedImages);
+    },
   },
 };
 
@@ -38,6 +42,9 @@ export const WithInitialValue: Story = {
     value:
       '# Welcome to SimpleMarkdownEditor\n\nThis is a **simple** markdown editor.',
     onImageUpload: mockImageUpload,
+    onUnusedImagesDetected: (unusedImages: string[]) => {
+      console.log('Unused images:', unusedImages);
+    },
   },
 };
 
@@ -47,6 +54,9 @@ export const WithCustomOnChange: Story = {
       console.log(`New value: ${value}`);
     },
     onImageUpload: mockImageUpload,
+    onUnusedImagesDetected: (unusedImages: string[]) => {
+      console.log('Unused images:', unusedImages);
+    },
   },
 };
 
@@ -54,6 +64,9 @@ export const WithLongContent: Story = {
   args: {
     value: '# Long Content\n\n' + 'Lorem ipsum '.repeat(100),
     onImageUpload: mockImageUpload,
+    onUnusedImagesDetected: (unusedImages: string[]) => {
+      console.log('Unused images:', unusedImages);
+    },
   },
 };
 
@@ -62,6 +75,9 @@ export const WithCodeBlock: Story = {
     value:
       '# Code Block Example\n\n```javascript\nconst greeting = "Hello, world!";\nconsole.log(greeting);\n```',
     onImageUpload: mockImageUpload,
+    onUnusedImagesDetected: (unusedImages: string[]) => {
+      console.log('Unused images:', unusedImages);
+    },
   },
 };
 
@@ -69,6 +85,9 @@ export const WithImagePlaceholder: Story = {
   args: {
     value: '# Image Example\n\n![Example Image](https://example.com/image.jpg)',
     onImageUpload: mockImageUpload,
+    onUnusedImagesDetected: (unusedImages: string[]) => {
+      console.log('Unused images:', unusedImages);
+    },
   },
 };
 
@@ -78,6 +97,9 @@ export const WithCustomImageUpload: Story = {
       console.log(`Uploading file: ${file.name}`);
       await new Promise((resolve) => setTimeout(resolve, 2000)); // 2秒の遅延をシミュレート
       return `https://custom-example.com/images/${file.name}`;
+    },
+    onUnusedImagesDetected: (unusedImages: string[]) => {
+      console.log('Unused images:', unusedImages);
     },
   },
 };
