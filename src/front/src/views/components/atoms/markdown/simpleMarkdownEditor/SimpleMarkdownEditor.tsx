@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import MDEditor from '@uiw/react-md-editor';
 
 interface SimpleMarkdownEditorProps {
@@ -16,6 +16,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
 }) => {
   const [value, setValue] = useState<string | undefined>(initialValue);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setValue(initialValue);
@@ -92,12 +93,56 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     [uploadedImages, onUnusedImagesDetected]
   );
 
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback(
+    async (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const files = Array.from(e.dataTransfer.files);
+      for (const file of files) {
+        if (file.type.startsWith('image/')) {
+          try {
+            const imageUrl = await onImageUpload(file);
+            setUploadedImages((prev) => [...prev, imageUrl]);
+            const imageMarkdown = `![uploaded-image](${imageUrl})`;
+            handleChange(value ? `${value}\n${imageMarkdown}` : imageMarkdown);
+          } catch (error) {
+            console.error('画像のアップロードに失敗しました:', error);
+          }
+        }
+      }
+    },
+    [onImageUpload, value, handleChange]
+  );
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('dragover', handleDragOver as any);
+      container.addEventListener('drop', handleDrop as any);
+    }
+    return () => {
+      if (container) {
+        container.removeEventListener('dragover', handleDragOver as any);
+        container.removeEventListener('drop', handleDrop as any);
+      }
+    };
+  }, [handleDragOver, handleDrop]);
+
   useEffect(() => {
     detectUnusedImages(value);
   }, [value, detectUnusedImages]);
 
   return (
-    <div className="markdown-editor-container w-full min-w-full">
+    <div
+      ref={containerRef}
+      className="markdown-editor-container w-full min-w-full"
+    >
       <MDEditor
         value={value}
         onChange={handleChange}
