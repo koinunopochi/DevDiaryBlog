@@ -53,7 +53,7 @@ function App() {
           {/* Articles */}
           <Route
             path="/articles"
-            element={<EditorPage />}
+            element={<EditorPage apiClient={apiClient}/>}
           />
 
           {/* Settings */}

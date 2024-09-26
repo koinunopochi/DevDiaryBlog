@@ -1,7 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import PreviewMarkdownEditor from '@components/atoms/markdown/previewMarkdownEditor/PreviewMarkdownEditor';
+import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 
-const EditorPage: React.FC = () => {
+interface EditorPageProps {
+  apiClient: EnhancedApiClient;
+}
+
+const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
   const [content, setContent] = useState<string>('');
 
   const handleImageUpload = useCallback(async (file: File): Promise<string> => {
@@ -11,10 +16,11 @@ const EditorPage: React.FC = () => {
 
   const handleLinkCardInfo = async (url: string) => {
     console.log('Link card info requested for:', url);
+    const res = await apiClient.get(`/api/ogp?url=${url}`);
     return {
       url: url,
-      imageUrl: 'https://example.com/link-image.jpg',
-      title: 'Example Link Title',
+      imageUrl: res.imageUrl,
+      title: res.title,
     };
   };
 
