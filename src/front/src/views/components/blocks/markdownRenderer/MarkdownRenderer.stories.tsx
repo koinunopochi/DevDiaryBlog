@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import MarkdownRenderer from './MarkdownRenderer';
 
 const meta: Meta<typeof MarkdownRenderer> = {
-  title: 'atoms/MarkdownRenderer',
+  title: 'blocks/MarkdownRenderer',
   component: MarkdownRenderer,
   parameters: {
     layout: 'centered',
@@ -17,9 +17,20 @@ const meta: Meta<typeof MarkdownRenderer> = {
 export default meta;
 type Story = StoryObj<typeof MarkdownRenderer>;
 
+const mockGetLinkCardInfo = async (url: string) => {
+  await new Promise((resolve) => setTimeout(resolve, 2000)); // 2秒の遅延
+  return {
+    url,
+    imageUrl:
+      'http://localhost:9000/dev-diary-blog/profile-icons/defaults/icon_102260_128.png',
+    title: 'Mock Link Card',
+  };
+};
+
 export const Default: Story = {
   args: {
     content: '# Hello\nThis is a **bold** text.',
+    getLinkCardInfo: mockGetLinkCardInfo,
   },
 };
 
@@ -57,6 +68,7 @@ function hello() {
 ## Conclusion
 This demonstrates various Markdown features.
     `,
+    getLinkCardInfo: mockGetLinkCardInfo,
   },
 };
 
@@ -64,6 +76,7 @@ export const WithCustomClass: Story = {
   args: {
     content: '# Styled Markdown\nThis has a custom class.',
     className: 'bg-gray-100 p-4 rounded',
+    getLinkCardInfo: mockGetLinkCardInfo,
   },
 };
 
@@ -75,18 +88,21 @@ export const WithTable: Story = {
 | Cell 1   | Cell 2   |
 | Cell 3   | Cell 4   |
     `,
+    getLinkCardInfo: mockGetLinkCardInfo,
   },
 };
 
 export const WithBlockquote: Story = {
   args: {
     content: '> This is a blockquote.\n\nNormal text here.',
+    getLinkCardInfo: mockGetLinkCardInfo,
   },
 };
 
 export const EmptyContent: Story = {
   args: {
     content: '',
+    getLinkCardInfo: mockGetLinkCardInfo,
   },
 };
 
@@ -219,5 +235,14 @@ if you chose xxx, you should also use yyy somewhere…
 export const ComprehensiveExample: Story = {
   args: {
     content: comprehensiveMarkdown,
+    getLinkCardInfo: mockGetLinkCardInfo,
+  },
+};
+
+export const WithLinkCard: Story = {
+  args: {
+    content:
+      'This is a link to \n\nhttps://example.com\n\nThis is a not converting link card https://example.com',
+    getLinkCardInfo: mockGetLinkCardInfo,
   },
 };
