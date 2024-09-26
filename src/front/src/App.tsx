@@ -14,6 +14,7 @@ import { ThemeProvider } from '@/views/components/providers/ThemeProvider';
 import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
 import NotFound from '@/views/components/atoms/notFound/NotFound';
 import UsernamePage from '@/views/pages/username/UsernamePage';
+import EditorPage from '@/views/pages/articles/edit/EditorPage';
 
 function App() {
   const apiClient = new EnhancedApiClient(
@@ -47,6 +48,12 @@ function App() {
           <Route
             path="/register"
             element={<RegisterPage authService={authService} />}
+          />
+
+          {/* Articles */}
+          <Route
+            path="/articles"
+            element={<EditorPage />}
           />
 
           {/* Settings */}
