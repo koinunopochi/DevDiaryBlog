@@ -12,7 +12,7 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, imageUrl, title }) => {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="block w-full max-w-md mx-auto my-4 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300"
+      className="block w-full mx-auto my-4 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300"
     >
       <div className="flex">
         <div className="flex-grow p-2 sm:p-3 min-w-0 flex flex-col justify-between">
