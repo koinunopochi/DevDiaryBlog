@@ -28,6 +28,32 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   className = '',
   getLinkCardInfo,
 }) => {
+  const [linkInfoMap, setLinkInfoMap] = React.useState<
+    Record<string, { url: string; imageUrl: string; title: string } | null>
+  >({});
+
+  const fetchLinkInfo = React.useCallback(
+    async (url: string) => {
+      if (!(url in linkInfoMap)) {
+        try {
+          const info = await getLinkCardInfo(url);
+          setLinkInfoMap((prev) => ({ ...prev, [url]: info }));
+        } catch (error) {
+          console.error(`Failed to fetch link info for ${url}:`, error);
+          setLinkInfoMap((prev) => ({ ...prev, [url]: null }));
+        }
+      }
+    },
+    [getLinkCardInfo, linkInfoMap]
+  );
+
+  React.useEffect(() => {
+    const urls = (content.match(/\bhttps?:\/\/\S+/gi) || []).filter(
+      (url) => !(url in linkInfoMap)
+    );
+    urls.forEach(fetchLinkInfo);
+  }, [content, fetchLinkInfo, linkInfoMap]);
+
   return (
     <div className={`markdown-body ${className}`}>
       <ReactMarkdown
@@ -55,7 +81,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             <h3 className="text-xl font-medium mt-4 mb-2" {...props} />
           ),
           p: ({ node, children, ...props }) => {
-            // Check if the paragraph contains only a single link
             if (
               node?.children.length === 1 &&
               node.children[0].type === 'element' &&
@@ -68,10 +93,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
               const href = node.children[0].properties.href as string;
               if (href && href.match(/^https?:\/\//)) {
                 return (
-                  <LinkCardWrapper
-                    href={href}
-                    getLinkCardInfo={getLinkCardInfo}
-                  >
+                  <LinkCardWrapper href={href} linkInfo={linkInfoMap[href]}>
                     {children}
                   </LinkCardWrapper>
                 );
@@ -147,25 +169,12 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
 
 const LinkCardWrapper: React.FC<{
   href: string;
-  getLinkCardInfo: (
-    url: string
-  ) => Promise<{ url: string; imageUrl: string; title: string }>;
+  linkInfo: { url: string; imageUrl: string; title: string } | null | undefined;
   children: React.ReactNode;
-}> = ({ href, getLinkCardInfo, children }) => {
-  const [linkInfo, setLinkInfo] = React.useState<{
-    url: string;
-    imageUrl: string;
-    title: string;
-  } | null>(null);
-
-  React.useEffect(() => {
-    getLinkCardInfo(href).then(setLinkInfo);
-  }, [href, getLinkCardInfo]);
-
+}> = ({ href, linkInfo, children }) => {
   if (linkInfo) {
     return <LinkCard {...linkInfo} />;
   }
-
   return (
     <a className="text-blue-600 hover:underline dark:text-blue-400" href={href}>
       {children}
