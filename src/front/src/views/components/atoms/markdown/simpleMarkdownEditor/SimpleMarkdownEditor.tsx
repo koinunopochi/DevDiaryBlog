@@ -51,29 +51,49 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     [value, handleChange]
   );
 
+  const handleImageUpload = useCallback(
+    async (file: File) => {
+      try {
+        const imageUrl = await onImageUpload(file);
+        setUploadedImages((prev) => [...prev, imageUrl]);
+        const imageMarkdown = `![uploaded-image](${imageUrl})`;
+        handleChange(value ? `${value}\n${imageMarkdown}` : imageMarkdown);
+      } catch (error) {
+        console.error('画像のアップロードに失敗しました:', error);
+      }
+    },
+    [onImageUpload, value, handleChange]
+  );
+
   const handlePaste = useCallback(
-    async (pasteEvent: React.ClipboardEvent) => {
-      const items = pasteEvent.clipboardData.items;
+    (e: React.ClipboardEvent) => {
+      const items = e.clipboardData.items;
       for (let i = 0; i < items.length; i++) {
         if (items[i].type.indexOf('image') !== -1) {
-          pasteEvent.preventDefault();
+          e.preventDefault();
           const file = items[i].getAsFile();
           if (file) {
-            try {
-              const imageUrl = await onImageUpload(file);
-              setUploadedImages((prev) => [...prev, imageUrl]);
-              const imageMarkdown = `![uploaded-image](${imageUrl})`;
-              handleChange(
-                value ? `${value}\n${imageMarkdown}` : imageMarkdown
-              );
-            } catch (error) {
-              console.error('画像のアップロードに失敗しました:', error);
-            }
+            handleImageUpload(file);
           }
         }
       }
     },
-    [onImageUpload, value, handleChange]
+    [handleImageUpload]
+  );
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const files = Array.from(e.dataTransfer.files);
+      files.forEach((file) => {
+        if (file.type.startsWith('image/')) {
+          handleImageUpload(file);
+        }
+      });
+    },
+    [handleImageUpload]
   );
 
   const detectUnusedImages = useCallback(
@@ -93,46 +113,19 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     [uploadedImages, onUnusedImagesDetected]
   );
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  }, []);
-
-  const handleDrop = useCallback(
-    async (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const files = Array.from(e.dataTransfer.files);
-      for (const file of files) {
-        if (file.type.startsWith('image/')) {
-          try {
-            const imageUrl = await onImageUpload(file);
-            setUploadedImages((prev) => [...prev, imageUrl]);
-            const imageMarkdown = `![uploaded-image](${imageUrl})`;
-            handleChange(value ? `${value}\n${imageMarkdown}` : imageMarkdown);
-          } catch (error) {
-            console.error('画像のアップロードに失敗しました:', error);
-          }
-        }
-      }
-    },
-    [onImageUpload, value, handleChange]
-  );
-
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
-      container.addEventListener('dragover', handleDragOver as any);
+      container.addEventListener('dragover', (e) => e.preventDefault());
       container.addEventListener('drop', handleDrop as any);
     }
     return () => {
       if (container) {
-        container.removeEventListener('dragover', handleDragOver as any);
+        container.removeEventListener('dragover', (e) => e.preventDefault());
         container.removeEventListener('drop', handleDrop as any);
       }
     };
-  }, [handleDragOver, handleDrop]);
+  }, [handleDrop]);
 
   useEffect(() => {
     detectUnusedImages(value);
