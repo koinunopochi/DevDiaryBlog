@@ -140,7 +140,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
             'w-full min-w-full p-4 focus:outline-none focus:ring-2 focus:ring-blue-500',
         }}
         preview="edit"
-        hideToolbar={true}
+        hideToolbar={false}
         height={400}
         className="w-full min-w-full"
       />
