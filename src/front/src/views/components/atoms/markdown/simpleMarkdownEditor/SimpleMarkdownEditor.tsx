@@ -1,5 +1,6 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import MDEditor from '@uiw/react-md-editor';
+import { useDropzone, Accept } from 'react-dropzone';
 
 interface SimpleMarkdownEditorProps {
   onImageUpload: (file: File) => Promise<string>;
@@ -16,7 +17,6 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
 }) => {
   const [value, setValue] = useState<string | undefined>(initialValue);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setValue(initialValue);
@@ -65,6 +65,28 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     [onImageUpload, value, handleChange]
   );
 
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      acceptedFiles.forEach((file) => {
+        if (file.type.startsWith('image/')) {
+          handleImageUpload(file);
+        }
+      });
+    },
+    [handleImageUpload]
+  );
+
+  const acceptedFileTypes: Accept = {
+    'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: acceptedFileTypes,
+    noClick: true,
+    noKeyboard: true,
+  });
+
   const handlePaste = useCallback(
     (e: React.ClipboardEvent) => {
       const items = e.clipboardData.items;
@@ -77,21 +99,6 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
           }
         }
       }
-    },
-    [handleImageUpload]
-  );
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const files = Array.from(e.dataTransfer.files);
-      files.forEach((file) => {
-        if (file.type.startsWith('image/')) {
-          handleImageUpload(file);
-        }
-      });
     },
     [handleImageUpload]
   );
@@ -114,40 +121,34 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
   );
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('dragover', (e) => e.preventDefault());
-      container.addEventListener('drop', handleDrop as any);
-    }
-    return () => {
-      if (container) {
-        container.removeEventListener('dragover', (e) => e.preventDefault());
-        container.removeEventListener('drop', handleDrop as any);
-      }
-    };
-  }, [handleDrop]);
-
-  useEffect(() => {
     detectUnusedImages(value);
   }, [value, detectUnusedImages]);
 
   return (
     <div
-      ref={containerRef}
-      className="markdown-editor-container w-full min-w-full"
+      {...getRootProps()}
+      className="w-full min-w-full relative border border-gray-300 rounded-lg shadow-sm overflow-hidden"
     >
+      <input {...getInputProps()} className="hidden" />
       <MDEditor
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         textareaProps={{
           onPaste: handlePaste,
+          className:
+            'w-full min-w-full p-4 focus:outline-none focus:ring-2 focus:ring-blue-500',
         }}
         preview="edit"
         hideToolbar={true}
         height={400}
-        style={{ width: '100%', minWidth: '100%' }}
+        className="w-full min-w-full"
       />
+      {isDragActive && (
+        <div className="absolute inset-0 bg-blue-100 bg-opacity-75 flex items-center justify-center text-blue-700 font-semibold">
+          画像をドロップしてアップロード
+        </div>
+      )}
     </div>
   );
 };
