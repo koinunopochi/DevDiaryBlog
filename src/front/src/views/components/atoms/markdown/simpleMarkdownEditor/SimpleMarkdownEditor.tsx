@@ -213,8 +213,8 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
         hideToolbar={false}
         commands={customToolbarCommands}
         extraCommands={[commands.fullscreen]}
-        height={400}
-        className="w-full min-w-full"
+        className="w-full min-w-full !h-full"
+        style={{ height: '100% !important' }}
       />
       {isDragActive && (
         <div className="absolute inset-0 bg-blue-100 bg-opacity-75 flex items-center justify-center text-blue-700 font-semibold">
