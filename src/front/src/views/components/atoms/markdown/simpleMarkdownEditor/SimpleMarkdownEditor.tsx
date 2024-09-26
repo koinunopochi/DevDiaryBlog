@@ -212,6 +212,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
         preview="edit"
         hideToolbar={false}
         commands={customToolbarCommands}
+        extraCommands={[commands.fullscreen]}
         height={400}
         className="w-full min-w-full"
       />
