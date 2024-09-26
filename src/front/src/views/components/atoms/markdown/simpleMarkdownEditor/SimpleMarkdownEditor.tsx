@@ -1,5 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import MDEditor, { commands } from '@uiw/react-md-editor';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import MDEditor, {
+  commands,
+  ICommand,
+} from '@uiw/react-md-editor';
 import { useDropzone, Accept } from 'react-dropzone';
 
 interface SimpleMarkdownEditorProps {
@@ -17,6 +20,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
 }) => {
   const [value, setValue] = useState<string | undefined>(initialValue);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setValue(initialValue);
@@ -124,6 +128,24 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     detectUnusedImages(value);
   }, [value, detectUnusedImages]);
 
+  // カスタム画像アップロードコマンド
+  const customImageCommand: ICommand = {
+    name: 'custom-image',
+    keyCommand: 'custom-image',
+    buttonProps: { 'aria-label': 'Insert image' },
+    icon: (
+      <svg width="12" height="12" viewBox="0 0 20 20">
+        <path
+          fill="currentColor"
+          d="M15 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm4-7H1c-.55 0-1 .45-1 1v14c0 .55.45 1 1 1h18c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1zm-1 13l-6-5-2 2-4-5-4 8V4h16v11z"
+        />
+      </svg>
+    ),
+    execute:() => {
+      fileInputRef.current?.click();
+    },
+  };
+
   // カスタムツールバーの定義
   const customToolbarCommands = [
     commands.bold,
@@ -149,12 +171,21 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     commands.quote,
     commands.code,
     commands.codeBlock,
-    commands.image,
+    customImageCommand,
     commands.divider,
     commands.unorderedListCommand,
     commands.orderedListCommand,
     commands.checkedListCommand,
   ];
+
+  const handleFileInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleImageUpload(file);
+    }
+  };
 
   return (
     <div
@@ -162,6 +193,13 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
       className="w-full min-w-full relative border border-gray-300 rounded-lg shadow-sm overflow-hidden"
     >
       <input {...getInputProps()} className="hidden" />
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileInputChange}
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
       <MDEditor
         value={value}
         onChange={handleChange}
