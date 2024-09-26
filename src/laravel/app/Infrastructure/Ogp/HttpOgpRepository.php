@@ -18,7 +18,7 @@ class HttpOgpRepository implements OgpRepositoryInterface
       $response->throw();
       $html = $response->body();
 
-      $imageUrl = $this->extractImageUrl($html);
+      $imageUrl = $this->extractAndVerifyImageUrl($html);
       $title = $this->extractTitle($html);
 
       return new Ogp(url: $url, imageUrl: $imageUrl, title: $title);
@@ -34,18 +34,39 @@ class HttpOgpRepository implements OgpRepositoryInterface
     }
   }
 
-  private function extractImageUrl(string $html): ?Url
+  private function extractAndVerifyImageUrl(string $html): ?Url
   {
     preg_match('/<meta property="og:image" content="(.*?)"/', $html, $imageMatches);
     if (isset($imageMatches[1])) {
       try {
-        return new Url($imageMatches[1]);
+        $imageUrl = new Url($imageMatches[1]);
+        if ($this->isImageUrlAccessible($imageUrl)) {
+          return $imageUrl;
+        }
       } catch (\Exception $e) {
         // Urlクラスで初期化できない場合はnull
         return null;
       }
     }
     return null;
+  }
+
+  private function isImageUrlAccessible(Url $url): bool
+  {
+    try {
+      $response = Http::withOptions([
+        'timeout' => 5,
+        'connect_timeout' => 5,
+      ])->head($url->toString());
+
+      if ($response->successful()) {
+        $contentType = $response->header('Content-Type');
+        return strpos($contentType, 'image/') === 0;
+      }
+      return false;
+    } catch (\Exception $e) {
+      return false;
+    }
   }
 
   private function extractTitle(string $html): ?string
