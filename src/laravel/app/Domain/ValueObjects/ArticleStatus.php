@@ -2,6 +2,8 @@
 
 namespace App\Domain\ValueObjects;
 
+use Illuminate\Support\Facades\Log;
+
 class ArticleStatus
 {
   public const STATUS_DRAFT = 'Draft';
@@ -13,6 +15,7 @@ class ArticleStatus
 
   public function __construct(string $status)
   {
+    Log::debug("class : ArticleStatus - method : constructor - \$status : $status");
     $this->validate($status);
     $this->status = $status;
   }
