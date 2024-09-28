@@ -18,7 +18,7 @@ class ArticleCategoryNameTest extends TestCase
    */
   public function testValidCategoryName(): void
   {
-    $validNames = ['カテゴリ', 'Category', 'カテゴリ123', '日本語カテゴリ', 'ＡＢＣ１２３'];
+    $validNames = ['カテゴリ', 'Category', 'カテゴリ123', '日本語カテゴリ', 'ＡＢＣ１２３', 'カテゴリ!@#$%', 'カテゴリ 名', 'Category-Name', 'カテゴリ（）', 'Category&Name'];
     foreach ($validNames as $name) {
       $categoryName = new ArticleCategoryName($name);
       $this->assertEquals($name, $categoryName->toString());
@@ -65,53 +65,20 @@ class ArticleCategoryNameTest extends TestCase
   /**
    * @test
    */
-  public function testCategoryNameWithSymbols(): void
-  {
-    $this->expectException(\InvalidArgumentException::class);
-    new ArticleCategoryName('カテゴリ!@#$%');
-  }
-
-  /**
-   * @test
-   */
-  public function testCategoryNameWithSpaces(): void
-  {
-    $this->expectException(\InvalidArgumentException::class);
-    new ArticleCategoryName('カテゴリ 名');
-  }
-
-  /**
-   * @test
-   */
   public function testCategoryNameWithMixedCharacters(): void
   {
     $validNames = [
       'カテゴリ123ABC',
       'ＡＢＣ１２３あいう',
       '日本語とEnglish',
-      'ＡＢＣａｂｃ１２３'
+      'ＡＢＣａｂｃ１２３',
+      'カテゴリ!@#$%&*()_+-=[]{}|;:,.<>?',
+      'Category Name with Spaces',
+      'ハイフン-アンダースコア_記号！＠＃＄％'
     ];
     foreach ($validNames as $name) {
       $categoryName = new ArticleCategoryName($name);
       $this->assertEquals($name, $categoryName->toString());
-    }
-  }
-
-  /**
-   * @test
-   */
-  public function testCategoryNameWithInvalidCharacters(): void
-  {
-    $invalidNames = [
-      'Category Name',  // スペースを含む
-      'カテゴリ_名',     // アンダースコアを含む
-      'Category-Name',  // ハイフンを含む
-      'カテゴリ（）',    // 括弧を含む
-      'Category&Name'   // アンパサンドを含む
-    ];
-    foreach ($invalidNames as $name) {
-      $this->expectException(\InvalidArgumentException::class);
-      new ArticleCategoryName($name);
     }
   }
 
