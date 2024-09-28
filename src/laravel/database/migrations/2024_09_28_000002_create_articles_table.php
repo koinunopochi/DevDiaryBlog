@@ -14,7 +14,7 @@ return new class extends Migration
       $table->text('content');
       $table->uuid('author_id');
       $table->uuid('category_id');
-      $table->enum('status', ['draft', 'published', 'archived', 'deleted']);
+      $table->enum('status', ['Draft', 'Published', 'Archived', 'Deleted']);
       $table->timestamps();
 
       $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');

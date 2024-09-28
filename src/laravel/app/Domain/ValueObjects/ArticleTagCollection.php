@@ -67,4 +67,10 @@ class ArticleTagCollection
 
     return true;
   }
+
+  public function map(callable $callback): array
+  {
+    Log::info('class : ArticleCategoryTagCollection - method : map');
+    return array_map($callback, $this->tagIds);
+  }
 }
