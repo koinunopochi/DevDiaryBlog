@@ -115,12 +115,10 @@ interface ArticleRepositoryInterface
   /**
    * Reserve a draft Article with a given ID and status
    *
-   * @param ArticleId $id
-   * @param ArticleStatus $status
-   * @param DateTime $createdAt
-   * @return DraftArticle
+   * @param DraftArticle $draftArticle
+   * @return void
    */
-  public function reserveDraftArticle(ArticleId $id, ArticleStatus $status, DateTime $createdAt): DraftArticle;
+  public function reserveDraftArticle(DraftArticle $draftArticle,): void;
 
   /**
    * Convert a DraftArticle to a full Article
