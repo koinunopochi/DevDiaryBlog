@@ -15,7 +15,7 @@ class CommentId
     if (is_null($commentId)) {
       // UUID v4 を生成し、最初の8文字を 'CmtId000' で置換
       $uuid = Uuid::uuid4()->toString();
-      $this->commentId = $this->prefix . substr($uuid, 7);
+      $this->commentId = $this->prefix . substr($uuid, 8);
     } else {
       $this->validate($commentId);
       $this->commentId = $commentId;

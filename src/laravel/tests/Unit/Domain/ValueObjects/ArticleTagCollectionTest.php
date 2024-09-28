@@ -143,4 +143,63 @@ class ArticleTagCollectionTest extends TestCase
     // When & Then
     $this->assertFalse($collection1->equals($collection2));
   }
+
+  /** @test */
+  public function testMap()
+  {
+    // Given
+    $tagId1 = new TagId();
+    $tagId2 = new TagId();
+    $tagIds = [$tagId1, $tagId2];
+    $tagCollection = new ArticleTagCollection($tagIds);
+
+    // When
+    $result = $tagCollection->map(function (TagId $tagId) {
+      return $tagId->toString();
+    });
+
+    // Then
+    $this->assertIsArray($result);
+    $this->assertCount(2, $result);
+    $this->assertEquals($tagId1->toString(), $result[0]);
+    $this->assertEquals($tagId2->toString(), $result[1]);
+  }
+
+  /** @test */
+  public function testMap_WithEmptyCollection()
+  {
+    // Given
+    $tagCollection = new ArticleTagCollection([]);
+
+    // When
+    $result = $tagCollection->map(function (TagId $tagId) {
+      return $tagId->toString();
+    });
+
+    // Then
+    $this->assertIsArray($result);
+    $this->assertEmpty($result);
+  }
+
+  /** @test */
+  public function testMap_WithCustomCallback()
+  {
+    // Given
+    $tagId1 = new TagId();
+    $tagId2 = new TagId();
+    $tagIds = [$tagId1, $tagId2];
+    $tagCollection = new ArticleTagCollection($tagIds);
+
+    // When
+    $result = $tagCollection->map(function (TagId $tagId) {
+      return 'Tag: ' . $tagId->toString();
+    });
+
+    // Then
+    $this->assertIsArray($result);
+    $this->assertCount(2, $result);
+    $this->assertStringStartsWith('Tag: ', $result[0]);
+    $this->assertStringStartsWith('Tag: ', $result[1]);
+    $this->assertNotEquals($result[0], $result[1]);
+  }
 }
