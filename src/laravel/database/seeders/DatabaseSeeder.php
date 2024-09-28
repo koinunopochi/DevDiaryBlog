@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
 
     $this->call([
       BroadITArticleCategorySeeder::class,
+      TagSeeder::class,
       // 他のSeederがあればここに追加
     ]);
   }
