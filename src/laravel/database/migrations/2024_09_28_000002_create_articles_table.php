@@ -10,10 +10,10 @@ return new class extends Migration
   {
     Schema::create('articles', function (Blueprint $table) {
       $table->uuid('id')->primary();
-      $table->string('title', 255);
-      $table->text('content');
-      $table->uuid('author_id');
-      $table->uuid('category_id');
+      $table->string('title', 255)->nullable();
+      $table->text('content')->nullable();
+      $table->uuid('author_id')->nullable();
+      $table->uuid('category_id')->nullable();
       $table->enum('status', ['Draft', 'Published', 'Archived', 'Deleted']);
       $table->timestamps();
 
