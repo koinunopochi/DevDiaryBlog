@@ -3,6 +3,7 @@
 namespace Tests\Feature\Infrastructure\Persistence;
 
 use App\Domain\Entities\Article;
+use App\Domain\Entities\DraftArticle;
 use App\Domain\ValueObjects\ArticleId;
 use App\Domain\ValueObjects\ArticleTitle;
 use App\Domain\ValueObjects\ArticleContent;
@@ -254,5 +255,68 @@ class EloquentArticleRepositoryTest extends TestCase
       $tagIds = $article->getTags()->map(fn(TagId $tagId) => $tagId->toString());
       $this->assertContains($tag->id, $tagIds);
     }
+  }
+
+  public function test_reserveDraftArticle(): void
+  {
+    // Given
+    $id = new ArticleId();
+    $status = new ArticleStatus(ArticleStatus::STATUS_DRAFT);
+    $createdAt = new DateTime("2024-09-29 05:25:37");
+    $draftArticle = new DraftArticle($id, $status, $createdAt);
+
+    // When
+    $this->repository->reserveDraftArticle($draftArticle);
+
+    // Then
+    $this->assertDatabaseHas('articles', [
+      'id' => $id->toString(),
+      'status' => $status->toString(),
+      'created_at' => "2024-09-29 05:25:37", // note: DBの保存形式に合わせる
+    ]);
+  }
+
+  public function test_convertDraftToArticle(): void
+  {
+    // Given
+    $draftId = new ArticleId();
+    $draftStatus = new ArticleStatus(ArticleStatus::STATUS_DRAFT);
+    $createdAt = new DateTime();
+    $draftArticle = new DraftArticle($draftId, $draftStatus, $createdAt);
+    $this->repository->reserveDraftArticle($draftArticle);
+
+    $author = EloquentUser::factory()->create();
+    $category = EloquentArticleCategory::factory()->create();
+    $tag = EloquentTag::factory()->create();
+
+    $fullArticle = new Article(
+      $draftId,
+      new ArticleTitle('Full Article Title'),
+      new ArticleContent('Full Article Content'),
+      new UserId($author->id),
+      new ArticleCategoryId($category->id),
+      new ArticleTagCollection([new TagId($tag->id)]),
+      new ArticleStatus(ArticleStatus::STATUS_PUBLISHED),
+      $createdAt,
+      new DateTime()
+    );
+
+    // When
+    $this->repository->convertDraftToArticle($draftArticle, $fullArticle);
+
+    // Then
+    $this->assertDatabaseHas('articles', [
+      'id' => $draftId->toString(),
+      'title' => 'Full Article Title',
+      'content' => 'Full Article Content',
+      'author_id' => $author->id,
+      'category_id' => $category->id,
+      'status' => ArticleStatus::STATUS_PUBLISHED,
+    ]);
+
+    $articleFromDb = EloquentArticle::find($draftId->toString());
+    $this->assertNotNull($articleFromDb);
+    $this->assertCount(1, $articleFromDb->tags);
+    $this->assertEquals($tag->id, $articleFromDb->tags->first()->id);
   }
 }
