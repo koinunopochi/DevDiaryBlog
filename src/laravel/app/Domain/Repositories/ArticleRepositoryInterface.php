@@ -3,11 +3,13 @@
 namespace App\Domain\Repositories;
 
 use App\Domain\Entities\Article;
+use App\Domain\Entities\DraftArticle;
 use App\Domain\ValueObjects\ArticleId;
 use App\Domain\ValueObjects\ArticleTitle;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\ArticleCategoryId;
 use App\Domain\ValueObjects\ArticleStatus;
+use App\Domain\ValueObjects\DateTime;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -109,4 +111,23 @@ interface ArticleRepositoryInterface
    * @return Collection<int, Article>
    */
   public function findByTagId(string $tagId): Collection;
+
+  /**
+   * Reserve a draft Article with a given ID and status
+   *
+   * @param ArticleId $id
+   * @param ArticleStatus $status
+   * @param DateTime $createdAt
+   * @return DraftArticle
+   */
+  public function reserveDraftArticle(ArticleId $id, ArticleStatus $status, DateTime $createdAt): DraftArticle;
+
+  /**
+   * Convert a DraftArticle to a full Article
+   *
+   * @param DraftArticle $draftArticle
+   * @param Article $article
+   * @return void
+   */
+  public function convertDraftToArticle(DraftArticle $draftArticle, Article $article): void;
 }
