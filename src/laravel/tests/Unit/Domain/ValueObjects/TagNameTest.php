@@ -18,7 +18,26 @@ class TagNameTest extends TestCase
    */
   public function testValidTagName(): void
   {
-    $validNames = ['タグ', 'Tag', 'タグ123', '日本語タグ', 'ＡＢＣ１２３'];
+    $validNames = [
+      'タグ',
+      'Tag',
+      'タグ123',
+      '日本語タグ',
+      'ＡＢＣ１２３',
+      'タグ!@#$%',
+      'タグ 名',
+      'C++',
+      'C#',
+      'ASP.NET',
+      'Ruby on Rails',
+      'Vue.js',
+      'Node.js',
+      'Machine Learning',
+      'CI/CD',
+      'AR/VR',
+      '5G',
+      'エッジコンピューティング'
+    ];
     foreach ($validNames as $name) {
       $tagName = new TagName($name);
       $this->assertEquals($name, $tagName->toString());
@@ -46,28 +65,57 @@ class TagNameTest extends TestCase
   /**
    * @test
    */
+  public function testMinimumLengthTagName(): void
+  {
+    $tagName = new TagName('a');
+    $this->assertEquals('a', $tagName->toString());
+  }
+
+  /**
+   * @test
+   */
+  public function testMaximumLengthTagName(): void
+  {
+    $maxLengthName = str_repeat('a', 25);
+    $tagName = new TagName($maxLengthName);
+    $this->assertEquals($maxLengthName, $tagName->toString());
+  }
+
+  /**
+   * @test
+   */
   public function testTooLongTagName(): void
   {
     $this->expectException(\InvalidArgumentException::class);
-    new TagName('この文字列は25文字を超えています1234567890');
+    new TagName(str_repeat('a', 26));
   }
 
   /**
    * @test
    */
-  public function testTagNameWithSymbols(): void
+  public function testTagNameWithVariousCharacters(): void
   {
-    $this->expectException(\InvalidArgumentException::class);
-    new TagName('タグ!@#$%');
-  }
-
-  /**
-   * @test
-   */
-  public function testTagNameWithSpaces(): void
-  {
-    $this->expectException(\InvalidArgumentException::class);
-    new TagName('タグ 名');
+    $validNames = [
+      'C++',
+      'C#',
+      '.NET',
+      'Node.js',
+      'Vue.js',
+      'Machine Learning',
+      'CI/CD',
+      '5G',
+      'AR/VR',
+      'エッジコンピューティング',
+      'Ruby on Rails',
+      'タグ!@#$%^&*()',
+      'Tag with spaces',
+      '日本語 タグ 漢字',
+      'Mix of あ123 and ABC'
+    ];
+    foreach ($validNames as $name) {
+      $tagName = new TagName($name);
+      $this->assertEquals($name, $tagName->toString());
+    }
   }
 
   /**
@@ -81,5 +129,28 @@ class TagNameTest extends TestCase
 
     $this->assertTrue($tagName1->equals($tagName2));
     $this->assertFalse($tagName1->equals($tagName3));
+  }
+
+  /**
+   * @test
+   */
+  public function testBoundaryValues(): void
+  {
+    // 1文字（最小長）
+    $tagName = new TagName('a');
+    $this->assertEquals('a', $tagName->toString());
+
+    // 25文字（最大長）
+    $maxLengthName = str_repeat('あ', 25);
+    $tagName = new TagName($maxLengthName);
+    $this->assertEquals($maxLengthName, $tagName->toString());
+
+    // 0文字（無効）
+    $this->expectException(\InvalidArgumentException::class);
+    new TagName('');
+
+    // 26文字（無効）
+    $this->expectException(\InvalidArgumentException::class);
+    new TagName(str_repeat('a', 26));
   }
 }
