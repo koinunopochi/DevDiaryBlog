@@ -148,4 +148,62 @@ class ArticleCategoryTagCollectionTest extends TestCase
     // When & Then
     $this->assertFalse($collection1->equals($collection2));
   }
+
+  /** @test */
+  public function testMap()
+  {
+    // Given
+    $tagIds = [$a = new TagId(), $b = new TagId(), $c = new TagId()];
+    $tagCollection = new ArticleCategoryTagCollection($tagIds);
+
+    // When
+    $result = $tagCollection->map(function (TagId $tagId) {
+      return $tagId->toString();
+    });
+
+    // Then
+    $this->assertIsArray($result);
+    $this->assertEquals([$a->toString(), $b->toString(), $c->toString()], $result);
+  }
+
+  /** @test */
+  public function testMap_WithEmptyCollection()
+  {
+    // Given
+    $tagCollection = new ArticleCategoryTagCollection([]);
+
+    // When
+    $result = $tagCollection->map(function (TagId $tagId) {
+      return $tagId->toString();
+    });
+
+    // Then
+    $this->assertIsArray($result);
+    $this->assertEmpty($result);
+  }
+
+  /** @test */
+  public function testMap_PreservesKeys()
+  {
+    // Given
+    $tagIds = [
+      'key1' => $a = new TagId(),
+      'key2' => $b = new TagId(),
+      'key3' => $c = new TagId()
+    ];
+    $tagCollection = new ArticleCategoryTagCollection($tagIds);
+
+    // When
+    $result = $tagCollection->map(function (TagId $tagId) {
+      return $tagId->toString();
+    });
+
+    // Then
+    $this->assertIsArray($result);
+    $this->assertEquals([
+      'key1' => $a->toString(),
+      'key2' => $b->toString(),
+      'key3' => $c->toString()
+    ], $result);
+  }
 }
