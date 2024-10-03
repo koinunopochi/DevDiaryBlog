@@ -24,6 +24,9 @@ class SaveArticleController extends Controller
 
       return response()->json([
         'message' => '記事の保存に成功しました',
+        'article'=>[
+          'id'=>$dto->toArticle()->getId()->toString()
+        ]
       ], 200);
     } catch (\Exception $e) {
       return response()->json(['error' => '記事の保存に失敗しました: ' . $e->getMessage()], 500);
