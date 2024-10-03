@@ -28,7 +28,7 @@ class SaveArticleDTO
 
   public function __construct(Request $request)
   {
-    $articleId = $request->input(key: 'articleId');
+    $articleId = $request->input(key: 'id');
     $this->id = $articleId ? new ArticleId($articleId) : new ArticleId();
     $this->title = new ArticleTitle($request->input('title'));
     $this->content = new ArticleContent($request->input('content'));
