@@ -52,8 +52,8 @@ function App() {
 
           {/* Articles */}
           <Route
-            path="/articles"
-            element={<EditorPage apiClient={apiClient}/>}
+            path="/articles/:articleId/edit"
+            element={<EditorPage apiClient={apiClient} />}
           />
 
           {/* Settings */}
