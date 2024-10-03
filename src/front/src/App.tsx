@@ -15,6 +15,7 @@ import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeTogg
 import NotFound from '@/views/components/atoms/notFound/NotFound';
 import UsernamePage from '@/views/pages/username/UsernamePage';
 import EditorPage from '@/views/pages/articles/edit/EditorPage';
+import ArticlePage from './views/pages/articles/articleId/ArticlePage';
 
 function App() {
   const apiClient = new EnhancedApiClient(
@@ -53,7 +54,12 @@ function App() {
           {/* Articles */}
           <Route
             path="/articles/edit"
-            element={<EditorPage apiClient={apiClient}/>}
+            element={<EditorPage apiClient={apiClient} />}
+          />
+
+          <Route
+            path="/articles/:articleId"
+            element={<ArticlePage apiClient={apiClient} />}
           />
 
           {/* Settings */}
