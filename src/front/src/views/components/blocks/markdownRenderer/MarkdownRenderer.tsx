@@ -9,6 +9,7 @@ import remarkDirective from 'remark-directive';
 import rehypeRaw from 'rehype-raw';
 import CustomNote from '@components/atoms/customNote/CustomNote';
 import LinkCard from '@components/atoms/linkCard/LinkCard';
+import MermaidRenderer from './MermaidRenderer';
 
 import 'katex/dist/katex.min.css';
 import remarkCustomNotes from '@/infrastructure/remarkPlugins/remarkCustomNotes';
@@ -66,7 +67,11 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
         ]}
         rehypePlugins={[rehypeKatex, rehypeRaw]}
         components={{
-          code: ({ node, className, children, ...props }) => {
+          code: ({ node,  className, children, ...props }) => {
+            const match = /language-(\w+)/.exec(className || '');
+            if (match && match[1] === 'mermaid') {
+              return <MermaidRenderer chart={String(children).trim()} />;
+            }
             return (
               <CodeBlock children={children} className={className} {...props} />
             );
