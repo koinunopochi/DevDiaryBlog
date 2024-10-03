@@ -6,7 +6,6 @@ use App\Application\DataTransferObjects\SaveArticleDTO;
 use App\Application\UseCases\SaveArticleUseCase;
 use App\Domain\Entities\Article;
 use App\Domain\ValueObjects\ArticleId;
-use App\Domain\ValueObjects\TagId;
 use App\Domain\ValueObjects\UserId;
 use App\Infrastructure\Persistence\EloquentArticleRepository;
 use App\Models\User as EloquentUser;
@@ -104,7 +103,7 @@ class SaveArticleUseCaseTest extends TestCase
       'tags' => $initialTagIds,
       'status' => 'Draft',
     ]);
-    $initialDto = new SaveArticleDTO($initialRequest, $existingArticleId);
+    $initialDto = new SaveArticleDTO($initialRequest);
     $useCase = new SaveArticleUseCase(new EloquentArticleRepository());
     $useCase->execute($initialDto);
 
@@ -121,7 +120,7 @@ class SaveArticleUseCaseTest extends TestCase
       'tags' => $newTagIds,
       'status' => 'Published',
     ]);
-    $updateDto = new SaveArticleDTO($updateRequest, $existingArticleId);
+    $updateDto = new SaveArticleDTO($updateRequest);
 
     // When
     $useCase->execute($updateDto);
