@@ -26,7 +26,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/views/components/*"],
-      "@img/*": ["src/img/*"]
+      "@img/*": ["src/img/*"],
+      "typeRoots": ["./node_modules/@types", "./src/types"]
     }
   },
   "include": ["src"]

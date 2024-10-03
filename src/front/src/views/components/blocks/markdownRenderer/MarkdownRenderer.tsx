@@ -6,9 +6,11 @@ import remarkMath from 'remark-math';
 import remarkCodeTitle from 'remark-code-title';
 import rehypeKatex from 'rehype-katex';
 import remarkDirective from 'remark-directive';
+import simplePlantUML from '@akebifiky/remark-simple-plantuml'; 
 import rehypeRaw from 'rehype-raw';
 import CustomNote from '@components/atoms/customNote/CustomNote';
 import LinkCard from '@components/atoms/linkCard/LinkCard';
+import MermaidRenderer from './MermaidRenderer';
 
 import 'katex/dist/katex.min.css';
 import remarkCustomNotes from '@/infrastructure/remarkPlugins/remarkCustomNotes';
@@ -63,10 +65,21 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           remarkCodeTitle,
           remarkDirective,
           remarkCustomNotes,
+          [
+            simplePlantUML,
+            { baseUrl: 'https://www.plantuml.com/plantuml/svg' },
+          ],
         ]}
         rehypePlugins={[rehypeKatex, rehypeRaw]}
         components={{
           code: ({ node, className, children, ...props }) => {
+            const match = /language-(\w+)/.exec(className || '');
+            if (match && match[1] === 'mermaid') {
+              return <MermaidRenderer chart={String(children).trim()} />;
+            }
+            if (match && match[1] === 'plantuml') {
+              return <div className="plantuml-diagram">{children}</div>;
+            }
             return (
               <CodeBlock children={children} className={className} {...props} />
             );
