@@ -26,8 +26,9 @@ class SaveArticleDTO
   private DateTime $createdAt;
   private DateTime $updatedAt;
 
-  public function __construct(Request $request, string $articleId = null)
+  public function __construct(Request $request)
   {
+    $articleId = $request->input(key: 'articleId');
     $this->id = $articleId ? new ArticleId($articleId) : new ArticleId();
     $this->title = new ArticleTitle($request->input('title'));
     $this->content = new ArticleContent($request->input('content'));
