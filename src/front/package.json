@@ -12,6 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@akebifiky/remark-simple-plantuml": "^1.0.2",
     "@uiw/react-md-editor": "^4.0.4",
     "framer-motion": "^11.5.4",
     "hastscript": "^9.0.0",
