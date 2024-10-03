@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Persistence;
 
 use App\Domain\Entities\Article;
+use App\Domain\Entities\DraftArticle;
 use App\Domain\ValueObjects\ArticleId;
 use App\Domain\ValueObjects\ArticleTitle;
 use App\Domain\ValueObjects\ArticleContent;
@@ -137,5 +138,31 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
       new DateTime($eloquentArticle->created_at),
       new DateTime($eloquentArticle->updated_at)
     );
+  }
+
+  public function reserveDraftArticle(DraftArticle $draftArticle): void
+  {
+    $eloquentArticle = new EloquentArticle();
+    $eloquentArticle->id = $draftArticle->getId()->toString();
+    $eloquentArticle->status = $draftArticle->getStatus()->toString();
+    $eloquentArticle->created_at = $draftArticle->getCreatedAt()->toString();
+    $eloquentArticle->save();
+  }
+
+  public function convertDraftToArticle(DraftArticle $draftArticle, Article $article): void
+  {
+    $eloquentArticle = EloquentArticle::findOrFail($draftArticle->getId()->toString());
+    $eloquentArticle->title = $article->getTitle()->toString();
+    $eloquentArticle->content = $article->getContent()->toString();
+    $eloquentArticle->author_id = $article->getAuthorId()->toString();
+    $eloquentArticle->category_id = $article->getCategoryId()->toString();
+    $eloquentArticle->status = $article->getStatus()->toString();
+    $eloquentArticle->updated_at = $article->getUpdatedAt()->toString();
+    $eloquentArticle->save();
+
+    $tagIds = $article->getTags()->map(function (TagId $tagId) {
+      return $tagId->toString();
+    });
+    $eloquentArticle->tags()->sync($tagIds);
   }
 }

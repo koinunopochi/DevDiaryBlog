@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CreateDraftArticleController;
 use App\Http\Controllers\ExistsByNameController;
 use App\Http\Controllers\GetAllDefaultProfileIconsController;
 use App\Http\Controllers\GetOgpByUrlController;
@@ -39,4 +40,5 @@ Route::get('/ogp', [GetOgpByUrlController::class, 'execute']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
   Route::post('/profile', [SaveProfileController::class, 'execute']);
   Route::post('/user',[SaveUserController::class, 'execute']);
+  Route::post('/articles/draft', [CreateDraftArticleController::class, 'execute']);
 });
