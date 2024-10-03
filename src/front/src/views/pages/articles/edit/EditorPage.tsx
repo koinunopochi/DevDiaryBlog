@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import PreviewMarkdownEditor from '@components/atoms/markdown/previewMarkdownEditor/PreviewMarkdownEditor';
 import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 
@@ -19,26 +19,30 @@ interface ArticleData {
 
 const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
   const { articleId } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [article, setArticle] = useState<ArticleData>({
     id: articleId || '',
     title: '',
     content: '',
-    authorId: 'user0000-7595-4ed8-a3fe-1e6af26495cc', // デフォルト値を設定
-    categoryId: 'ArtCATId-6735-412c-95ba-6c37f19c3680', // デフォルト値を設定
+    authorId: 'user0000-7595-4ed8-a3fe-1e6af26495cc',
+    categoryId: 'ArtCATId-6735-412c-95ba-6c37f19c3680',
     tags: [],
     status: 'Draft',
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchArticle = async () => {
       if (articleId) {
+        setIsLoading(true);
         try {
           const response = await apiClient.get(`/api/articles/${articleId}`);
           setArticle(response.article);
         } catch (error) {
           console.error('Error fetching article:', error);
           // エラーハンドリング（例：エラーメッセージを表示）
+        } finally {
+          setIsLoading(false);
         }
       }
     };
@@ -86,6 +90,14 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
       // エラーハンドリング（例：エラーメッセージを表示）
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4">
