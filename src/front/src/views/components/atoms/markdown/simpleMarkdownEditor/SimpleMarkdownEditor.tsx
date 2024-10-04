@@ -173,31 +173,6 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
   };
   const editorRef = useRef(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const editorRect = editorRef.current.getBoundingClientRect();
-      const toolbarElement = editorRef.current.querySelector(
-        '.w-md-editor-toolbar'
-      );
-
-      if (toolbarElement) {
-        if (editorRect.top < 0) {
-          toolbarElement.style.position = 'fixed';
-          toolbarElement.style.top = '0';
-          toolbarElement.style.width = `${editorRect.width}px`;
-          toolbarElement.style.zIndex = '1000';
-        } else {
-          toolbarElement.style.position = 'relative';
-          toolbarElement.style.top = 'auto';
-          toolbarElement.style.width = 'auto';
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <div
       {...getRootProps()}
