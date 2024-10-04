@@ -130,7 +130,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
           a: ({ node, href, children, ...props }) => {
             return (
               <a
-                className="text-blue-600 hover:underline dark:text-blue-400"
+                className="text-blue-600 hover:underline dark:text-blue-400 break-words"
                 target="_blank"
                 rel="noopener noreferrer"
                 href={href}
