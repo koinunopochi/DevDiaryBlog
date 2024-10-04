@@ -72,26 +72,26 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
   );
 
   return (
-    <div className="flex flex-col relative min-h-screen">
-      <div className="relative flex-grow overflow-hidden">
+    <div className="flex flex-col h-screen">
+      <div className="flex-grow overflow-hidden">
         <DisplayModeButton />
         <div
           className={`flex ${
             displayMode === 'split' && isWideScreen ? 'flex-row' : 'flex-col'
-          } space-y-4 ${isWideScreen ? 'space-x-4' : 'space-x-0'} h-full`}
+          } h-full`}
         >
           {(displayMode === 'editor' || displayMode === 'split') && (
             <div
               className={`${
                 displayMode === 'split' && isWideScreen ? 'w-1/2' : 'w-full'
-              } h-full overflow-auto flex flex-col`}
+              } h-full`}
             >
               <SimpleMarkdownEditor
                 onImageUpload={onImageUpload}
                 value={content}
                 onChange={handleChange}
                 onUnusedImagesDetected={onUnusedImagesDetected}
-                className="flex-grow min-h-full"
+                className="h-full"
               />
             </div>
           )}
@@ -99,12 +99,12 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
             <div
               className={`${
                 displayMode === 'split' && isWideScreen ? 'w-1/2' : 'w-full'
-              } h-full overflow-auto relative flex flex-col`}
+              } h-full overflow-auto`}
             >
               <MarkdownRenderer
                 content={content}
                 getLinkCardInfo={getLinkCardInfo}
-                className="flex-grow min-h-full"
+                className="h-full"
               />
             </div>
           )}
