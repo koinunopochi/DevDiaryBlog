@@ -169,20 +169,6 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     commands.italic,
     commands.strikethrough,
     commands.hr,
-    commands.group(
-      [
-        commands.title2,
-        commands.title3,
-        commands.title4,
-        commands.title5,
-        commands.title6,
-      ],
-      {
-        name: 'title',
-        groupName: 'title',
-        buttonProps: { 'aria-label': 'Insert title' },
-      }
-    ),
     commands.divider,
     commands.link,
     commands.quote,
@@ -230,7 +216,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
         preview="edit"
         hideToolbar={false}
         commands={customToolbarCommands}
-        extraCommands={[commands.fullscreen]}
+        extraCommands={[]}
         className="w-full min-w-full !min-h-full"
       />
       {isDragActive && (
