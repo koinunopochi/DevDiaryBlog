@@ -73,7 +73,7 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex-grow overflow-hidden">
+      <div className="flex-grow overflow-hidden relative">
         <DisplayModeButton />
         <div
           className={`flex ${
@@ -97,9 +97,11 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
           )}
           {(displayMode === 'preview' || displayMode === 'split') && (
             <div
-              className={`${
-                displayMode === 'split' && isWideScreen ? 'w-1/2' : 'w-full'
-              } h-full overflow-auto`}
+              className={`
+                mt-8 px-3
+                ${
+                  displayMode === 'split' && isWideScreen ? 'w-1/2' : 'w-full'
+                } h-full overflow-auto`}
             >
               <MarkdownRenderer
                 content={content}
