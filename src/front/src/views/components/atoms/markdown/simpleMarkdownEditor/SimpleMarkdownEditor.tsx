@@ -1,8 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import MDEditor, {
-  commands,
-  ICommand,
-} from '@uiw/react-md-editor';
+import MDEditor, { commands, ICommand } from '@uiw/react-md-editor';
 import { useDropzone, Accept } from 'react-dropzone';
 
 interface SimpleMarkdownEditorProps {
@@ -10,6 +7,7 @@ interface SimpleMarkdownEditorProps {
   value?: string;
   onChange?: (value: string | undefined) => void;
   onUnusedImagesDetected?: (unusedImages: string[]) => void;
+  className?: string;
 }
 
 const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
@@ -17,6 +15,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
   value: initialValue,
   onChange,
   onUnusedImagesDetected,
+  className = '',
 }) => {
   const [value, setValue] = useState<string | undefined>(initialValue);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
@@ -141,7 +140,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
         />
       </svg>
     ),
-    execute:() => {
+    execute: () => {
       fileInputRef.current?.click();
     },
   };
@@ -207,7 +206,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
         textareaProps={{
           onPaste: handlePaste,
           className:
-            'w-full min-w-full p-4 focus:outline-none focus:ring-2 focus:ring-blue-500',
+            `w-full min-w-full p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`,
         }}
         preview="edit"
         hideToolbar={false}

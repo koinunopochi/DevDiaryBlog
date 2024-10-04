@@ -63,34 +63,43 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
   );
 
   return (
-    <div
-      className={`flex ${
-        isFullscreenPreview ? 'flex-col' : isWideScreen ? 'flex-row' : 'flex-col'
-      } space-x-4 space-y-4 h-full`}
-    >
-      {!isFullscreenPreview && (
-        <div
-          className={`${isWideScreen ? 'w-1/2' : 'w-full'} h-full overflow-auto`}
-        >
-          <SimpleMarkdownEditor
-            onImageUpload={onImageUpload}
-            value={content}
-            onChange={handleChange}
-            onUnusedImagesDetected={onUnusedImagesDetected}
-          />
-        </div>
-      )}
+    <div className="h-screen flex flex-col">
       <div
-        className={`${
-          isFullscreenPreview ? 'w-full' : isWideScreen ? 'w-1/2' : 'w-full'
-        } h-full overflow-auto relative !mt-0`}
+        className={`flex ${
+          isFullscreenPreview
+            ? 'flex-col'
+            : isWideScreen
+              ? 'flex-row'
+              : 'flex-col'
+        } space-x-4 space-y-4 flex-grow overflow-hidden min-h-screen`}
       >
-        <MarkdownRenderer
-          content={content}
-          getLinkCardInfo={getLinkCardInfo}
-          className=""
-        />
-        <FullscreenButton />
+        {!isFullscreenPreview && (
+          <div
+            className={`${
+              isWideScreen ? 'w-1/2' : 'w-full'
+            } h-full overflow-auto flex flex-col`}
+          >
+            <SimpleMarkdownEditor
+              onImageUpload={onImageUpload}
+              value={content}
+              onChange={handleChange}
+              onUnusedImagesDetected={onUnusedImagesDetected}
+              className="flex-grow min-h-full"
+            />
+          </div>
+        )}
+        <div
+          className={`${
+            isFullscreenPreview ? 'w-full' : isWideScreen ? 'w-1/2' : 'w-full'
+          } h-full overflow-auto relative !mt-0 flex flex-col`}
+        >
+          <MarkdownRenderer
+            content={content}
+            getLinkCardInfo={getLinkCardInfo}
+            className="flex-grow min-h-full"
+          />
+          <FullscreenButton />
+        </div>
       </div>
     </div>
   );
