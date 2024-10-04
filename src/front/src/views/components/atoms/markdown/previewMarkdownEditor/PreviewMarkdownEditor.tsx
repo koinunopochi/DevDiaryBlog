@@ -63,7 +63,7 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
   );
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="flex flex-col">
       <div
         className={`flex ${
           isFullscreenPreview

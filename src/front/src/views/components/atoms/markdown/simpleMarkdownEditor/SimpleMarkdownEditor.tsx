@@ -19,11 +19,29 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
 }) => {
   const [value, setValue] = useState<string | undefined>(initialValue);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+  const [editorHeight, setEditorHeight] = useState(1000);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (containerRef.current) {
+        const windowHeight = window.innerHeight;
+        const containerTop = containerRef.current.getBoundingClientRect().top;
+        const newHeight = windowHeight - containerTop - 20; // 20pxのマージンを確保
+        setEditorHeight(Math.max(newHeight, 400)); // 最小高さを400pxに設定
+      }
+    };
+
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
 
   const handleChange = useCallback(
     (val: string | undefined) => {
@@ -201,19 +219,19 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
       />
       <MDEditor
         value={value}
+        height="100%"
+        minHeight={editorHeight}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         textareaProps={{
           onPaste: handlePaste,
-          className:
-            `w-full min-w-full p-4 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`,
+          className: `w-full min-w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-night-sky text-gray-900 dark:text-white ${className}`,
         }}
         preview="edit"
         hideToolbar={false}
         commands={customToolbarCommands}
         extraCommands={[commands.fullscreen]}
-        className="w-full min-w-full !h-full"
-        style={{ height: '100% !important' }}
+        className="w-full min-w-full !min-h-full"
       />
       {isDragActive && (
         <div className="absolute inset-0 bg-blue-100 bg-opacity-75 flex items-center justify-center text-blue-700 font-semibold">
