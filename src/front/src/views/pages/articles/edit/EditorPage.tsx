@@ -106,7 +106,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
         value={article.title}
         onChange={handleTitleChange}
         placeholder="記事タイトル"
-        className="w-full mb-4 p-2 border rounded"
+        className="w-full mb-4 p-2 border rounded  bg-white dark:bg-night-sky text-gray-900 dark:text-white"
       />
       <PreviewMarkdownEditor
         onImageUpload={handleImageUpload}
