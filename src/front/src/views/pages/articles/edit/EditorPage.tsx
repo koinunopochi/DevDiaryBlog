@@ -101,13 +101,21 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
 
   return (
     <div className="container mx-auto p-4">
-      <input
-        type="text"
-        value={article.title}
-        onChange={handleTitleChange}
-        placeholder="記事タイトル"
-        className="w-full mb-4 p-2 border rounded"
-      />
+      <div className="flex items-center mb-4 space-x-4">
+        <input
+          type="text"
+          value={article.title}
+          onChange={handleTitleChange}
+          placeholder="記事タイトル"
+          className="flex-grow p-2 border rounded bg-white dark:bg-night-sky text-gray-900 dark:text-white"
+        />
+        <button
+          onClick={handleSave}
+          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
+        >
+          保存
+        </button>
+      </div>
       <PreviewMarkdownEditor
         onImageUpload={handleImageUpload}
         getLinkCardInfo={handleLinkCardInfo}
@@ -115,12 +123,6 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
         onChange={handleContentChange}
         onUnusedImagesDetected={handleUnusedImagesDetected}
       />
-      <button
-        onClick={handleSave}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        保存
-      </button>
     </div>
   );
 };

@@ -1,8 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import MDEditor, {
-  commands,
-  ICommand,
-} from '@uiw/react-md-editor';
+import MDEditor, { commands, ICommand } from '@uiw/react-md-editor';
 import { useDropzone, Accept } from 'react-dropzone';
 
 interface SimpleMarkdownEditorProps {
@@ -10,6 +7,7 @@ interface SimpleMarkdownEditorProps {
   value?: string;
   onChange?: (value: string | undefined) => void;
   onUnusedImagesDetected?: (unusedImages: string[]) => void;
+  className?: string;
 }
 
 const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
@@ -17,6 +15,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
   value: initialValue,
   onChange,
   onUnusedImagesDetected,
+  className = '',
 }) => {
   const [value, setValue] = useState<string | undefined>(initialValue);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
@@ -141,7 +140,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
         />
       </svg>
     ),
-    execute:() => {
+    execute: () => {
       fileInputRef.current?.click();
     },
   };
@@ -152,20 +151,6 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
     commands.italic,
     commands.strikethrough,
     commands.hr,
-    commands.group(
-      [
-        commands.title2,
-        commands.title3,
-        commands.title4,
-        commands.title5,
-        commands.title6,
-      ],
-      {
-        name: 'title',
-        groupName: 'title',
-        buttonProps: { 'aria-label': 'Insert title' },
-      }
-    ),
     commands.divider,
     commands.link,
     commands.quote,
@@ -186,11 +171,13 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
       handleImageUpload(file);
     }
   };
+  const editorRef = useRef(null);
 
   return (
     <div
       {...getRootProps()}
-      className="w-full min-w-full relative border border-gray-300 rounded-lg shadow-sm overflow-hidden"
+      className="w-full h-full relative border border-gray-300 rounded-lg shadow-sm"
+      ref={editorRef}
     >
       <input {...getInputProps()} className="hidden" />
       <input
@@ -202,19 +189,18 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
       />
       <MDEditor
         value={value}
+        height="100%"
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         textareaProps={{
           onPaste: handlePaste,
-          className:
-            'w-full min-w-full p-4 focus:outline-none focus:ring-2 focus:ring-blue-500',
+          className: `w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-night-sky text-gray-900 dark:text-white ${className}`,
         }}
         preview="edit"
         hideToolbar={false}
         commands={customToolbarCommands}
-        extraCommands={[commands.fullscreen]}
-        className="w-full min-w-full !h-full"
-        style={{ height: '100% !important' }}
+        extraCommands={[]}
+        className="w-full h-full"
       />
       {isDragActive && (
         <div className="absolute inset-0 bg-blue-100 bg-opacity-75 flex items-center justify-center text-blue-700 font-semibold">
