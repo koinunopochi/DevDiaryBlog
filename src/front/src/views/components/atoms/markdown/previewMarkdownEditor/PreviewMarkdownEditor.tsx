@@ -72,7 +72,7 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
   );
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col min-h-screen mb-10">
       <div className="flex-grow relative">
         <DisplayModeButton />
         <div
@@ -84,30 +84,44 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
             <div
               className={`${
                 displayMode === 'split' && isWideScreen ? 'w-1/2' : 'w-full'
-              } h-full overflow-auto`}
+              } h-full`}
             >
               <SimpleMarkdownEditor
                 onImageUpload={onImageUpload}
                 value={content}
                 onChange={handleChange}
                 onUnusedImagesDetected={onUnusedImagesDetected}
-                className="h-full"
+                className="h-screen"
               />
             </div>
           )}
           {(displayMode === 'preview' || displayMode === 'split') && (
             <div
               className={`
-                mt-8 px-3
-                ${
-                  displayMode === 'split' && isWideScreen ? 'w-1/2' : 'w-full'
-                } h-full overflow-auto`}
+                ml-1
+                ${displayMode === 'split' && isWideScreen ? 'w-1/2' : 'w-full'} 
+                ${displayMode === 'split' ? 'border border-gray-200' : ''}
+                h-full rounded-md
+              `}
             >
-              <MarkdownRenderer
-                content={content}
-                getLinkCardInfo={getLinkCardInfo}
-                className="h-full"
-              />
+              <div className="h-7 flex items-center justify-between  border-b border-gray-200 bg-white">
+                <span className="text-sm font-medium text-black pl-3">
+                  Preview
+                </span>
+              </div>
+              <div className="">
+                {' '}
+                {/* 28px is equivalent to h-7 */}
+                <MarkdownRenderer
+                  content={content}
+                  getLinkCardInfo={getLinkCardInfo}
+                  className={
+                    displayMode === 'preview'
+                      ? 'h-full overflow-hidden'
+                      : 'h-[calc(100vh+2px)] px-3 overflow-auto'
+                  }
+                />
+              </div>
             </div>
           )}
         </div>
