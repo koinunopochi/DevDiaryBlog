@@ -140,13 +140,13 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
   };
 
   const PageHead = ()=>{
-    return(
+    return (
       <div>
         <Helmet>
-          <title>編集中...</title>
+          <title>編集中 | {article.title !== "" ? article.title : "無題の記事"}</title>
         </Helmet>
       </div>
-    )
+    );
   }
 
   if (isLoading) {
