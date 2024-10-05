@@ -9,6 +9,7 @@ interface TagManagerProps {
   required?: boolean;
   error?: string;
   className?: string;
+  onChange?: (selectedTags: string[]) => void;
 }
 
 const TagManager: React.FC<TagManagerProps> = ({
@@ -18,14 +19,22 @@ const TagManager: React.FC<TagManagerProps> = ({
   required = false,
   error,
   className = '',
+  onChange,
 }) => {
-  const [selectedTags, setSelectedTags] = useState<string[]>(initialSelectedTags);
+  const [selectedTags, setSelectedTags] =
+    useState<string[]>(initialSelectedTags);
   const [query, setQuery] = useState('');
   const [isTouched, setIsTouched] = useState(false);
 
   useEffect(() => {
     setSelectedTags(initialSelectedTags);
   }, [initialSelectedTags]);
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(selectedTags);
+    }
+  }, [selectedTags, onChange]);
 
   const filteredTags =
     query === ''
@@ -91,7 +100,9 @@ const TagManager: React.FC<TagManagerProps> = ({
                 value={tag}
                 className={({ active }) =>
                   `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active ? 'bg-cosmic-blue text-white' : 'text-gray-900 dark:text-starlight'
+                    active
+                      ? 'bg-cosmic-blue text-white'
+                      : 'text-gray-900 dark:text-starlight'
                   }`
                 }
               >
@@ -103,7 +114,9 @@ const TagManager: React.FC<TagManagerProps> = ({
                 value={query}
                 className={({ active }) =>
                   `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active ? 'bg-cosmic-blue text-white' : 'text-gray-900 dark:text-starlight'
+                    active
+                      ? 'bg-cosmic-blue text-white'
+                      : 'text-gray-900 dark:text-starlight'
                   }`
                 }
                 onClick={() => handleCreateTag(query)}
