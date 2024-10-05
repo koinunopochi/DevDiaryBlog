@@ -78,7 +78,6 @@ const SaveSettingsModal: React.FC<SaveSettingsModalProps> = ({
             initialSelectedTags={selectedTags}
             label="タグ"
             onChange={setSelectedTags}
-            required
           />
         </div>
         <div className="mb-6">
