@@ -14,6 +14,7 @@ interface CategoryListProps {
   onTagClick: (tagName: string, categoryId: string, tagId?: string) => void;
   className?: string;
   selectedCategoryId?: string;
+  id?: string;
 }
 
 const CategoryList: React.FC<CategoryListProps> = ({
@@ -22,9 +23,10 @@ const CategoryList: React.FC<CategoryListProps> = ({
   onTagClick,
   className,
   selectedCategoryId,
+  id,
 }) => {
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div id={id} className={`space-y-4 ${className}`}>
       {categories.map((category) => (
         <div key={category.id} className="transition-transform hover:scale-105">
           <Category
