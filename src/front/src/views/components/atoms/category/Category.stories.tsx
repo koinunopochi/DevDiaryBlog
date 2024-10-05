@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Category from './Category';
+import { action } from '@storybook/addon-actions';
 
 const meta: Meta<typeof Category> = {
   title: 'atoms/Category',
@@ -11,6 +12,8 @@ const meta: Meta<typeof Category> = {
   argTypes: {
     category: { control: 'object' },
     isSelected: { control: 'boolean' },
+    onTagClick: { action: 'onTagClick' },
+    onCategoryClick: { action: 'onCategoryClick' },
   },
 };
 
@@ -31,18 +34,21 @@ const sampleCategory = {
 export const Default: Story = {
   args: {
     category: sampleCategory,
+    onTagClick: action('onTagClick'),
+    onCategoryClick: action('onCategoryClick'),
   },
 };
 
 export const Selected: Story = {
   args: {
-    category: sampleCategory,
+    ...Default.args,
     isSelected: true,
   },
 };
 
 export const LongDescription: Story = {
   args: {
+    ...Default.args,
     category: {
       ...sampleCategory,
       description:
@@ -53,6 +59,7 @@ export const LongDescription: Story = {
 
 export const ManyTags: Story = {
   args: {
+    ...Default.args,
     category: {
       ...sampleCategory,
       tags: [

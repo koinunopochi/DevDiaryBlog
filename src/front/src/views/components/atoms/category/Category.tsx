@@ -18,6 +18,7 @@ interface CategoryProps {
   className?: string;
   isSelected?: boolean;
   onTagClick?: (tagId: string, tagName: string) => void;
+  onCategoryClick?: (categoryId: string, categoryName: string) => void;
 }
 
 const Category: React.FC<CategoryProps> = ({
@@ -25,7 +26,18 @@ const Category: React.FC<CategoryProps> = ({
   className,
   isSelected = false,
   onTagClick,
+  onCategoryClick,
 }) => {
+  const handleCategoryClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    // タグをクリックした場合は、カテゴリーのクリックイベントを発火させない
+    if ((event.target as HTMLElement).closest('.tag-component')) {
+      return;
+    }
+    if (onCategoryClick) {
+      onCategoryClick(category.id, category.name);
+    }
+  };
+
   return (
     <div
       id={category.id}
@@ -35,8 +47,11 @@ const Category: React.FC<CategoryProps> = ({
         'text-gray-800 dark:text-gray-200',
         'transition-all duration-300 ease-in-out',
         isSelected ? 'ring-2 ring-blue-500' : '',
+        onCategoryClick &&
+          'cursor-pointer hover:bg-gray-50 dark:hover:bg-night-sky-light',
         className
       )}
+      onClick={handleCategoryClick}
     >
       <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
         {category.name}
@@ -51,6 +66,7 @@ const Category: React.FC<CategoryProps> = ({
             id={tag.id}
             name={tag.name}
             onClick={onTagClick}
+            className="tag-component"
           />
         ))}
       </div>
