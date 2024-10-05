@@ -84,21 +84,21 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
             <div
               className={`${
                 displayMode === 'split' && isWideScreen ? 'w-1/2' : 'w-full'
-              } h-full overflow-auto`}
+              } h-full`}
             >
               <SimpleMarkdownEditor
                 onImageUpload={onImageUpload}
                 value={content}
                 onChange={handleChange}
                 onUnusedImagesDetected={onUnusedImagesDetected}
-                className="h-full"
+                className="h-screen"
               />
             </div>
           )}
           {(displayMode === 'preview' || displayMode === 'split') && (
             <div
               className={`
-                mt-8 px-3
+                 px-3 pt-7
                 ${
                   displayMode === 'split' && isWideScreen ? 'w-1/2' : 'w-full'
                 } h-full overflow-auto`}
@@ -106,7 +106,11 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
               <MarkdownRenderer
                 content={content}
                 getLinkCardInfo={getLinkCardInfo}
-                className="h-full"
+                className={
+                  displayMode === 'preview'
+                    ? 'h-full overflow-hidden'
+                    : 'h-screen'
+                }
               />
             </div>
           )}
