@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import PreviewMarkdownEditor from '@components/atoms/markdown/previewMarkdownEditor/PreviewMarkdownEditor';
 import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 import SaveSettingsModal from '@components/blocks/saveSettingsModal/SaveSettingsModal';
@@ -138,9 +139,20 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
     }
   };
 
+  const PageHead = ()=>{
+    return(
+      <div>
+        <Helmet>
+          <title>編集中...</title>
+        </Helmet>
+      </div>
+    )
+  }
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
+        <PageHead />
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
       </div>
     );
@@ -148,6 +160,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
 
   return (
     <div className="container mx-auto p-4">
+      <PageHead/>
       <div className="flex items-center mb-4 space-x-4">
         <input
           type="text"
