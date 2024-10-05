@@ -2,6 +2,7 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import TagComponents from '@components/atoms/tag/Tag';
 import { Check } from 'lucide-react';
+import MarkdownRenderer from '@components/blocks/markdownRenderer/MarkdownRenderer';
 
 interface Tag {
   id: string;
@@ -17,8 +18,11 @@ interface CategoryProps {
   };
   className?: string;
   isSelected?: boolean;
-  onTagClick?: (tagName: string,tagId?: string) => void;
+  onTagClick?: (tagName: string, tagId?: string) => void;
   onCategoryClick?: (categoryId: string, categoryName: string) => void;
+  getLinkCardInfo: (
+    url: string
+  ) => Promise<{ url: string; imageUrl: string; title: string }>;
 }
 
 const Category: React.FC<CategoryProps> = ({
@@ -27,9 +31,9 @@ const Category: React.FC<CategoryProps> = ({
   isSelected = false,
   onTagClick,
   onCategoryClick,
+  getLinkCardInfo,
 }) => {
   const handleCategoryClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    // タグをクリックした場合は、カテゴリーのクリックイベントを発火させない
     if ((event.target as HTMLElement).closest('.tag-component')) {
       return;
     }
@@ -56,9 +60,13 @@ const Category: React.FC<CategoryProps> = ({
       <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
         {category.name}
       </h2>
-      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
-        {category.description}
-      </p>
+      <div className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
+        <MarkdownRenderer
+          content={category.description}
+          getLinkCardInfo={getLinkCardInfo}
+          className="overflow-hidden"
+        />
+      </div>
       <div className="flex flex-wrap gap-1 sm:gap-2">
         {category.tags.map((tag) => (
           <TagComponents

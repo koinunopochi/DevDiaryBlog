@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Application\UseCases\FindArticleByIdUseCase;
+use App\Application\UseCases\FindTagByIdUseCase;
 use App\Domain\ValueObjects\ArticleId;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FindArticleByIdController extends Controller
 {
   private FindArticleByIdUseCase $findArticleByIdUseCase;
+  private FindTagByIdUseCase $findTagByIdUseCase;
 
-  public function __construct(FindArticleByIdUseCase $findArticleByIdUseCase)
+  public function __construct(FindArticleByIdUseCase $findArticleByIdUseCase, FindTagByIdUseCase $findTagByIdUseCase)
   {
     $this->findArticleByIdUseCase = $findArticleByIdUseCase;
+    $this->findTagByIdUseCase = $findTagByIdUseCase;
   }
 
   public function execute(Request $request): JsonResponse
@@ -34,7 +38,10 @@ class FindArticleByIdController extends Controller
           'content' => $article->getContent()->toString(),
           'authorId' => $article->getAuthorId()->toString(),
           'categoryId' => $article->getCategoryId()->toString(),
-          'tags' => array_map(fn($tag) => $tag->toString(), $article->getTags()->toArray()),
+          'tags' => array_map(function ($tagId) { // note:tagIdからTagNameに変換している
+            $tagName = $this->findTagByIdUseCase->execute($tagId)->getName();
+            return $tagName !== null ? $tagName->toString() : null;
+          }, $article->getTags()->toArray()),
           'status' => $article->getStatus()->toString(),
           'createdAt' => $article->getCreatedAt()->toString(),
           'updatedAt' => $article->getUpdatedAt()->toString(),

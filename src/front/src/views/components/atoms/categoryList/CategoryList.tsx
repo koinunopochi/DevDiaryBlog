@@ -15,6 +15,9 @@ interface CategoryListProps {
   className?: string;
   selectedCategoryId?: string;
   id?: string;
+  getLinkCardInfo: (
+    url: string
+  ) => Promise<{ url: string; imageUrl: string; title: string }>;
 }
 
 const CategoryList: React.FC<CategoryListProps> = ({
@@ -24,11 +27,18 @@ const CategoryList: React.FC<CategoryListProps> = ({
   className,
   selectedCategoryId,
   id,
+  getLinkCardInfo,
 }) => {
   return (
-    <div id={id} className={`space-y-4 ${className}`}>
+    <div
+      id={id}
+      className={`grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 ${className}`}
+    >
       {categories.map((category) => (
-        <div key={category.id} className="transition-transform hover:scale-105">
+        <div
+          key={category.id}
+          className="transition-transform hover:scale-105 flex flex-col"
+        >
           <Category
             category={category}
             isSelected={selectedCategoryId === category.id}
@@ -36,6 +46,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
             onTagClick={(tagName, tagId) =>
               onTagClick(tagName, category.id, tagId)
             }
+            getLinkCardInfo={getLinkCardInfo}
           />
         </div>
       ))}

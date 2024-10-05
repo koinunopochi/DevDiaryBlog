@@ -15,9 +15,7 @@ class BroadITArticleCategorySeeder extends Seeder
     $categories = [
       [
         'name' => 'ソフトウェア開発',
-        'description' => '# ソフトウェア開発
-
-- プログラミング言語と開発手法
+        'description' => '- プログラミング言語と開発手法
 - ソフトウェアアーキテクチャとデザインパターン
 - 開発ツールとIDE
 - フレームワークとライブラリ
@@ -25,9 +23,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'インフラストラクチャ',
-        'description' => '# インフラストラクチャ
-
-- クラウドコンピューティング（AWS、Azure、GCPなど）
+        'description' => '- クラウドコンピューティング（AWS、Azure、GCPなど）
 - サーバー管理とネットワーキング
 - 仮想化技術とコンテナ化
 - CI/CDパイプライン
@@ -35,9 +31,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'データサイエンス',
-        'description' => '# データサイエンス
-
-- 機械学習とAI
+        'description' => '- 機械学習とAI
 - ビッグデータ処理と分析
 - データビジュアライゼーション
 - 統計学と数学的基礎
@@ -45,9 +39,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'セキュリティ',
-        'description' => '# セキュリティ
-
-- サイバーセキュリティベストプラクティス
+        'description' => '- サイバーセキュリティベストプラクティス
 - 暗号化技術と認証システム
 - ネットワークセキュリティ
 - セキュリティ監査とペネトレーションテスト
@@ -55,9 +47,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'エマージングテクノロジー',
-        'description' => '# エマージングテクノロジー
-
-- ブロックチェーンと分散型技術
+        'description' => '- ブロックチェーンと分散型技術
 - IoTとエッジコンピューティング
 - AR/VRと空間コンピューティング
 - 量子コンピューティング
@@ -65,9 +55,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'キャリア＆スキル開発',
-        'description' => '# キャリア＆スキル開発
-
-- 継続的学習と自己啓発
+        'description' => '- 継続的学習と自己啓発
 - 技術資格と認定
 - リーダーシップとマネジメントスキル
 - コミュニケーションとプレゼンテーションスキル
@@ -75,9 +63,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'プロジェクト管理',
-        'description' => '# プロジェクト管理
-
-- アジャイルとスクラム手法
+        'description' => '- アジャイルとスクラム手法
 - DevOpsの実践
 - プロジェクト計画と見積もり
 - リスク管理と問題解決
@@ -85,9 +71,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'ビジネス＆テクノロジー',
-        'description' => '# ビジネス＆テクノロジー
-
-- デジタルトランスフォーメーション戦略
+        'description' => '- デジタルトランスフォーメーション戦略
 - テクノロジースタートアップと起業
 - IT戦略とアライメント
 - テクノロジーの経済的影響
@@ -95,9 +79,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'オープンソース＆コミュニティ',
-        'description' => '# オープンソース＆コミュニティ
-
-- オープンソースプロジェクトとライセンス
+        'description' => '- オープンソースプロジェクトとライセンス
 - コミュニティ貢献とオープンソース開発
 - テックカンファレンスとイベント
 - オンラインコミュニティとフォーラム
@@ -105,9 +87,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'テクノロジー倫理＆社会影響',
-        'description' => '# テクノロジー倫理＆社会影響
-
-- AIと機械学習の倫理的考慮事項
+        'description' => '- AIと機械学習の倫理的考慮事項
 - プライバシーとデータ保護
 - テクノロジーの社会的影響と責任
 - デジタルアクセシビリティとインクルージョン
@@ -115,9 +95,7 @@ class BroadITArticleCategorySeeder extends Seeder
       ],
       [
         'name' => 'プロジェクト＆開発コミュニティ',
-        'description' => '# プロジェクト＆開発コミュニティ
-
-- プロジェクト紹介と募集
+        'description' => '- プロジェクト紹介と募集
 - コードレビューとペアプログラミング
 - ハッカソンとコーディングチャレンジ
 - オープンソースコントリビューション機会
