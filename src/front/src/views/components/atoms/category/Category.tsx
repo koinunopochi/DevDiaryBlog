@@ -17,12 +17,14 @@ interface CategoryProps {
   };
   className?: string;
   isSelected?: boolean;
+  onTagClick?: (tagId: string, tagName: string) => void;
 }
 
 const Category: React.FC<CategoryProps> = ({
   category,
   className,
   isSelected = false,
+  onTagClick,
 }) => {
   return (
     <div
@@ -44,7 +46,12 @@ const Category: React.FC<CategoryProps> = ({
       </p>
       <div className="flex flex-wrap gap-1 sm:gap-2">
         {category.tags.map((tag) => (
-          <TagComponents key={tag.id} id={tag.id} name={tag.name} />
+          <TagComponents
+            key={tag.id}
+            id={tag.id}
+            name={tag.name}
+            onClick={onTagClick}
+          />
         ))}
       </div>
       {isSelected && (
