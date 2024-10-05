@@ -2,7 +2,8 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import PreviewMarkdownEditor from '@components/atoms/markdown/previewMarkdownEditor/PreviewMarkdownEditor';
 import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
-import SaveSettingsSidebar from '@components/blocks/saveSettingsSidebar/SaveSettingsSidebar';
+import SaveSettingsModal from '@components/blocks/saveSettingsModal/SaveSettingsModal';
+import { CategoryData } from '@/views/components/atoms/categoryList/CategoryList';
 
 interface EditorPageProps {
   apiClient: EnhancedApiClient;
@@ -30,9 +31,9 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
     status: 'Draft',
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [categories, setCategories] = useState([]);
   const [availableTags, setAvailableTags] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -100,25 +101,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
     // 未使用画像の処理を実装する必要があります
   };
 
-  const handleSave = async (selectedCategory: any, selectedTags: string[]) => {
-    try {
-      const updatedArticle = {
-        ...article,
-        categoryId: selectedCategory?.id,
-        tags: selectedTags,
-      };
-      const response = await apiClient.post(
-        '/api/articles/save',
-        updatedArticle
-      );
-      console.log('Article saved:', response);
-      setIsSidebarOpen(false);
-    } catch (error) {
-      console.error('Error saving article:', error);
-    }
-  };
-
-  const handleCategoryClick = (category:any) => {
+  const handleCategoryClick = (category: any) => {
     setArticle((prevArticle) => ({
       ...prevArticle,
       categoryId: category.id,
@@ -132,6 +115,27 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
     tagId?: string
   ) => {
     console.log('Tag clicked:', tagName, categoryId, tagId);
+  };
+
+  const handleSave = async (
+    selectedCategory: CategoryData | null,
+    selectedTags: string[]
+  ) => {
+    try {
+      const updatedArticle = {
+        ...article,
+        categoryId: selectedCategory?.id,
+        tags: selectedTags,
+      };
+      const response = await apiClient.post(
+        '/api/articles/save',
+        updatedArticle
+      );
+      console.log('Article saved:', response);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error saving article:', error);
+    }
   };
 
   if (isLoading) {
@@ -153,7 +157,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
           className="flex-grow p-2 border rounded bg-white dark:bg-night-sky text-gray-900 dark:text-white"
         />
         <button
-          onClick={() => setIsSidebarOpen(true)}
+          onClick={() => setIsModalOpen(true)}
           className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
         >
           保存
@@ -166,24 +170,16 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
         onChange={handleContentChange}
         onUnusedImagesDetected={handleUnusedImagesDetected}
       />
-      {isSidebarOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end overflow-auto">
-          <SaveSettingsSidebar
-            categories={categories}
-            availableTags={availableTags}
-            onSave={handleSave}
-            onCategoryClick={handleCategoryClick}
-            onTagClick={handleTagClick}
-            selectedCategoryId={article.categoryId}
-          />
-          <button
-            onClick={() => setIsSidebarOpen(false)}
-            className="absolute top-4 right-4 text-white"
-          >
-            閉じる
-          </button>
-        </div>
-      )}
+      <SaveSettingsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        categories={categories}
+        availableTags={availableTags}
+        onSave={handleSave}
+        onCategoryClick={handleCategoryClick}
+        onTagClick={handleTagClick}
+        selectedCategoryId={article.categoryId}
+      />
     </div>
   );
 };
