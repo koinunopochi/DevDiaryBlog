@@ -160,7 +160,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
 
   return (
     <div className="container mx-auto p-4">
-      <PageHead/>
+      <PageHead />
       <div className="flex items-center mb-4 space-x-4">
         <input
           type="text"
@@ -193,6 +193,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
         onTagClick={handleTagClick}
         selectedCategoryId={article.categoryId}
         getLinkCardInfo={handleLinkCardInfo}
+        initSelectedTag={article.tags}
       />
     </div>
   );

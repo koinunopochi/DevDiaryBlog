@@ -19,6 +19,7 @@ interface SaveSettingsModalProps {
   getLinkCardInfo: (
     url: string
   ) => Promise<{ url: string; imageUrl: string; title: string }>;
+  initSelectedTag:string[];
 }
 
 const SaveSettingsModal: React.FC<SaveSettingsModalProps> = ({
@@ -31,11 +32,12 @@ const SaveSettingsModal: React.FC<SaveSettingsModalProps> = ({
   onTagClick,
   selectedCategoryId,
   getLinkCardInfo,
+  initSelectedTag,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryData | null>(
     null
   );
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>(initSelectedTag);
 
   useEffect(() => {
     if (selectedCategoryId) {
