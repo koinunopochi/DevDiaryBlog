@@ -2,16 +2,16 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface TagProps {
-  id: string;
+  id?: string;
   name: string;
-  onClick?: (id: string, name: string) => void;
-  className?:string;
+  onClick?: (name: string, id?: string) => void;
+  className?: string;
 }
 
-const Tag: React.FC<TagProps> = ({ id, name, onClick,className }) => {
+const Tag: React.FC<TagProps> = ({ id, name, onClick, className }) => {
   const handleClick = () => {
     if (onClick) {
-      onClick(id, name);
+      onClick(name, id);
     }
   };
 

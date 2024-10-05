@@ -17,7 +17,7 @@ interface CategoryProps {
   };
   className?: string;
   isSelected?: boolean;
-  onTagClick?: (tagId: string, tagName: string) => void;
+  onTagClick?: (tagName: string,tagId?: string) => void;
   onCategoryClick?: (categoryId: string, categoryName: string) => void;
 }
 

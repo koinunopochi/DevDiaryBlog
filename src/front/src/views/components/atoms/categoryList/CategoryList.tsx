@@ -11,7 +11,7 @@ export interface CategoryData {
 interface CategoryListProps {
   categories: CategoryData[];
   onCategoryClick: (category: CategoryData) => void;
-  onTagClick: (tagId: string, tagName: string, categoryId: string) => void;
+  onTagClick: (tagName: string, categoryId: string, tagId?: string) => void;
   className?: string;
   selectedCategoryId?: string;
 }
@@ -31,8 +31,8 @@ const CategoryList: React.FC<CategoryListProps> = ({
             category={category}
             isSelected={selectedCategoryId === category.id}
             onCategoryClick={() => onCategoryClick(category)}
-            onTagClick={(tagId, tagName) =>
-              onTagClick(tagId, tagName, category.id)
+            onTagClick={(tagName, tagId) =>
+              onTagClick(tagName, category.id, tagId)
             }
           />
         </div>
@@ -42,4 +42,3 @@ const CategoryList: React.FC<CategoryListProps> = ({
 };
 
 export default CategoryList;
-
