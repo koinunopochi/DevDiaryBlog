@@ -29,7 +29,7 @@ const sampleTags = [
 export const Default: Story = {
   args: {
     availableTags: sampleTags,
-    initialSelectedTags: ['default'],
+    initialSelectedTags: [],
   },
 };
 
@@ -37,6 +37,21 @@ export const EmptyList: Story = {
   args: {
     availableTags: [],
     initialSelectedTags: [],
+  },
+};
+
+export const Required: Story = {
+  args: {
+    ...Default.args,
+    label:"Tag",
+    required: true,
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    ...Default.args,
+    error: '少なくとも1つのタグを選択してください',
   },
 };
 
