@@ -59,6 +59,14 @@ export const NumbersAndSymbols: Story = {
   },
 };
 
+export const WithOnClick: Story = {
+  args: {
+    id: 'tag-6',
+    name: 'Web3.0',
+    onClick:(id:string,name:string)=>alert(`${id},${name}`)
+  },
+};
+
 // タグの複数表示例
 export const MultipleTagsExample: Story = {
   render: () => (
