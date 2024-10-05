@@ -179,6 +179,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
         onCategoryClick={handleCategoryClick}
         onTagClick={handleTagClick}
         selectedCategoryId={article.categoryId}
+        getLinkCardInfo={handleLinkCardInfo}
       />
     </div>
   );

@@ -16,6 +16,9 @@ interface SaveSettingsModalProps {
   onCategoryClick: (category: CategoryData) => void;
   onTagClick: (tagName: string, categoryId: string, tagId?: string) => void;
   selectedCategoryId?: string;
+  getLinkCardInfo: (
+    url: string
+  ) => Promise<{ url: string; imageUrl: string; title: string }>;
 }
 
 const SaveSettingsModal: React.FC<SaveSettingsModalProps> = ({
@@ -27,6 +30,7 @@ const SaveSettingsModal: React.FC<SaveSettingsModalProps> = ({
   onCategoryClick,
   onTagClick,
   selectedCategoryId,
+  getLinkCardInfo,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryData | null>(
     null
@@ -88,6 +92,7 @@ const SaveSettingsModal: React.FC<SaveSettingsModalProps> = ({
             onCategoryClick={handleCategoryClick}
             onTagClick={handleTagClick}
             selectedCategoryId={selectedCategory?.id || selectedCategoryId}
+            getLinkCardInfo={getLinkCardInfo}
           />
         </div>
         <div className="flex justify-end space-x-4">

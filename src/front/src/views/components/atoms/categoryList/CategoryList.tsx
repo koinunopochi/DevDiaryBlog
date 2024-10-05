@@ -15,6 +15,9 @@ interface CategoryListProps {
   className?: string;
   selectedCategoryId?: string;
   id?: string;
+  getLinkCardInfo: (
+    url: string
+  ) => Promise<{ url: string; imageUrl: string; title: string }>;
 }
 
 const CategoryList: React.FC<CategoryListProps> = ({
@@ -24,6 +27,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
   className,
   selectedCategoryId,
   id,
+  getLinkCardInfo,
 }) => {
   return (
     <div
@@ -42,6 +46,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
             onTagClick={(tagName, tagId) =>
               onTagClick(tagName, category.id, tagId)
             }
+            getLinkCardInfo={getLinkCardInfo}
           />
         </div>
       ))}
