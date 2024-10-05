@@ -1,6 +1,7 @@
 import React from 'react';
 import { twMerge } from 'tailwind-merge';
 import TagComponents from '@components/atoms/tag/Tag';
+import { Check } from 'lucide-react';
 
 interface Tag {
   id: string;
@@ -15,17 +16,23 @@ interface CategoryProps {
     tags: Tag[];
   };
   className?: string;
+  isSelected?: boolean;
 }
 
-const Category: React.FC<CategoryProps> = ({ category, className }) => {
+const Category: React.FC<CategoryProps> = ({
+  category,
+  className,
+  isSelected = false,
+}) => {
   return (
     <div
       id={category.id}
       className={twMerge(
-        'rounded-lg p-4 sm:p-6 max-w-sm sm:max-w-md mx-auto border',
+        'rounded-lg p-4 sm:p-6 max-w-sm sm:max-w-md mx-auto border relative',
         'bg-white dark:bg-night-sky',
         'text-gray-800 dark:text-gray-200',
         'transition-all duration-300 ease-in-out',
+        isSelected ? 'ring-2 ring-blue-500' : '',
         className
       )}
     >
@@ -40,6 +47,11 @@ const Category: React.FC<CategoryProps> = ({ category, className }) => {
           <TagComponents key={tag.id} id={tag.id} name={tag.name} />
         ))}
       </div>
+      {isSelected && (
+        <div className="absolute top-2 right-2 bg-blue-500 rounded-full p-1">
+          <Check size={16} color="white" />
+        </div>
+      )}
     </div>
   );
 };
