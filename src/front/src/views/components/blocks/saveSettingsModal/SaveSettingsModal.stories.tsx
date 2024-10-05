@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import SaveSettingsSidebar from './SaveSettingsSidebar';
+import SaveSettingsModal from './SaveSettingsModal';
 import { action } from '@storybook/addon-actions';
 
-const meta: Meta<typeof SaveSettingsSidebar> = {
-  title: 'blocks/SaveSettingsSidebar',
-  component: SaveSettingsSidebar,
+const meta: Meta<typeof SaveSettingsModal> = {
+  title: 'blocks/SaveSettingsModal',
+  component: SaveSettingsModal,
   parameters: {
     layout: 'centered',
   },
@@ -12,7 +12,7 @@ const meta: Meta<typeof SaveSettingsSidebar> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof SaveSettingsSidebar>;
+type Story = StoryObj<typeof SaveSettingsModal>;
 
 const sampleCategories = [
   {
