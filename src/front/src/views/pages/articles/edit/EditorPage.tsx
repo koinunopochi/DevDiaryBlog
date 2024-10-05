@@ -25,7 +25,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
     id: articleId || '',
     title: '',
     content: '',
-    authorId: 'user0000-7595-4ed8-a3fe-1e6af26495cc',
+    authorId: localStorage.getItem('userId') || "",
     categoryId: '',
     tags: [],
     status: 'Draft',
