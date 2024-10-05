@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Domain\Repositories\ArticleCategoryRepositoryInterface;
 use App\Domain\Repositories\ArticleRepositoryInterface;
 use App\Domain\Repositories\OgpRepositoryInterface;
 use App\Domain\Repositories\ProfileIconRepositoryInterface;
@@ -9,6 +10,7 @@ use App\Domain\Repositories\TagRepositoryInterface;
 use App\Domain\Repositories\UserProfileRepositoryInterface;
 use App\Domain\Repositories\UserRepositoryInterface;
 use App\Infrastructure\Ogp\HttpOgpRepository;
+use App\Infrastructure\Persistence\EloquentArticleCategoryRepository;
 use App\Infrastructure\Persistence\EloquentArticleRepository;
 use App\Infrastructure\Persistence\EloquentTagRepository;
 use App\Infrastructure\Persistence\EloquentUserProfileRepository;
@@ -29,6 +31,7 @@ class RepositoryServiceProvider extends ServiceProvider
     $this->app->bind(OgpRepositoryInterface::class, HttpOgpRepository::class);
     $this->app->bind(ArticleRepositoryInterface::class, EloquentArticleRepository::class);
     $this->app->bind(TagRepositoryInterface::class, EloquentTagRepository::class);
+    $this->app->bind(ArticleCategoryRepositoryInterface::class, EloquentArticleCategoryRepository::class);
   }
 
   /**
