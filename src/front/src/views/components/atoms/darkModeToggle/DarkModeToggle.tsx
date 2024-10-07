@@ -2,15 +2,20 @@ import React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../providers/ThemeProvider';
 
-const DarkModeToggle: React.FC = () => {
+interface DarkModeToggleProps {
+  className?: string;
+}
+
+const DarkModeToggle: React.FC<DarkModeToggleProps> = ({ className }) => {
   const { isDark, setIsDark } = useTheme();
 
   return (
     <button
       onClick={() => setIsDark(!isDark)}
-      className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+      className={`flex items-center w-full text-left px-4 py-2 text-sm ${className}`}
     >
-      {isDark ? <Sun size={24} /> : <Moon size={24} />}
+      {isDark ? <Sun className="mr-2" /> : <Moon className="mr-2" />}
+      {isDark ? 'ライトモード' : 'ダークモード'}
     </button>
   );
 };

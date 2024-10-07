@@ -11,7 +11,6 @@ import ProfilePage from '@/views/pages/settings/profile/ProfilePage';
 import { ProfileService } from '@/services/ProfileService';
 import { UserService } from '@/services/UserService';
 import { ThemeProvider } from '@/views/components/providers/ThemeProvider';
-import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
 import NotFound from '@/views/components/atoms/notFound/NotFound';
 import UsernamePage from '@/views/pages/username/UsernamePage';
 import EditorPage from '@/views/pages/articles/edit/EditorPage';
@@ -37,8 +36,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-night-sky text-gray-900 dark:text-white max-w-full px-4">
-        <DarkModeToggle />
+      <div className="min-h-screen bg-white dark:bg-night-sky text-gray-900 dark:text-white max-w-full">
         <Routes>
           <Route path="/" element={<Page authService={authService} />} />
           <Route path="/button" element={<Button label="Button" />} />
