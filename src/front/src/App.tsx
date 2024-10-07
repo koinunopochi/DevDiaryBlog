@@ -50,7 +50,7 @@ function App() {
 
           {/* PageLayoutを適用するルート */}
           <Route element={<PageLayout authService={authService} />}>
-            <Route path="/" element={<Page {authService} />} />
+            <Route path="/" element={<Page />} />
             <Route path="/button" element={<Button label="Button" />} />
 
             {/* Articles */}
