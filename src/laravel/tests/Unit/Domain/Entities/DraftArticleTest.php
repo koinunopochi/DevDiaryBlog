@@ -11,7 +11,7 @@ use App\Domain\ValueObjects\ArticleTitle;
 use App\Domain\ValueObjects\ArticleContent;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\ArticleCategoryId;
-use App\Domain\ValueObjects\ArticleTagCollection;
+use App\Domain\ValueObjects\ArticleTagIdCollection;
 use App\Domain\ValueObjects\TagId;
 use Tests\TestCase;
 
@@ -44,7 +44,7 @@ class DraftArticleTest extends TestCase
     $content = new ArticleContent('新しい記事の内容');
     $authorId = new UserId();
     $categoryId = new ArticleCategoryId();
-    $tags = new ArticleTagCollection([new TagId(), new TagId()]);
+    $tags = new ArticleTagIdCollection([new TagId(), new TagId()]);
     $updatedAt = new DateTime();
 
     // When

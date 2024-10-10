@@ -8,7 +8,7 @@ use App\Domain\ValueObjects\ArticleTitle;
 use App\Domain\ValueObjects\ArticleContent;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\ArticleCategoryId;
-use App\Domain\ValueObjects\ArticleTagCollection;
+use App\Domain\ValueObjects\ArticleTagIdCollection;
 use App\Domain\ValueObjects\ArticleStatus;
 use App\Domain\ValueObjects\DateTime;
 use App\Domain\ValueObjects\TagId;
@@ -25,7 +25,7 @@ class ArticleTest extends TestCase
     $content = new ArticleContent('これはテスト記事の内容です。');
     $authorId = new UserId();
     $categoryId = new ArticleCategoryId();
-    $tags = new ArticleTagCollection([new TagId(), new TagId()]);
+    $tags = new ArticleTagIdCollection([new TagId(), new TagId()]);
     $status = new ArticleStatus(ArticleStatus::STATUS_DRAFT);
     $createdAt = new DateTime();
     $updatedAt = new DateTime();
@@ -94,7 +94,7 @@ class ArticleTest extends TestCase
     $newTitle = new ArticleTitle('新しいタイトル');
     $newContent = new ArticleContent('新しい内容');
     $newCategoryId = new ArticleCategoryId();
-    $newTags = new ArticleTagCollection([new TagId(), new TagId(), new TagId()]);
+    $newTags = new ArticleTagIdCollection([new TagId(), new TagId(), new TagId()]);
     $newStatus = new ArticleStatus(ArticleStatus::STATUS_PUBLISHED);
     $newUpdatedAt = new DateTime();
 
@@ -128,7 +128,7 @@ class ArticleTest extends TestCase
       new ArticleContent('元の内容'),
       new UserId(),
       new ArticleCategoryId(),
-      new ArticleTagCollection([new TagId()]),
+      new ArticleTagIdCollection([new TagId()]),
       new ArticleStatus(ArticleStatus::STATUS_DRAFT),
       new DateTime(),
       new DateTime()

@@ -6,7 +6,7 @@ use App\Domain\ValueObjects\ArticleCategoryId;
 use App\Domain\ValueObjects\ArticleContent;
 use App\Domain\ValueObjects\ArticleId;
 use App\Domain\ValueObjects\ArticleStatus;
-use App\Domain\ValueObjects\ArticleTagCollection;
+use App\Domain\ValueObjects\ArticleTagIdCollection;
 use App\Domain\ValueObjects\ArticleTitle;
 use App\Domain\ValueObjects\DateTime;
 use App\Domain\ValueObjects\UserId;
@@ -44,7 +44,7 @@ class DraftArticle
     ArticleContent $content,
     UserId $authorId,
     ArticleCategoryId $categoryId,
-    ArticleTagCollection $tags,
+    ArticleTagIdCollection $tags,
     DateTime $updatedAt
   ): Article {
     return new Article(
