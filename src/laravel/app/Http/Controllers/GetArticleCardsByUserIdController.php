@@ -43,7 +43,8 @@ class GetArticleCardsByUserIdController extends Controller
       return response()->json([
         'articles' => $result['articles'],
         'nextCursor' => $result['nextCursor'],
-        'hasNextPage' => $result['hasNextPage']
+        'hasNextPage' => $result['hasNextPage'],
+        'totalItems' => $result['totalItems']
       ]);
     } catch (\Exception $e) {
       Log::error($e);

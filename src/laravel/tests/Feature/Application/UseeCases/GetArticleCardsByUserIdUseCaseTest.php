@@ -42,6 +42,7 @@ class GetArticleCardsByUserIdUseCaseTest extends TestCase
     $this->assertArrayHasKey('articles', $result);
     $this->assertArrayHasKey('nextCursor', $result);
     $this->assertArrayHasKey('hasNextPage', $result);
+    $this->assertArrayHasKey('totalItems', $result);
     $this->assertCount(5, $result['articles']);
     $this->assertInstanceOf(Collection::class, collect($result['articles']));
 
@@ -66,6 +67,7 @@ class GetArticleCardsByUserIdUseCaseTest extends TestCase
     $this->assertEmpty($result['articles']);
     $this->assertNull($result['nextCursor']);
     $this->assertFalse($result['hasNextPage']);
+    $this->assertEquals(0, $result['totalItems']);
   }
 
   private function assertArticleCardStructure(array $article): void
