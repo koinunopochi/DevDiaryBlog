@@ -1,36 +1,9 @@
 import React from 'react';
-
-import { Header } from '../../components/blocks/header/Header';
-
 import './page.css';
-import { useNavigate } from 'react-router-dom';
-import AuthService from '@/services/AuthService';
 
-type User = {
-  name: string;
-};
-
-interface PageProps {
-  authService: AuthService;
-}
-export const Page: React.FC<PageProps> = ({authService}) => {
-  const [user, setUser] = React.useState<User>({ name: 'default' });
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await authService.logout();
-    navigate('/login');
-  };
-
+export const Page: React.FC = () => {
   return (
     <article>
-      <Header
-        user={user}
-        onLogin={() => navigate('/login')}
-        onLogout={handleLogout}
-        onCreateAccount={() => navigate('/register')}
-      />
-
       <section className="storybook-page">
         <h2>Pages in Storybook</h2>
         <p>
