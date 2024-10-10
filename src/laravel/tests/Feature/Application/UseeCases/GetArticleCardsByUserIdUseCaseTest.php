@@ -3,10 +3,7 @@
 namespace Tests\Feature\Application\UseCases;
 
 use App\Application\UseCases\GetArticleCardsByUserIdUseCase;
-use App\Domain\ValueObjects\ArticleId;
 use App\Domain\ValueObjects\UserId;
-use App\Domain\ValueObjects\Cursor;
-use App\Domain\ValueObjects\DateTime;
 use App\Infrastructure\Persistence\EloquentArticleCardRepository;
 use App\Models\EloquentArticle;
 use App\Models\User as EloquentUser;
