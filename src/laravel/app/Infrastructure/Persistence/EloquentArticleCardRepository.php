@@ -22,6 +22,7 @@ use App\Models\User as EloquentUser;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 
 class EloquentArticleCardRepository implements ArticleCardListRepositoryInterface
 {
@@ -38,9 +39,29 @@ class EloquentArticleCardRepository implements ArticleCardListRepositoryInterfac
     if ($cursor) {
       $cursorData = $cursor->jsonSerialize();
       $query->where(function ($q) use ($cursorData, $sortBy) {
-        $q->where($sortBy, $cursorData[$sortBy])
-          ->where('id', '>', $cursorData['id']);
-      })->orWhere($sortBy, '>', $cursorData[$sortBy]);
+        if ($sortBy === 'created_at') {
+          $q->where($sortBy, '>=', $cursorData['createdAt'])
+          ->where(function ($subQ) use ($cursorData) {
+            $subQ->where('created_at', '>', $cursorData['createdAt'])
+            ->orWhere(function ($subSubQ) use ($cursorData) {
+              $subSubQ->where('created_at', '=', $cursorData['createdAt'])
+              ->whereRaw('STRCMP(id, ?) > 0', [$cursorData['id']]);
+            });
+          });
+        } elseif ($sortBy === 'updated_at') {
+          $q->where($sortBy, '>=', $cursorData['updatedAt'])
+          ->where(function ($subQ) use ($cursorData) {
+            $subQ->where('updated_at', '>', $cursorData['updatedAt'])
+            ->orWhere(function ($subSubQ) use ($cursorData) {
+              $subSubQ->where('updated_at', '=', $cursorData['updatedAt'])
+              ->whereRaw('STRCMP(id, ?) > 0', [$cursorData['id']]);
+            });
+          });
+        } else {
+          // $sortByが不正な値の場合のエラー処理
+          throw new InvalidArgumentException("Invalid sort column: {$sortBy}");
+        }
+      });
     }
     return $query;
   }
