@@ -11,7 +11,7 @@ use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\ArticleCategoryId;
 use App\Domain\ValueObjects\ArticleStatus;
 use App\Domain\ValueObjects\DateTime;
-use App\Domain\ValueObjects\ArticleTagCollection;
+use App\Domain\ValueObjects\ArticleTagIdCollection;
 use App\Domain\ValueObjects\TagId;
 use App\Infrastructure\Persistence\EloquentArticleRepository;
 use App\Models\EloquentArticle;
@@ -143,7 +143,7 @@ class EloquentArticleRepositoryTest extends TestCase
       new ArticleContent('Content'),
       new UserId($author->id),
       new ArticleCategoryId($category->id),
-      new ArticleTagCollection([]),
+      new ArticleTagIdCollection([]),
       new ArticleStatus(ArticleStatus::STATUS_DRAFT),
       new DateTime(),
       new DateTime()
@@ -172,7 +172,7 @@ class EloquentArticleRepositoryTest extends TestCase
       new ArticleContent($existingArticle->content),
       new UserId($existingArticle->author_id),
       new ArticleCategoryId($existingArticle->category_id),
-      new ArticleTagCollection([]),
+      new ArticleTagIdCollection([]),
       new ArticleStatus($existingArticle->status),
       new DateTime($existingArticle->created_at),
       new DateTime()
@@ -295,7 +295,7 @@ class EloquentArticleRepositoryTest extends TestCase
       new ArticleContent('Full Article Content'),
       new UserId($author->id),
       new ArticleCategoryId($category->id),
-      new ArticleTagCollection([new TagId($tag->id)]),
+      new ArticleTagIdCollection([new TagId($tag->id)]),
       new ArticleStatus(ArticleStatus::STATUS_PUBLISHED),
       $createdAt,
       new DateTime()

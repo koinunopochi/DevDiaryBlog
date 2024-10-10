@@ -8,7 +8,7 @@ use App\Domain\ValueObjects\ArticleTitle;
 use App\Domain\ValueObjects\ArticleContent;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\ArticleCategoryId;
-use App\Domain\ValueObjects\ArticleTagCollection;
+use App\Domain\ValueObjects\ArticleTagIdCollection;
 use App\Domain\ValueObjects\ArticleStatus;
 use App\Domain\ValueObjects\DateTime;
 use App\Domain\ValueObjects\TagId;
@@ -21,7 +21,7 @@ class SaveArticleDTO
   private ArticleContent $content;
   private UserId $authorId;
   private ArticleCategoryId $categoryId;
-  private ArticleTagCollection $tags;
+  private ArticleTagIdCollection $tags;
   private ArticleStatus $status;
   private DateTime $createdAt;
   private DateTime $updatedAt;
@@ -40,7 +40,7 @@ class SaveArticleDTO
     $tagObjects = array_map(function ($tagId) {
       return new TagId($tagId);
     }, $tagIds);
-    $this->tags = new ArticleTagCollection($tagObjects);
+    $this->tags = new ArticleTagIdCollection($tagObjects);
 
     $this->status = new ArticleStatus($request->input('status'));
     $this->createdAt = new DateTime($request->input('createdAt', 'now'));

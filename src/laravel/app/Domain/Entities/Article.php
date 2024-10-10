@@ -7,7 +7,7 @@ use App\Domain\ValueObjects\ArticleTitle;
 use App\Domain\ValueObjects\ArticleContent;
 use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\ArticleCategoryId;
-use App\Domain\ValueObjects\ArticleTagCollection;
+use App\Domain\ValueObjects\ArticleTagIdCollection;
 use App\Domain\ValueObjects\ArticleStatus;
 use App\Domain\ValueObjects\DateTime;
 
@@ -18,7 +18,7 @@ class Article
   private ArticleContent $content;
   private UserId $authorId;
   private ArticleCategoryId $categoryId;
-  private ArticleTagCollection $tags;
+  private ArticleTagIdCollection $tags;
   private ArticleStatus $status;
   private DateTime $createdAt;
   private DateTime $updatedAt;
@@ -29,7 +29,7 @@ class Article
     ArticleContent $content,
     UserId $authorId,
     ArticleCategoryId $categoryId,
-    ArticleTagCollection $tags,
+    ArticleTagIdCollection $tags,
     ArticleStatus $status,
     DateTime $createdAt,
     DateTime $updatedAt
@@ -70,7 +70,7 @@ class Article
     return $this->categoryId;
   }
 
-  public function getTags(): ArticleTagCollection
+  public function getTags(): ArticleTagIdCollection
   {
     return $this->tags;
   }
@@ -105,7 +105,7 @@ class Article
     return new self($this->id, $this->title, $this->content, $this->authorId, $categoryId, $this->tags, $this->status, $this->createdAt, $updatedAt);
   }
 
-  public function updateTags(ArticleTagCollection $tags, DateTime $updatedAt): self
+  public function updateTags(ArticleTagIdCollection $tags, DateTime $updatedAt): self
   {
     return new self($this->id, $this->title, $this->content, $this->authorId, $this->categoryId, $tags, $this->status, $this->createdAt, $updatedAt);
   }
@@ -119,7 +119,7 @@ class Article
     ArticleTitle $title,
     ArticleContent $content,
     ArticleCategoryId $categoryId,
-    ArticleTagCollection $tags,
+    ArticleTagIdCollection $tags,
     ArticleStatus $status,
     DateTime $updatedAt
   ): self {
