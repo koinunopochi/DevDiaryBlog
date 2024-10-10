@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import Tag from '@components/atoms/tag/Tag';
 
-interface ArticlePreviewProps {
+export interface ArticlePreviewProps {
   id: number;
   title: string;
   author: {
