@@ -8,6 +8,7 @@ use App\Domain\ValueObjects\ArticleAuthor;
 use App\Domain\ValueObjects\Likes;
 use App\Domain\ValueObjects\ArticleTagNameCollection;
 use App\Domain\ValueObjects\DateTime;
+use App\Domain\ValueObjects\TagName;
 use Illuminate\Support\Facades\Log;
 
 class ArticleCard
@@ -82,7 +83,7 @@ class ArticleCard
       'title' => $this->title->toString(),
       'author' => $this->author->toArray(),
       'likes' => $this->likes->getValue(),
-      'tags' => $this->tags->toArray(),
+      'tags' => $this->tags->map(fn(TagName $tagName)=> $tagName->toString()),
       'createdAt' => $this->createdAt->toString(),
       'updatedAt' => $this->updatedAt->toString()
     ];
