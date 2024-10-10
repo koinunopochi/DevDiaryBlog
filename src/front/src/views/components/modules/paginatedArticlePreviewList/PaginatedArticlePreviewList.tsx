@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ArticlePreviewList from '@components/blocks/articlePreviewList/ArticlePreviewList';
 import Pagination from '@components/atoms/pagination/Pagination';
 import { ArticlePreviewProps } from '@components/blocks/articlePreview/ArticlePreview';
@@ -6,45 +6,36 @@ import { ArticlePreviewProps } from '@components/blocks/articlePreview/ArticlePr
 interface PaginatedArticlePreviewListProps {
   articles: Omit<ArticlePreviewProps, 'onTagClick'>[];
   onTagClick?: (name: string, id?: string) => void;
+  currentPage: number;
+  totalItems: number;
   itemsPerPage: number;
+  onPageChange: (page: number) => void;
 }
 
 const PaginatedArticlePreviewList: React.FC<
   PaginatedArticlePreviewListProps
-> = ({ articles, onTagClick, itemsPerPage }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [paginatedArticles, setPaginatedArticles] = useState<
-    Omit<ArticlePreviewProps, 'onTagClick'>[]
-  >([]);
-
-  const totalPages = Math.ceil(articles.length / itemsPerPage);
-
-  useEffect(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    setPaginatedArticles(articles.slice(startIndex, endIndex));
-  }, [currentPage, articles, itemsPerPage]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo(0, 0);
-  };
+> = ({
+  articles,
+  onTagClick,
+  currentPage,
+  totalItems,
+  itemsPerPage,
+  onPageChange,
+}) => {
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
     <div className="space-y-6">
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={handlePageChange}
+        onPageChange={onPageChange}
       />
-      <ArticlePreviewList
-        articles={paginatedArticles}
-        onTagClick={onTagClick}
-      />
+      <ArticlePreviewList articles={articles} onTagClick={onTagClick} />
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
-        onPageChange={handlePageChange}
+        onPageChange={onPageChange}
       />
     </div>
   );
