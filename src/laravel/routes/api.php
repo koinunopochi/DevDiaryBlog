@@ -7,6 +7,7 @@ use App\Http\Controllers\GetAllArticleCategoriesController;
 use App\Http\Controllers\GetAllDefaultProfileIconsController;
 use App\Http\Controllers\GetAllTagNamesController;
 use App\Http\Controllers\GetArticleCardsByUserIdController;
+use App\Http\Controllers\GetLatestArticleCardsController;
 use App\Http\Controllers\GetOgpByUrlController;
 use App\Http\Controllers\GetUserDetailsController;
 use App\Http\Controllers\LoginController;
@@ -43,6 +44,7 @@ Route::get('/profile-icons/defaults', [GetAllDefaultProfileIconsController::clas
 Route::post('/user/check-name',[ExistsByNameController::class,'execute']);
 Route::get('/ogp', [GetOgpByUrlController::class, 'execute']);
 Route::get('/articles/categories', [GetAllArticleCategoriesController::class, 'execute']);
+Route::get('/articles/latest', [GetLatestArticleCardsController::class, 'execute']);
 Route::get('/articles/{articleId}', [FindArticleByIdController::class, 'execute']); //note: articlesはこれの前に配置する
 Route::get('/tags/autocompletes', [GetAllTagNamesController::class, 'execute']);
 
