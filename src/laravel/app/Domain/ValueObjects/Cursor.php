@@ -2,6 +2,7 @@
 
 namespace App\Domain\ValueObjects;
 
+use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;
 use JsonSerializable;
 
@@ -37,8 +38,8 @@ class Cursor implements JsonSerializable
   {
     return [
       'id' => $this->id->toString(),
-      'createdAt' => $this->createdAt->toString(),
-      'updatedAt' => $this->updatedAt->toString(),
+      'created_at' => $this->createdAt->toString(),
+      'updated_at' => $this->updatedAt->toString(),
     ];
   }
 
@@ -50,11 +51,11 @@ class Cursor implements JsonSerializable
       throw new InvalidArgumentException('Invalid JSON string.');
     }
 
-    if (!isset($data['id'], $data['createdAt'], $data['updatedAt'])) {
+    if (!isset($data['id'], $data['created_at'], $data['updated_at'])) {
       throw new InvalidArgumentException('Missing required fields in JSON.');
     }
 
-    return new self(new ArticleId($data['id']), new DateTime($data['createdAt']), new DateTime($data['updatedAt']));
+    return new self(new ArticleId($data['id']), new DateTime($data['created_at']), new DateTime($data['updated_at']));
   }
 
   public static function fromBase64(string $base64): self
@@ -65,11 +66,13 @@ class Cursor implements JsonSerializable
       throw new InvalidArgumentException('Invalid Base64 string.');
     }
 
+    Log::debug($json);
+
     return self::fromJson($json);
   }
 
   public function toBase64(): string
   {
-    return base64_encode(json_encode($this));
+    return base64_encode(json_encode($this->jsonSerialize()));
   }
 }

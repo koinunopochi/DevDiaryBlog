@@ -19,10 +19,10 @@ use App\Domain\ValueObjects\Username;
 use App\Models\EloquentArticle;
 use App\Models\EloquentProfile;
 use App\Models\User as EloquentUser;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
-use InvalidArgumentException;
 
 class EloquentArticleCardRepository implements ArticleCardListRepositoryInterface
 {
@@ -34,35 +34,55 @@ class EloquentArticleCardRepository implements ArticleCardListRepositoryInterfac
     return $query->orderBy($sortBy, $sortDirection);
   }
 
-  private function applyCursor(Builder $query, ?Cursor $cursor, string $sortBy): Builder
+
+  private function applyCursor(Builder $query, ?Cursor $cursor, string $sortBy, string $sortDirection, int $limit): Builder
   {
+    Log::debug('Entering applyCursor method', [
+      'sortBy' => $sortBy,
+      'sortDirection' => $sortDirection,
+      'limit' => $limit
+    ]);
+
+    $query->select('id', 'title', 'author_id', 'category_id', 'status', 'created_at', 'updated_at');
+
     if ($cursor) {
       $cursorData = $cursor->jsonSerialize();
-      $query->where(function ($q) use ($cursorData, $sortBy) {
-        if ($sortBy === 'created_at') {
-          $q->where($sortBy, '>=', $cursorData['createdAt'])
-          ->where(function ($subQ) use ($cursorData) {
-            $subQ->where('created_at', '>', $cursorData['createdAt'])
-            ->orWhere(function ($subSubQ) use ($cursorData) {
-              $subSubQ->where('created_at', '=', $cursorData['createdAt'])
-              ->whereRaw('STRCMP(id, ?) > 0', [$cursorData['id']]);
-            });
+      // 日時形式を変換
+      $cursorData['created_at'] = Carbon::parse($cursorData['created_at'])->format('Y-m-d H:i:s');
+      $cursorData['updated_at'] = Carbon::parse($cursorData['updated_at'])->format('Y-m-d H:i:s');
+
+      Log::debug('Cursor data', ['cursorData' => $cursorData]);
+
+      $operator = $sortDirection === 'desc' ? '<' : '>';
+
+      $query->where(function ($q) use ($cursorData, $operator) {
+        $q->where('created_at', $operator, $cursorData['created_at'])
+        ->orWhere(function ($subQ) use ($cursorData, $operator) {
+          $subQ->where('created_at', '=', $cursorData['created_at'])
+          ->where('updated_at', $operator, $cursorData['updated_at']);
+        })
+          ->orWhere(function ($subQ) use ($cursorData, $operator) {
+            $subQ->where('created_at', '=', $cursorData['created_at'])
+            ->where('updated_at', '=', $cursorData['updated_at'])
+            ->where('id', $operator, $cursorData['id']);
           });
-        } elseif ($sortBy === 'updated_at') {
-          $q->where($sortBy, '>=', $cursorData['updatedAt'])
-          ->where(function ($subQ) use ($cursorData) {
-            $subQ->where('updated_at', '>', $cursorData['updatedAt'])
-            ->orWhere(function ($subSubQ) use ($cursorData) {
-              $subSubQ->where('updated_at', '=', $cursorData['updatedAt'])
-              ->whereRaw('STRCMP(id, ?) > 0', [$cursorData['id']]);
-            });
-          });
-        } else {
-          // $sortByが不正な値の場合のエラー処理
-          throw new InvalidArgumentException("Invalid sort column: {$sortBy}");
-        }
       });
+    } else {
+      Log::debug('No cursor provided');
     }
+
+    $query->orderBy('created_at', $sortDirection)
+      ->orderBy('updated_at', $sortDirection)
+      ->orderBy('id', $sortDirection)
+      ->limit($limit + 1);
+
+    // バインディングを適用した実行可能なSQLクエリを生成
+    $sql = $query->toSql();
+    $bindings = $query->getBindings();
+    $executableSql = vsprintf(str_replace(['?'], ['\'%s\''], $sql), $bindings);
+
+    Log::debug('Executable SQL query', ['sql' => $executableSql]);
+
     return $query;
   }
 
@@ -93,23 +113,61 @@ class EloquentArticleCardRepository implements ArticleCardListRepositoryInterfac
 
   private function buildResult(Collection $articles, int $limit): array
   {
+    Log::info('buildResult: Initial articles count: ' . $articles->count());
+    Log::info('buildResult: Limit: ' . $limit);
+    Log::info('buildResult: Initial articles:', $articles->toArray());
+
     $hasNextPage = $articles->count() > $limit;
-    $articles = $articles->take($limit);
+    Log::info('buildResult: Has next page: ' . ($hasNextPage ? 'true' : 'false'));
+
+    $articles = $articles->take(limit: $limit);
+    Log::info('buildResult: Articles after take(): ' . $articles->count());
+
+    Log::info('buildResult: Articles:', $articles->toArray());
+
     $lastArticle = $articles->last();
+    if ($lastArticle) {
+      Log::info('buildResult: Last article details', [
+        'id' => $lastArticle->id,
+        'created_at' => $lastArticle->created_at,
+        'updated_at' => $lastArticle->updated_at
+      ]);
+    } else {
+      Log::info('buildResult: No last article found');
+    }
+
     $nextCursor = $lastArticle ? new Cursor(new ArticleId($lastArticle->id), new DateTime($lastArticle->created_at), new DateTime($lastArticle->updated_at)) : null;
 
-    return [
+    if ($nextCursor) {
+      Log::info('buildResult: Next cursor details', [
+        'articleId' => $nextCursor->getId()->toString(),
+        'createdAt' => $nextCursor->getCreatedAt()->toString(),
+        'updatedAt' => $nextCursor->getUpdatedAt()->toString()
+      ]);
+    } else {
+      Log::info('buildResult: No next cursor created');
+    }
+
+    $result = [
       'data' => $articles->map(fn($article) => $this->mapToDomainEntity($article)),
       'nextCursor' => $nextCursor,
       'hasNextPage' => $hasNextPage
     ];
+
+    Log::info('buildResult: Final result', [
+      'dataCount' => count($result['data']),
+      'hasNextCursor' => $result['nextCursor'] !== null,
+      'hasNextPage' => $result['hasNextPage']
+    ]);
+
+    return $result;
   }
 
   public function getArticleCards(int $limit, ?Cursor $cursor = null, array $filters = [], string $sortBy = 'created_at', string $sortDirection = 'desc'): array
   {
     $query = EloquentArticle::with(['author', 'tags']);
     $query = $this->applyFiltersAndSort($query, $filters, $sortBy, $sortDirection);
-    $query = $this->applyCursor($query, $cursor, $sortBy);
+    $query = $this->applyCursor($query, $cursor, $sortBy, $sortDirection, $limit);
 
     $articles = $query->take($limit + 1)->get();
     $result = $this->buildResult($articles, $limit);
@@ -120,12 +178,27 @@ class EloquentArticleCardRepository implements ArticleCardListRepositoryInterfac
 
   public function getByAuthorId(UserId $authorId, int $limit, ?Cursor $cursor = null, string $sortBy = 'created_at', string $sortDirection = 'desc'): array
   {
-    $query = EloquentArticle::with(['author', 'tags'])->where('author_id', $authorId->toString());
+    $query = EloquentArticle::with(['author', 'tags'])
+    ->where('author_id', $authorId->toString())
+      ->orderBy($sortBy, $sortDirection)
+      ->orderBy('id', $sortDirection);
     $query = $this->applyFiltersAndSort($query, [], $sortBy, $sortDirection);
-    $query = $this->applyCursor($query, $cursor, $sortBy);
 
-    $articles = $query->take($limit + 1)->get();
-    return $this->buildResult($articles, $limit);
+    if ($cursor) {
+      Log::info('Applying cursor', [
+        'articleId' => $cursor->getId()->toString(),
+        'createdAt' => $cursor->getCreatedAt()->toString()
+      ]);
+      $query = $this->applyCursor($query, $cursor, $sortBy,$sortDirection, $limit);
+    } else {
+      Log::info('No cursor to apply');
+    }
+
+    Log::info('Final SQL Query: ' . $query->toSql());
+    Log::info('Final SQL Bindings: ' . json_encode($query->getBindings()));
+
+    $articles = $query->limit($limit + 1)->get();
+    return $this->buildResult($articles, limit: $limit);
   }
 
   public function getByTag(TagName $tagName, int $limit, ?Cursor $cursor = null, string $sortBy = 'created_at', string $sortDirection = 'desc'): array
@@ -135,7 +208,7 @@ class EloquentArticleCardRepository implements ArticleCardListRepositoryInterfac
         $q->where('name', $tagName->toString());
       });
     $query = $this->applyFiltersAndSort($query, [], $sortBy, $sortDirection);
-    $query = $this->applyCursor($query, $cursor, $sortBy);
+    $query = $this->applyCursor($query, $cursor, $sortBy,$sortDirection, $limit);
 
     $articles = $query->take($limit + 1)->get();
     return $this->buildResult($articles, $limit);
@@ -146,7 +219,7 @@ class EloquentArticleCardRepository implements ArticleCardListRepositoryInterfac
     $query = EloquentArticle::with(['author', 'tags'])
       ->where('title', 'like', "%{$searchTerm}%");
     $query = $this->applyFiltersAndSort($query, [], $sortBy, $sortDirection);
-    $query = $this->applyCursor($query, $cursor, $sortBy);
+    $query = $this->applyCursor($query, $cursor, $sortBy,$sortDirection, $limit);
 
     $articles = $query->take($limit + 1)->get();
     return $this->buildResult($articles, $limit);
@@ -161,7 +234,7 @@ class EloquentArticleCardRepository implements ArticleCardListRepositoryInterfac
   public function getLatest(int $limit, ?Cursor $cursor = null, string $sortBy = 'created_at'): array
   {
     $query = EloquentArticle::with(['author', 'tags'])->orderBy($sortBy, 'desc');
-    $query = $this->applyCursor($query, $cursor, $sortBy);
+    $query = $this->applyCursor($query, $cursor, $sortBy,'desc', $limit);
 
     $articles = $query->take($limit + 1)->get();
     return $this->buildResult($articles, $limit);
@@ -172,7 +245,7 @@ class EloquentArticleCardRepository implements ArticleCardListRepositoryInterfac
     $query = EloquentArticle::with(['author', 'tags'])
       ->where($dateField, '>', $date->toString())
       ->orderBy($dateField, 'asc');
-    $query = $this->applyCursor($query, $cursor, $dateField);
+    $query = $this->applyCursor($query, $cursor, $dateField,'desc', $limit);
 
     $articles = $query->take($limit + 1)->get();
     return $this->buildResult($articles, $limit);
