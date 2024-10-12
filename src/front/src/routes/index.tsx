@@ -6,10 +6,11 @@ import AuthService from '@/services/AuthService';
 import { AccountService } from '@/services/AccountService';
 import { ProfileService } from '@/services/ProfileService';
 import { UserService } from '@/services/UserService';
+import ArticleRootPage from '@/views/pages/articles/ArticleRootPage';
+import RootPage from '@/views/pages/RootPage';
 
 const LoginPage = React.lazy(() => import('@/views/pages/login/LoginPage'));
 const RegisterPage = React.lazy(() => import('@/views/pages/register/Register'));
-const Page = React.lazy(() => import('@/views/pages/page/Page'));
 const EditorPage = React.lazy(() => import('@/views/pages/articles/edit/EditorPage'));
 const ArticlePage = React.lazy(() => import('@/views/pages/articles/articleId/ArticlePage'));
 const AccountPage = React.lazy(() => import('@/views/pages/settings/account/AccountPage'));
@@ -47,13 +48,14 @@ export const createRoutes = (
 
   const mainRoutes = (
     <>
-      <Route path="/" element={<Page />} />
+      <Route path="/" element={<RootPage />} />
       <Route path="/about" element={<AboutPage />} />
     </>
   );
 
   const articleRoutes = (
     <>
+      <Route path="/articles" element={<ArticleRootPage />} />
       <Route
         path="/articles/:articleId/edit"
         element={<EditorPage apiClient={apiClient} />}
