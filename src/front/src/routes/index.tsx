@@ -23,6 +23,7 @@ const UnixTimestampConverter = React.lazy(() => import('@/views/pages/tools/unix
 const ColorCodeConverter = React.lazy(() => import('@/views/pages/tools/colorCodeConverter/ColorCodeConverter'));
 const RegexTester = React.lazy(() => import('@/views/pages/tools/regexTester/RegexTester'));
 const UsernamePage = React.lazy(() => import('@/views/pages/username/UsernamePage'));
+const AboutPage = React.lazy(() => import('@/views/pages/about/AboutPage'));
 
 export const createRoutes = (
   apiClient: EnhancedApiClient,
@@ -47,6 +48,7 @@ export const createRoutes = (
   const mainRoutes = (
     <>
       <Route path="/" element={<Page />} />
+      <Route path="/about" element={<AboutPage />} />
     </>
   );
 
