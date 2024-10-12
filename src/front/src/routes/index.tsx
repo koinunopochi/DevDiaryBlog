@@ -49,7 +49,7 @@ export const createRoutes = (
 
   const mainRoutes = (
     <>
-      <Route path="/" element={<RootPage />} />
+      <Route path="/" element={<RootPage apiClient={apiClient} />} />
       <Route path="/about" element={<AboutPage />} />
     </>
   );
