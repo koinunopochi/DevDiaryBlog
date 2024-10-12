@@ -3,6 +3,7 @@ import BasePageLayout from '@components/modules/basePageLayout/BasePageLayout';
 import { Header } from '@components/blocks/header/Header';
 import { Outlet, useNavigate } from 'react-router-dom';
 import AuthService from '@/services/AuthService';
+import TabNavigation from '@components/atoms/tabNavigation/TabNavigation';
 
 interface PageLayoutProps {
   authService: AuthService;
@@ -22,6 +23,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ authService }) => {
         onLogout={handleLogout}
         onCreateAccount={() => navigate('/register')}
       />
+      <TabNavigation />
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Outlet />
       </main>
