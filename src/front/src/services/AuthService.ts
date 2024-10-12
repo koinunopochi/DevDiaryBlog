@@ -33,7 +33,14 @@ export default class AuthService {
       localStorage.setItem('userId', data.id);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      await this.userService.getUserInfo({ search_type: 'id', value: data.id });
+      const response = await this.userService.getUserInfo({
+        search_type: 'id',
+        value: data.id,
+      });
+
+      localStorage.setItem('userId', response.id);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      localStorage.setItem('profile', JSON.stringify(response.profile));
 
       return data;
     } catch (error) {
