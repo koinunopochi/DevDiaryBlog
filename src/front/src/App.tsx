@@ -16,6 +16,14 @@ import UsernamePage from '@/views/pages/username/UsernamePage';
 import EditorPage from '@/views/pages/articles/edit/EditorPage';
 import ArticlePage from './views/pages/articles/articleId/ArticlePage';
 import PageLayout from './views/components/modules/pageLayout/PageLayout';
+import ToolsRootPage from './views/pages/tools/ToolsRootPage';
+import FormatTool from './views/pages/tools/formatTool/FormatTool';
+import Base64Converter from './views/pages/tools/base64/Base64Converter';
+import NewlineConverter from './views/pages/tools/newlineConverter/NewlineConverter';
+import URLEncoderDecoder from './views/pages/tools/URLEncoderDecoder/URLEncoderDecoder';
+import UnixTimestampConverter from './views/pages/tools/unixTimestampConverter/UnixTimestampConverter';
+import ColorCodeConverter from './views/pages/tools/colorCodeConverter/ColorCodeConverter';
+import RegexTester from './views/pages/tools/regexTester/RegexTester';
 
 function App() {
   const apiClient = new EnhancedApiClient(
@@ -97,6 +105,32 @@ function App() {
                 />
               }
             />
+
+            {/* Tools */}
+            <Route path="/tools" element={<ToolsRootPage />} />
+            <Route path="/tools/base64" element={<Base64Converter />} />
+            <Route path="/tools/format" element={<FormatTool />} />
+            <Route
+              path="/tools/newline-converter"
+              element={<NewlineConverter />}
+            />
+            <Route
+              path="/tools/url-encoder-decoder"
+              element={<URLEncoderDecoder />}
+            />
+            <Route
+              path="/tools/unix-timestamp-converter"
+              element={<UnixTimestampConverter />}
+            />
+            <Route
+              path="/tools/color-code-converter"
+              element={<ColorCodeConverter />}
+            />
+            <Route
+              path="/tools/regex-tester"
+              element={<RegexTester />}
+            />
+            <Route path="/tools/*" element={<Navigate to="/tools" />} />
 
             {/* Profile */}
             <Route
