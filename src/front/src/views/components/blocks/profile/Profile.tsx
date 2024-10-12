@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, Mail, Calendar, Tag } from 'lucide-react';
 import Icon from '@components/atoms/icon/Icon';
