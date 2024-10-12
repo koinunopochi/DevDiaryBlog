@@ -3,10 +3,10 @@
 namespace Tests\Unit\Domain\ValueObjects;
 
 use Tests\TestCase;
-use App\Domain\ValueObjects\ArticleTagCollection;
+use App\Domain\ValueObjects\ArticleTagIdCollection;
 use App\Domain\ValueObjects\TagId;
 
-class ArticleTagCollectionTest extends TestCase
+class ArticleTagIdCollectionTest extends TestCase
 {
   public function setUp(): void
   {
@@ -21,10 +21,10 @@ class ArticleTagCollectionTest extends TestCase
     $tagIds = [new TagId(), new TagId()];
 
     // When
-    $tagCollection = new ArticleTagCollection($tagIds);
+    $tagCollection = new ArticleTagIdCollection($tagIds);
 
     // Then
-    $this->assertInstanceOf(ArticleTagCollection::class, $tagCollection);
+    $this->assertInstanceOf(ArticleTagIdCollection::class, $tagCollection);
   }
 
   /** @test */
@@ -34,7 +34,7 @@ class ArticleTagCollectionTest extends TestCase
     $tagIds = [new TagId(), new TagId()];
 
     // When
-    $tagCollection = new ArticleTagCollection($tagIds);
+    $tagCollection = new ArticleTagIdCollection($tagIds);
 
     // Then
     $this->assertEquals($tagIds, $tagCollection->toArray());
@@ -49,7 +49,7 @@ class ArticleTagCollectionTest extends TestCase
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
     $this->expectExceptionMessage("タグの数が上限の5を超えています");
-    new ArticleTagCollection($tagIds);
+    new ArticleTagIdCollection($tagIds);
   }
 
   /** @test */
@@ -65,10 +65,10 @@ class ArticleTagCollectionTest extends TestCase
     ];
 
     // When
-    $tagCollection = new ArticleTagCollection($tagIds);
+    $tagCollection = new ArticleTagIdCollection($tagIds);
 
     // Then
-    $this->assertInstanceOf(ArticleTagCollection::class, $tagCollection);
+    $this->assertInstanceOf(ArticleTagIdCollection::class, $tagCollection);
     $this->assertEquals(5, $tagCollection->count());
   }
 
@@ -81,7 +81,7 @@ class ArticleTagCollectionTest extends TestCase
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
     $this->expectExceptionMessage("無効なTagIdタイプです: string");
-    new ArticleTagCollection($tagIds);
+    new ArticleTagIdCollection($tagIds);
   }
 
   /** @test */
@@ -94,7 +94,7 @@ class ArticleTagCollectionTest extends TestCase
     // When & Then
     $this->expectException(\InvalidArgumentException::class);
     $this->expectExceptionMessage("重複するTagIdが存在します");
-    new ArticleTagCollection($tagIds);
+    new ArticleTagIdCollection($tagIds);
   }
 
   /** @test */
@@ -104,7 +104,7 @@ class ArticleTagCollectionTest extends TestCase
     $tagIds = [new TagId(), new TagId(), new TagId()];
 
     // When
-    $tagCollection = new ArticleTagCollection($tagIds);
+    $tagCollection = new ArticleTagIdCollection($tagIds);
 
     // Then
     $this->assertEquals(3, $tagCollection->count());
@@ -115,8 +115,8 @@ class ArticleTagCollectionTest extends TestCase
   {
     // Given
     $tagIds = [new TagId(), new TagId()];
-    $collection1 = new ArticleTagCollection($tagIds);
-    $collection2 = new ArticleTagCollection($tagIds);
+    $collection1 = new ArticleTagIdCollection($tagIds);
+    $collection2 = new ArticleTagIdCollection($tagIds);
 
     // When & Then
     $this->assertTrue($collection1->equals($collection2));
@@ -126,8 +126,8 @@ class ArticleTagCollectionTest extends TestCase
   public function testEquals_DifferentCollection()
   {
     // Given
-    $collection1 = new ArticleTagCollection([new TagId(), new TagId()]);
-    $collection2 = new ArticleTagCollection([new TagId(), new TagId()]);
+    $collection1 = new ArticleTagIdCollection([new TagId(), new TagId()]);
+    $collection2 = new ArticleTagIdCollection([new TagId(), new TagId()]);
 
     // When & Then
     $this->assertFalse($collection1->equals($collection2));
@@ -137,8 +137,8 @@ class ArticleTagCollectionTest extends TestCase
   public function testEquals_DifferentCount()
   {
     // Given
-    $collection1 = new ArticleTagCollection([new TagId(), new TagId()]);
-    $collection2 = new ArticleTagCollection([new TagId()]);
+    $collection1 = new ArticleTagIdCollection([new TagId(), new TagId()]);
+    $collection2 = new ArticleTagIdCollection([new TagId()]);
 
     // When & Then
     $this->assertFalse($collection1->equals($collection2));
@@ -151,7 +151,7 @@ class ArticleTagCollectionTest extends TestCase
     $tagId1 = new TagId();
     $tagId2 = new TagId();
     $tagIds = [$tagId1, $tagId2];
-    $tagCollection = new ArticleTagCollection($tagIds);
+    $tagCollection = new ArticleTagIdCollection($tagIds);
 
     // When
     $result = $tagCollection->map(function (TagId $tagId) {
@@ -169,7 +169,7 @@ class ArticleTagCollectionTest extends TestCase
   public function testMap_WithEmptyCollection()
   {
     // Given
-    $tagCollection = new ArticleTagCollection([]);
+    $tagCollection = new ArticleTagIdCollection([]);
 
     // When
     $result = $tagCollection->map(function (TagId $tagId) {
@@ -188,7 +188,7 @@ class ArticleTagCollectionTest extends TestCase
     $tagId1 = new TagId();
     $tagId2 = new TagId();
     $tagIds = [$tagId1, $tagId2];
-    $tagCollection = new ArticleTagCollection($tagIds);
+    $tagCollection = new ArticleTagIdCollection($tagIds);
 
     // When
     $result = $tagCollection->map(function (TagId $tagId) {

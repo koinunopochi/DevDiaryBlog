@@ -11,7 +11,7 @@ use App\Domain\ValueObjects\UserId;
 use App\Domain\ValueObjects\ArticleCategoryId;
 use App\Domain\ValueObjects\ArticleStatus;
 use App\Domain\ValueObjects\DateTime;
-use App\Domain\ValueObjects\ArticleTagCollection;
+use App\Domain\ValueObjects\ArticleTagIdCollection;
 use App\Models\EloquentArticle;
 use App\Models\EloquentTag;
 use Illuminate\Support\Collection;
@@ -133,7 +133,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
       new ArticleContent($eloquentArticle->content),
       new UserId($eloquentArticle->author_id),
       new ArticleCategoryId($eloquentArticle->category_id),
-      new ArticleTagCollection($tagIds),
+      new ArticleTagIdCollection($tagIds),
       new ArticleStatus($eloquentArticle->status),
       new DateTime($eloquentArticle->created_at),
       new DateTime($eloquentArticle->updated_at)

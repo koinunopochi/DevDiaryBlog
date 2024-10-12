@@ -96,6 +96,7 @@ class SaveArticleUseCaseTest extends TestCase
 
     // 既存の記事を保存
     $initialRequest = new Request([
+      'id'=>$existingArticleId,
       'title' => '初期タイトル',
       'content' => '初期内容',
       'authorId' => $user->id,
@@ -113,6 +114,7 @@ class SaveArticleUseCaseTest extends TestCase
 
     // 更新リクエスト
     $updateRequest = new Request([
+      'id' => $existingArticleId,
       'title' => '更新されたタイトル',
       'content' => '更新された内容',
       'authorId' => $user->id,
