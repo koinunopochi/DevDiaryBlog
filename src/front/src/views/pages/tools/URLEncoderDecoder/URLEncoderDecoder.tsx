@@ -18,7 +18,7 @@ const URLEncoderDecoder = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
+    <div className="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-night-sky border shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-4">URL エンコーダー/デコーダー</h2>
       <div className="space-y-4">
         <textarea

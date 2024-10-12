@@ -53,10 +53,6 @@ export class UserService {
         `/api/user?${queryString}`
       );
 
-      localStorage.setItem('userId', response.id);
-      localStorage.setItem('user', JSON.stringify(response.user));
-      localStorage.setItem('profile', JSON.stringify(response.profile));
-
       return response;
     } catch (error) {
       console.error('ユーザー情報の取得に失敗しました', error);

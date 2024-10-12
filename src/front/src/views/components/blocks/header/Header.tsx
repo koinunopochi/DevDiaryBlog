@@ -3,7 +3,6 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { User,LogOut, ChevronDown } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useNavigate } from 'react-router-dom';
-import './header.css';
 import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
 
 type UserProfile = {
@@ -75,7 +74,7 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
 
   return (
     <header className="border-b-2 ">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
         <div className="flex items-center">
           <svg
             width="32"
