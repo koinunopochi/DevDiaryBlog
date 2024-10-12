@@ -83,8 +83,8 @@ const ArticleRootPage = () => {
               onClick={() => setSelectedCategory(category)}
               className={`px-4 py-2 rounded-full ${
                 selectedCategory === category
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
+                  ? 'bg-blue-500 text-white border'
+                  : 'bg-white dark:bg-night-sky text-gray-700 hover:bg-gray-100 border'
               } transition-colors duration-200`}
             >
               {category}
@@ -96,7 +96,7 @@ const ArticleRootPage = () => {
           {filteredArticles.map((article) => (
             <div
               key={article.id}
-              className="bg-white rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+              className="bg-white dark:bg-night-sky rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 border"
             >
               <img
                 src={article.image}
