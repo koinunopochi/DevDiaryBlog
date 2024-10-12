@@ -1,7 +1,7 @@
 import React from 'react';
 import './page.css';
 
-export const Page: React.FC = () => {
+const Page: React.FC = () => {
   return (
     <article>
       <section className="storybook-page">
@@ -74,3 +74,5 @@ export const Page: React.FC = () => {
     </article>
   );
 };
+
+export default Page;
