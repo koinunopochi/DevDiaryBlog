@@ -11,7 +11,7 @@ const BasePageLayout: React.FC<BasePageLayoutProps> = ({
 }) => {
   return (
     <div
-      className={`min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 ${className}`}
+      className={`min-h-screen ${className}`}
     >
       {children}
     </div>

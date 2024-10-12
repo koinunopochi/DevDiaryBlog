@@ -46,20 +46,24 @@ const AboutPage: React.FC<{ blogInfo?: Partial<BlogInfo> }> = ({
   } = { ...defaultBlogInfo, ...blogInfo };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8 bg-gray-50 rounded-lg">
+    <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8 bg-gray-50 dark:bg-night-sky rounded-lg border">
       <h1 className="text-4xl font-extrabold text-indigo-600 mb-6">
         {blogName}について
       </h1>
 
-      <section className="mb-12 bg-white rounded-lg p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+      <section className="mb-12 bg-white dark:bg-night-sky rounded-lg p-6 border">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
           ブログの紹介
         </h2>
-        <p className="text-gray-600 mb-4 leading-relaxed">{blogDescription}</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
+          {blogDescription}
+        </p>
       </section>
 
-      <section className="mb-12 bg-white rounded-lg p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">運営紹介</h2>
+      <section className="mb-12 bg-white dark:bg-night-sky rounded-lg p-6 border">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
+          運営紹介
+        </h2>
         <div className="flex items-center mb-4">
           <img
             src={authorImgUrl}
@@ -67,33 +71,39 @@ const AboutPage: React.FC<{ blogInfo?: Partial<BlogInfo> }> = ({
             className="w-20 h-20 rounded-full mr-4"
           />
           <div>
-            <h3 className="text-xl font-medium text-gray-900">{authorName}</h3>
+            <h3 className="text-xl font-medium text-gray-900 dark:text-gray-200">
+              {authorName}
+            </h3>
           </div>
         </div>
-        <p className="text-gray-600 mb-4 leading-relaxed">{authorBio}</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
+          {authorBio}
+        </p>
       </section>
 
-      <section className="mb-12 bg-white rounded-lg p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+      <section className="mb-12 bg-white dark:bg-night-sky rounded-lg p-6 border">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
           主なトピック
         </h2>
         <div className="grid grid-cols-2 gap-4">
           {topics.map((topic, index) => (
             <div
               key={index}
-              className="bg-indigo-100 rounded-lg p-1 flex items-center justify-center"
+              className="bg-indigo-100 dark:bg-night-sky rounded-lg p-1 flex items-center justify-center border"
             >
-              <p className="text-indigo-700 font-medium mt-3 text-center">{topic}</p>
+              <p className="text-indigo-700 font-medium mt-3 text-center">
+                {topic}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="bg-white rounded-lg p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+      <section className="bg-white dark:bg-night-sky rounded-lg p-6 border">
+        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
           お問い合わせ・フォロー
         </h2>
-        <p className="text-gray-600 mb-4 leading-relaxed">
+        <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
           ご質問、フィードバック、またはコラボレーションのご提案がありましたら、以下のSNSでお気軽にお問い合わせください。新しいアイデアや技術的な議論を歓迎します！
         </p>
         <div className="flex space-x-4 mt-4">

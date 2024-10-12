@@ -25,7 +25,7 @@ const ArticlePreview: React.FC<ArticlePreviewProps> = ({
   onTagClick,
 }) => {
   return (
-    <div className="bg-white dark:bg-cosmic-blue rounded-lg p-4 transition-shadow duration-300">
+    <div className="bg-white dark:bg-night-sky rounded-lg p-4 transition-shadow duration-300 border">
       <Link to={`/articles/${id}`} className="block mb-2">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-starlight">
           {title}

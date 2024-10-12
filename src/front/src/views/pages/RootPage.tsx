@@ -47,7 +47,7 @@ const RootPage = () => {
     <div className="">
         <section className="mb-16">
           <h2 className="text-3xl font-bold mb-8">注目の記事</h2>
-          <div className="bg-white rounded-lg overflow-hidden shadow-lg">
+          <div className="bg-white dark:bg-night-sky border rounded-lg overflow-hidden shadow-lg">
             <img
               src={featuredPost.image}
               alt={featuredPost.title}
@@ -73,7 +73,7 @@ const RootPage = () => {
             </h2>
             <div className="space-y-4">
               {recentPosts.map((post) => (
-                <div key={post.id} className="bg-white p-4 rounded-lg shadow">
+                <div key={post.id} className="bg-white dark:bg-night-sky border p-4 rounded-lg shadow">
                   <h3 className="font-semibold mb-1">{post.title}</h3>
                   <span className="text-sm text-blue-500">{post.category}</span>
                 </div>
@@ -90,7 +90,7 @@ const RootPage = () => {
             </h2>
             <div className="space-y-4">
               {popularPosts.map((post) => (
-                <div key={post.id} className="bg-white p-4 rounded-lg shadow">
+                <div key={post.id} className="bg-white dark:bg-night-sky border p-4 rounded-lg shadow">
                   <h3 className="font-semibold mb-1">{post.title}</h3>
                   <span className="text-sm text-gray-500">
                     {post.views.toLocaleString()} views
@@ -109,7 +109,7 @@ const RootPage = () => {
             {categories.map((category) => (
               <div
                 key={category.name}
-                className="bg-white p-4 rounded-lg shadow text-center"
+                className="bg-white dark:bg-night-sky border p-4 rounded-lg shadow text-center"
               >
                 <h3 className="font-semibold mb-1">{category.name}</h3>
                 <span className="text-sm text-gray-500">
