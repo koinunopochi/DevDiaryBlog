@@ -4,7 +4,7 @@ import { Heart } from 'lucide-react';
 import Tag from '@components/atoms/tag/Tag';
 
 export interface ArticlePreviewProps {
-  id: number;
+  id: string;
   title: string;
   author: {
     displayName: string;
@@ -12,7 +12,7 @@ export interface ArticlePreviewProps {
     profileImage: string;
   };
   likes: number;
-  tags: { id: string; name: string }[];
+  tags: string[];
   onTagClick?: (name: string, id?: string) => void;
 }
 
@@ -49,7 +49,7 @@ const ArticlePreview: React.FC<ArticlePreviewProps> = ({
       </div>
       <div className="flex flex-wrap gap-2 mt-2">
         {tags.map((tag) => (
-          <Tag key={tag.id} id={tag.id} name={tag.name} onClick={onTagClick} />
+          <Tag name={tag} onClick={onTagClick} />
         ))}
       </div>
     </div>
