@@ -8,6 +8,7 @@ import { ProfileService } from '@/services/ProfileService';
 import { UserService } from '@/services/UserService';
 import ArticleRootPage from '@/views/pages/articles/ArticleRootPage';
 import RootPage from '@/views/pages/RootPage';
+import WishesRootPage from '@/views/pages/wishes/WishesRootPage';
 
 const LoginPage = React.lazy(() => import('@/views/pages/login/LoginPage'));
 const RegisterPage = React.lazy(() => import('@/views/pages/register/Register'));
@@ -48,7 +49,7 @@ export const createRoutes = (
 
   const mainRoutes = (
     <>
-      <Route path="/" element={<RootPage />} />
+      <Route path="/" element={<RootPage apiClient={apiClient} />} />
       <Route path="/about" element={<AboutPage />} />
     </>
   );
@@ -141,5 +142,17 @@ export const createRoutes = (
     />
   );
 
-  return { authRoutes, mainRoutes, articleRoutes, settingsRoutes, toolRoutes, profileRoutes };
+  const wishRoutes = (
+    <Route path="wish" element={<WishesRootPage />} />
+  )
+
+  return {
+    authRoutes,
+    mainRoutes,
+    articleRoutes,
+    settingsRoutes,
+    toolRoutes,
+    profileRoutes,
+    wishRoutes,
+  };
 };
