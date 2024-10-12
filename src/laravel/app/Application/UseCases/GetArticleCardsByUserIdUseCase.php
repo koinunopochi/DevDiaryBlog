@@ -35,7 +35,7 @@ class GetArticleCardsByUserIdUseCase
       'articles' => $result['data']->map(fn(ArticleCard $article) => $article->toArray()),
       'nextCursor' => $result['nextCursor'],
       'hasNextPage' => $result['hasNextPage'],
-      'totalItems' => $result['totalItems'] ?? $this->articleCardRepository->getTotalCount()
+      'totalItems' => $result['totalItems'] ?? $this->articleCardRepository->getTotalCount(['author_id' => $userId->toString()])
     ];
   }
 }

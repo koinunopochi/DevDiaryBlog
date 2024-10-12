@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Application\UseCases\GetLatestArticleCardsUseCase;
-use App\Domain\ValueObjects\ArticleId;
-use App\Domain\ValueObjects\DateTime;
 use App\Domain\ValueObjects\Cursor;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,11 +21,7 @@ class GetLatestArticleCardsController extends Controller
   {
     try {
       $limit = $request->input('limit', 10);
-      $cursor = $request->input('cursor') ? new Cursor(
-        new ArticleId($request->input('cursor.id')),
-        new DateTime($request->input('cursor.createdAt')),
-        new DateTime($request->input('cursor.updatedAt'))
-      ) : null;
+      $cursor = $request->input('cursor') ? Cursor::fromBase64($request->input('cursor')) : null;
       $sortBy = $request->input('sortBy', 'created_at');
 
       $result = $this->getLatestArticleCardsUseCase->execute(
@@ -38,7 +32,7 @@ class GetLatestArticleCardsController extends Controller
 
       return response()->json([
         'articles' => $result['articles'],
-        'nextCursor' => $result['nextCursor'],
+        'nextCursor' => Cursor::fromJson(json_encode($result['nextCursor']))->toBase64(),
         'hasNextPage' => $result['hasNextPage'],
         'totalItems' => $result['totalItems']
       ]);
