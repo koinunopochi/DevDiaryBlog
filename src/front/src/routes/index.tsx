@@ -56,7 +56,10 @@ export const createRoutes = (
 
   const articleRoutes = (
     <>
-      <Route path="/articles" element={<ArticleRootPage />} />
+      <Route
+        path="/articles"
+        element={<ArticleRootPage apiClient={apiClient} />}
+      />
       <Route
         path="/articles/:articleId/edit"
         element={<EditorPage apiClient={apiClient} />}
