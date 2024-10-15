@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
+  <style>
+    .main-text { font: bold 48px 'Arial', sans-serif; }
+    .morse { stroke: #24292e; stroke-width: 2; }
+    .colored-morse { stroke: #FFA500; stroke-width: 2; }
+  </style>
+  <rect x="0" y="0" width="300" height="100" fill="#ffffff"/>
+  <text x="10" y="60" class="main-text" fill="#24292e">tetex.tech</text>
+  
+  <!-- Main line -->
+  <line x1="10" y1="75" x2="260" y2="75" class="morse" />
+  
+  <!-- CODE in Morse code (compressed within C width) -->
+  <!-- C: -.- -->
+  <line x1="265" y1="75" x2="268" y2="75" class="colored-morse" />
+  <line x1="269" y1="75" x2="270" y2="75" class="colored-morse" />
+  <line x1="271" y1="75" x2="274" y2="75" class="colored-morse" />
+  <!-- O: --- -->
+  <line x1="275" y1="75" x2="278" y2="75" class="morse" />
+  <line x1="279" y1="75" x2="282" y2="75" class="morse" />
+  <line x1="283" y1="75" x2="286" y2="75" class="morse" />
+  <!-- D: -.. -->
+  <line x1="287" y1="75" x2="290" y2="75" class="colored-morse" />
+  <line x1="291" y1="75" x2="292" y2="75" class="colored-morse" />
+  <line x1="293" y1="75" x2="294" y2="75" class="colored-morse" />
+  <!-- E: . -->
+  <line x1="295" y1="75" x2="296" y2="75" class="morse" />
+</svg>
