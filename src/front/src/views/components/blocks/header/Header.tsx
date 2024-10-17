@@ -141,7 +141,10 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
               </MenuItems>
             </Menu>
           ) : (
-            <div className="space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <button>
+                <ThemeToggle className="ml-2" />
+              </button>
               <button
                 onClick={onLogin}
                 className={`${buttonBaseStyle} hover:opacity-90`}
