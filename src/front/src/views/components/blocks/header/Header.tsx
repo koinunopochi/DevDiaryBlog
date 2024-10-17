@@ -79,8 +79,8 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
     twMerge(
       'flex items-center w-full text-left px-4 py-2 text-sm',
       active
-        ? 'bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-gray-100'
-        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
+        ? `bg-opacity-10 text-${theme.colors.primary}`
+        : `text-${theme.colors.textPrimary} hover:bg-opacity-5`
     );
 
   const buttonBaseStyle = `
@@ -98,7 +98,14 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
         <div>
           {userProfile ? (
             <Menu as="div" className="relative inline-block text-left">
-              <MenuButton className="inline-flex items-center justify-center w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+              <MenuButton
+                className="inline-flex items-center justify-center w-full rounded-md border px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200"
+                style={{
+                  backgroundColor: theme.colors.backgroundMain,
+                  borderColor: theme.colors.borderPrimary,
+                  color: theme.colors.textPrimary,
+                }}
+              >
                 <Avatar
                   src={userProfile.avatarUrl}
                   alt={userProfile.displayName}
@@ -108,13 +115,24 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
                 <ChevronDown className="ml-2 h-5 w-5" aria-hidden="true" />
               </MenuButton>
 
-              <MenuItems className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <MenuItems
+                className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg ring-1 ring-opacity-5 focus:outline-none"
+                style={{
+                  backgroundColor: theme.colors.backgroundMain,
+                  borderColor: theme.colors.borderPrimary,
+                }}
+              >
                 <div className="py-1">
                   <MenuItem>
                     {({ active }) => (
                       <button
                         onClick={toMyPage}
                         className={menuItemClass({ active })}
+                        style={{
+                          color: active
+                            ? theme.colors.primary
+                            : theme.colors.textPrimary,
+                        }}
                       >
                         <User className="mr-2" />
                         マイページ
@@ -123,7 +141,9 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
                   </MenuItem>
                   <MenuItem>
                     {({ active }) => (
-                      <ThemeToggle className={menuItemClass({ active })} />
+                      <ThemeToggle
+                        className={menuItemClass({ active })}
+                      />
                     )}
                   </MenuItem>
                   <MenuItem>
@@ -131,6 +151,11 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
                       <button
                         onClick={onLogout}
                         className={menuItemClass({ active })}
+                        style={{
+                          color: active
+                            ? theme.colors.primary
+                            : theme.colors.textPrimary,
+                        }}
                       >
                         <LogOut className="mr-2" />
                         ログアウト
