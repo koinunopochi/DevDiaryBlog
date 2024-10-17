@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffa500;stop-opacity:0.7" />
+      <stop offset="100%" style="stop-color:#e69400;stop-opacity:0.7" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <rect width="1200" height="600" fill="url(#grad1)" />
+  
+  <circle cx="200" cy="150" r="80" fill="#cd9327" opacity="0.6" />
+  <circle cx="1000" cy="450" r="100" fill="#cd9327" opacity="0.6" />
+  
+  <g fill="#24292e" opacity="0.8" filter="url(#shadow)">
+    <path d="M600 200 L650 300 L600 400 L550 300 Z" />
+    <rect x="400" y="250" width="100" height="100" rx="20" />
+    <circle cx="800" cy="300" r="50" />
+  </g>
+  
+  <style>
+    @media (prefers-color-scheme: dark) {
+      #grad1 stop:first-child { stop-color: #1a1a1a; }
+      #grad1 stop:last-child { stop-color: #333333; }
+      circle { fill: #ffa500; }
+      g { fill: #e0e0e0; }
+      text { fill: #e0e0e0; }
+    }
+  </style>
+</svg>
