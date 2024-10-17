@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from '@/views/components/providers/ThemeProvider';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import PageLayout from '@/views/components/modules/pageLayout/PageLayout';
 import NotFound from '@/views/components/atoms/notFound/NotFound';
 import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';

@@ -3,8 +3,8 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { User,LogOut, ChevronDown } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useNavigate } from 'react-router-dom';
-import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
 import WithCharacterLog from '@/img/with_character_logo.svg';
+import ThemeToggle from '@/views/components/atoms/themeToggle/ThemeToggle';
 
 type UserProfile = {
   displayName: string;
@@ -107,7 +107,7 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
                   </MenuItem>
                   <MenuItem>
                     {({ active }) => (
-                      <DarkModeToggle className={menuItemClass({ active })} />
+                      <ThemeToggle className={menuItemClass({ active })} />
                     )}
                   </MenuItem>
                   <MenuItem>

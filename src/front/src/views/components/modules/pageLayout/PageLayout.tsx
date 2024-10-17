@@ -4,6 +4,7 @@ import { Header } from '@components/blocks/header/Header';
 import { Outlet, useNavigate } from 'react-router-dom';
 import AuthService from '@/services/AuthService';
 import TabNavigation from '@components/atoms/tabNavigation/TabNavigation';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface PageLayoutProps {
   authService: AuthService;
@@ -11,6 +12,7 @@ interface PageLayoutProps {
 
 const PageLayout: React.FC<PageLayoutProps> = ({ authService }) => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   const handleLogout = async () => {
     await authService.logout();
@@ -27,8 +29,20 @@ const PageLayout: React.FC<PageLayoutProps> = ({ authService }) => {
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Outlet />
       </main>
-      <footer className="bg-gray-100 dark:bg-gray-800 py-4">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 dark:text-gray-300">
+      <footer
+        className="py-4"
+        style={{
+          backgroundColor: theme.colors.backgroundSecondary,
+          color: theme.colors.accent1,
+        }}
+      >
+        <div
+          className="container mx-auto px-4 sm:px-6 lg:px-8 text-center"
+          style={{
+            backgroundColor: theme.colors.backgroundSecondary,
+            color: theme.colors.accent1,
+          }}
+        >
           © {new Date().getFullYear()} Your Company Name. All rights reserved.
         </div>
       </footer>
