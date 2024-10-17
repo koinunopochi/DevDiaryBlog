@@ -70,7 +70,7 @@ const SaveSettingsModal: React.FC<SaveSettingsModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center overflow-auto">
-      <div className="bg-white dark:bg-night-sky p-6 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-background-main p-6 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <h2 className="text-2xl font-bold mb-4">保存設定</h2>
         <div className="mb-6">
           <TagManager
@@ -83,7 +83,7 @@ const SaveSettingsModal: React.FC<SaveSettingsModalProps> = ({
         <div className="mb-6">
           <label
             htmlFor="category-list"
-            className="block text-gray-700 dark:text-moonlight text-sm sm:text-base font-bold mb-2"
+            className="block text-sm sm:text-base font-bold mb-2"
           >
             カテゴリー
           </label>
@@ -99,13 +99,13 @@ const SaveSettingsModal: React.FC<SaveSettingsModalProps> = ({
         <div className="flex justify-end space-x-4">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-black rounded focus:outline-none focus:shadow-outline"
+            className="px-4 py-2 border border-secondary hover:bg-accent1 hover:text-inverted rounded focus:outline-none focus:shadow-outline"
           >
             キャンセル
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-cosmic-blue hover:bg-blue-600 text-white rounded focus:outline-none focus:shadow-outline"
+            className="px-4 py-2 bg-background-secondary hover:bg-accent1 hover:text-inverted rounded focus:outline-none focus:shadow-outline"
           >
             保存
           </button>

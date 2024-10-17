@@ -79,10 +79,9 @@ const TagManager: React.FC<TagManagerProps> = ({
             className={`shadow appearance-none border rounded w-full 
               py-2 px-3 sm:py-2.5 sm:px-4
               text-sm sm:text-base
-              text-gray-700 dark:text-starlight 
-              bg-white dark:bg-night-sky
+              bg-background-main
               leading-tight focus:outline-none 
-              focus:shadow-outline focus:border-cosmic-blue dark:focus:border-starlight
+              focus:shadow-outline
               box-border ${
                 error && isTouched
                   ? 'border-red-500 dark:border-red-400'
@@ -93,16 +92,17 @@ const TagManager: React.FC<TagManagerProps> = ({
             onBlur={handleBlur}
             placeholder="タグを選択または作成"
           />
-          <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-night-sky py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Combobox.Options
+            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-background-secondary
+ py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+          >
             {filteredTags.map((tag) => (
               <Combobox.Option
                 key={tag}
                 value={tag}
                 className={({ active }) =>
                   `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active
-                      ? 'bg-cosmic-blue text-white'
-                      : 'text-gray-900 dark:text-starlight'
+                    active ? 'bg-accent1 text-inverted' : 'text-primary'
                   }`
                 }
               >
@@ -114,9 +114,7 @@ const TagManager: React.FC<TagManagerProps> = ({
                 value={query}
                 className={({ active }) =>
                   `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                    active
-                      ? 'bg-cosmic-blue text-white'
-                      : 'text-gray-900 dark:text-starlight'
+                    active ? 'bg-accent1 text-inverted' : 'text-primary'
                   }`
                 }
                 onClick={() => handleCreateTag(query)}

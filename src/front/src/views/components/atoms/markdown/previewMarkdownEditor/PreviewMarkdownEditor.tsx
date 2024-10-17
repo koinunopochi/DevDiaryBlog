@@ -60,7 +60,7 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
   const DisplayModeButton = () => (
     <button
       onClick={toggleDisplayMode}
-      className="absolute top-0.5 right-1 px-2 py-1.5 rounded-md bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-50"
+      className="absolute top-0.5 right-1 px-2 py-1.5 rounded-md bg-background-main hover:bg-background-secondary transition-colors z-50"
       aria-label="Toggle display mode"
       title="Toggle display mode"
     >
@@ -104,7 +104,7 @@ const PreviewMarkdownEditor: React.FC<PreviewMarkdownEditorProps> = ({
                 h-full rounded-md
               `}
             >
-              <div className="h-7 flex items-center justify-between  border-b border-gray-200 bg-white">
+              <div className="h-7 flex items-center justify-between  border-b border-gray-200 bg-white rounded-sm">
                 <span className="text-sm font-medium text-black pl-3">
                   Preview
                 </span>

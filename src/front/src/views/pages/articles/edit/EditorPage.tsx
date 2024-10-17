@@ -153,7 +153,7 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
     return (
       <div className="flex justify-center items-center h-screen">
         <PageHead />
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2"></div>
       </div>
     );
   }
@@ -167,11 +167,11 @@ const EditorPage: React.FC<EditorPageProps> = ({ apiClient }) => {
           value={article.title}
           onChange={handleTitleChange}
           placeholder="記事タイトル"
-          className="flex-grow p-2 border rounded bg-white dark:bg-night-sky text-gray-900 dark:text-white"
+          className="flex-grow p-2 border rounded bg-background-main"
         />
         <button
           onClick={() => setIsModalOpen(true)}
-          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
+          className="px-6 py-2 bg-background-secondary text-primary hover:bg-accent2 transition duration-200 rounded-md"
         >
           保存
         </button>
