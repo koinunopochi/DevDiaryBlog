@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { themes, ThemeName } from '@/themes/themes';
 
 type ThemeContextType = {
@@ -13,6 +13,10 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [themeName, setThemeName] = useState<ThemeName>('light');
+
+  useEffect(() => {
+    document.documentElement.className = `theme-${themeName}`;
+  }, [themeName]);
 
   const value = {
     themeName,

@@ -4,9 +4,6 @@ import { Heart, Clock } from 'lucide-react';
 import Tag from '@components/atoms/tag/Tag';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
-import { useTheme } from '@/contexts/ThemeContext';
-import { getThemeClasses } from '@/themes/getThemeClasses';
-
 
 const truncateUsername = (username: string, maxLength: number = 15) => {
   if (username.length <= maxLength) return username;
@@ -18,8 +15,6 @@ const EnhancedTooltip: React.FC<{
   children: React.ReactNode;
 }> = ({ author, children }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const { theme } = useTheme();
-  const themeClasses = getThemeClasses(theme.colors);
 
   return (
     <div className="relative inline-block">
@@ -30,14 +25,10 @@ const EnhancedTooltip: React.FC<{
         {children}
       </div>
       {isVisible && (
-        <div
-          className={`absolute z-10 p-3 text-sm rounded shadow-lg w-auto ${themeClasses.backgroundSecondary} ${themeClasses.textInverted}`}
-        >
+        <div className="absolute z-10 p-3 text-sm rounded shadow-lg w-auto bg-background-secondary text-accent1">
           <div>
             <span>{author.displayName}</span>
-            <span className={themeClasses.textSecondary}>
-              (@{author.username})
-            </span>
+            <span className="text-text-secondary">(@{author.username})</span>
           </div>
         </div>
       )}
@@ -71,8 +62,6 @@ const ArticlePreview: React.FC<ArticlePreviewProps> = ({
   onTagClick,
 }) => {
   const navigate = useNavigate();
-  const { theme } = useTheme();
-  const themeClasses = getThemeClasses(theme.colors);
 
   const handleArticleClick = () => {
     navigate(`/articles/${id}`);
@@ -85,21 +74,15 @@ const ArticlePreview: React.FC<ArticlePreviewProps> = ({
   };
 
   return (
-    <div
-      className={`rounded-lg p-5 transition-all duration-300 border hover:shadow-md ${themeClasses.backgroundMain} ${themeClasses.borderPrimary} hover:${themeClasses.primary}`}
-    >
+    <div className="rounded-lg p-5 transition-all duration-300 border hover:shadow-md bg-background-main border-border-primary hover:border-primary">
       <div
         className="cursor-pointer transform transition-transform duration-300 hover:scale-[1.02]"
         onClick={handleArticleClick}
       >
-        <h2
-          className={`text-xl font-semibold mb-2 ${themeClasses.textPrimary} hover:${themeClasses.primary}`}
-        >
+        <h2 className="text-xl font-semibold mb-2 text-text-primary hover:text-primary">
           {title}
         </h2>
-        <div
-          className={`flex items-center justify-between text-sm mb-2 ${themeClasses.textSecondary}`}
-        >
+        <div className="flex items-center justify-between text-sm mb-2 text-text-secondary">
           <div className="flex items-center">
             <EnhancedTooltip author={author}>
               <Link
@@ -117,12 +100,12 @@ const ArticlePreview: React.FC<ArticlePreviewProps> = ({
             </EnhancedTooltip>
           </div>
           <div className="flex items-center">
-            <Heart size={16} className={`mr-1 ${themeClasses.error}`} />
+            <Heart size={16} className="mr-1 text-error" />
             <span>{likes}</span>
           </div>
         </div>
         {(createdAt || updatedAt) && (
-          <div className={`text-xs mb-2 ${themeClasses.textSecondary}`}>
+          <div className="text-xs mb-2 text-text-secondary">
             <Clock size={12} className="inline-block mr-1" />
             {createdAt && <span>作成: {formatDate(createdAt)}</span>}
             {updatedAt && createdAt !== updatedAt && (

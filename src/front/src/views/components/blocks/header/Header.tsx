@@ -5,7 +5,6 @@ import { twMerge } from 'tailwind-merge';
 import { useNavigate } from 'react-router-dom';
 import WithCharacterLog from '@/img/with_character_logo.svg';
 import ThemeToggle from '@/views/components/atoms/themeToggle/ThemeToggle';
-import { useTheme } from '@/contexts/ThemeContext';
 
 type UserProfile = {
   displayName: string;
@@ -43,44 +42,43 @@ const Avatar = ({
 export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const navigate = useNavigate();
-  const { theme } = useTheme();
 
-  useEffect(() => {
-    const storedProfile = localStorage.getItem('profile');
-    if (storedProfile) {
-      try {
-        setUserProfile(JSON.parse(storedProfile));
-      } catch (error) {
-        console.error('Error parsing profile from localStorage:', error);
-      }
-    }
-  }, []);
+   useEffect(() => {
+     const storedProfile = localStorage.getItem('profile');
+     if (storedProfile) {
+       try {
+         setUserProfile(JSON.parse(storedProfile));
+       } catch (error) {
+         console.error('Error parsing profile from localStorage:', error);
+       }
+     }
+   }, []);
 
-  const toMyPage = () => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      try {
-        const { name } = JSON.parse(user);
-        if (name) {
-          navigate(`/${name}`);
-        } else {
-          throw new Error('User name not found');
-        }
-      } catch (error) {
-        console.error('Error parsing user from localStorage:', error);
-        alert('エラーが発生しました。ログインしてください。');
-      }
-    } else {
-      alert('マイページにアクセスするにはログインしてください。');
-    }
-  };
+   const toMyPage = () => {
+     const user = localStorage.getItem('user');
+     if (user) {
+       try {
+         const { name } = JSON.parse(user);
+         if (name) {
+           navigate(`/${name}`);
+         } else {
+           throw new Error('User name not found');
+         }
+       } catch (error) {
+         console.error('Error parsing user from localStorage:', error);
+         alert('エラーが発生しました。ログインしてください。');
+       }
+     } else {
+       alert('マイページにアクセスするにはログインしてください。');
+     }
+   };
 
   const menuItemClass = ({ active }: { active: boolean }) =>
     twMerge(
       'flex items-center w-full text-left px-4 py-2 text-sm',
       active
-        ? `bg-opacity-10 text-${theme.colors.primary}`
-        : `text-${theme.colors.textPrimary} hover:bg-opacity-5`
+        ? 'hover:bg-background-main hover:text-accent1 '
+        : 'text-text-primary hover:bg-background-main hover:text-accent1'
     );
 
   const buttonBaseStyle = `
@@ -90,7 +88,7 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
   `;
 
   return (
-    <header className="border-b-2 ">
+    <header className="border-b-2 border-border-primary">
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
         <div className="flex items-center">
           <img src={WithCharacterLog} alt="ロゴ" width={130} height={100} />
@@ -99,12 +97,9 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
           {userProfile ? (
             <Menu as="div" className="relative inline-block text-left">
               <MenuButton
-                className="inline-flex items-center justify-center w-full rounded-md border px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200"
-                style={{
-                  backgroundColor: theme.colors.backgroundMain,
-                  borderColor: theme.colors.borderPrimary,
-                  color: theme.colors.textPrimary,
-                }}
+                className={`inline-flex items-center justify-center w-full rounded-md border px-4 py-2 text-sm font-medium 
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200
+                            bg-background-main border-border-primary text-text-primary`}
               >
                 <Avatar
                   src={userProfile.avatarUrl}
@@ -116,11 +111,8 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
               </MenuButton>
 
               <MenuItems
-                className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg ring-1 ring-opacity-5 focus:outline-none"
-                style={{
-                  backgroundColor: theme.colors.backgroundMain,
-                  borderColor: theme.colors.borderPrimary,
-                }}
+                className={`origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg ring-1 ring-opacity-5 focus:outline-none
+                            bg-background-main border-border-primary`}
               >
                 <div className="py-1">
                   <MenuItem>
@@ -128,11 +120,6 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
                       <button
                         onClick={toMyPage}
                         className={menuItemClass({ active })}
-                        style={{
-                          color: active
-                            ? theme.colors.primary
-                            : theme.colors.textPrimary,
-                        }}
                       >
                         <User className="mr-2" />
                         マイページ
@@ -141,9 +128,7 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
                   </MenuItem>
                   <MenuItem>
                     {({ active }) => (
-                      <ThemeToggle
-                        className={menuItemClass({ active })}
-                      />
+                      <ThemeToggle className={menuItemClass({ active })} />
                     )}
                   </MenuItem>
                   <MenuItem>
@@ -151,11 +136,6 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
                       <button
                         onClick={onLogout}
                         className={menuItemClass({ active })}
-                        style={{
-                          color: active
-                            ? theme.colors.primary
-                            : theme.colors.textPrimary,
-                        }}
                       >
                         <LogOut className="mr-2" />
                         ログアウト
@@ -172,23 +152,13 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
               </button>
               <button
                 onClick={onLogin}
-                className={`${buttonBaseStyle} hover:opacity-90`}
-                style={{
-                  backgroundColor: theme.colors.primary,
-                  color: theme.colors.textInverted,
-                  border: `1px solid ${theme.colors.primary}`,
-                }}
+                className={`${buttonBaseStyle} bg-primary text-text-inverted border border-primary hover:opacity-90`}
               >
                 ログイン
               </button>
               <button
                 onClick={onCreateAccount}
-                className={`${buttonBaseStyle} hover:bg-opacity-10`}
-                style={{
-                  backgroundColor: 'transparent',
-                  color: theme.colors.primary,
-                  border: `1px solid ${theme.colors.primary}`,
-                }}
+                className={`${buttonBaseStyle} bg-transparent text-primary border border-primary hover:bg-primary hover:bg-opacity-10`}
               >
                 新規登録
               </button>
