@@ -87,6 +87,8 @@
 .text-warning { color: var(--color-warning); }
 .text-error { color: var(--color-error); }
 .text-info { color: var(--color-info); }
+.text-accent1 { color: var(--color-accent1); }
+.text-accent2 { color: var(--color-accent2); }
 
 .bg-success { background-color: var(--color-success); }
 .bg-warning { background-color: var(--color-warning); }
