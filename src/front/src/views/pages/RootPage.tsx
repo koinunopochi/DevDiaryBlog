@@ -4,6 +4,8 @@ import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
 import { ArticlePreviewProps } from '@components/blocks/articlePreview/ArticlePreview';
 import { Link, useNavigate } from 'react-router-dom';
 import ArticlePreviewList from '../components/blocks/articlePreviewList/ArticlePreviewList';
+import FeaturedArticleBackground from '@/img/featured-article-background.svg';
+
 
 interface ApiArticle extends Omit<ArticlePreviewProps, 'onTagClick'> {
   excerpt: string;
@@ -84,7 +86,7 @@ const RootPage: React.FC<{ apiClient: EnhancedApiClient }> = ({
           <h2 className="text-3xl font-bold mb-8">注目の記事</h2>
           <div className="bg-white dark:bg-night-sky border rounded-lg overflow-hidden">
             <img
-              src="/api/placeholder/1200/600"
+              src={FeaturedArticleBackground}
               alt={featuredPost.title}
               className="w-full h-64 object-cover"
             />
