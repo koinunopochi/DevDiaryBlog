@@ -1,4 +1,10 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from 'react';
 import { themes, ThemeName } from '@/themes/themes';
 
 type ThemeContextType = {
@@ -12,10 +18,14 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [themeName, setThemeName] = useState<ThemeName>('light');
+  const [themeName, setThemeName] = useState<ThemeName>(() => {
+    const storedTheme = localStorage.getItem('theme');
+    return (storedTheme as ThemeName | null) || 'light';
+  });
 
   useEffect(() => {
     document.documentElement.className = `theme-${themeName}`;
+    localStorage.setItem('theme', themeName);
   }, [themeName]);
 
   const value = {

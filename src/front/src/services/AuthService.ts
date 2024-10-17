@@ -74,7 +74,9 @@ export default class AuthService {
   async logout(): Promise<void> {
     try {
       await this.apiClient.post<void>('/api/logout', {});
+      const theme = localStorage.getItem('theme');
       localStorage.clear();
+      localStorage.setItem('theme', theme || "light");
     } catch (error) {
       console.error('ログアウトに失敗しました', error);
       throw error;
