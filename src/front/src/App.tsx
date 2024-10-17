@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from '@/views/components/providers/ThemeProvider';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import PageLayout from '@/views/components/modules/pageLayout/PageLayout';
 import NotFound from '@/views/components/atoms/notFound/NotFound';
 import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
@@ -38,6 +38,7 @@ function App() {
     toolRoutes,
     profileRoutes,
     wishRoutes,
+    develop,
   } = createRoutes(
     apiClient,
     authService,
@@ -48,7 +49,9 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-night-sky text-gray-900 dark:text-white max-w-full">
+      <div
+        className="min-h-screen max-w-full"
+      >
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             {authRoutes}
@@ -59,6 +62,7 @@ function App() {
               {toolRoutes}
               {profileRoutes}
               {wishRoutes}
+              {develop}
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -18,27 +18,27 @@ const URLEncoderDecoder = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-night-sky border shadow-md rounded-lg">
+    <div className="w-full max-w-2xl mx-auto p-6 border rounded-lg">
       <h2 className="text-2xl font-bold mb-4">URL エンコーダー/デコーダー</h2>
       <div className="space-y-4">
         <textarea
           placeholder="変換するテキストを入力してください"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-full h-40 p-2 border rounded"
+          className="w-full h-40 p-2 border rounded bg-background-secondary"
         />
         <div className="flex space-x-4">
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value)}
-            className="p-2 border rounded"
+            className="p-2 border rounded bg-background-main"
           >
             <option value="encode">エンコード</option>
             <option value="decode">デコード</option>
           </select>
           <button
             onClick={handleConvert}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="mt-4 w-full bg-background-secondary text-primary py-2 px-4 rounded-md hover:bg-accent2 transition-colors text-sm sm:text-base"
           >
             変換
           </button>
@@ -46,7 +46,7 @@ const URLEncoderDecoder = () => {
         <textarea
           value={output}
           readOnly
-          className="w-full h-40 p-2 border rounded bg-gray-100"
+          className="w-full h-40 p-2 border rounded bg-background-secondary "
         />
       </div>
     </div>

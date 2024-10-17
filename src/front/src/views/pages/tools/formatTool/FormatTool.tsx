@@ -41,13 +41,13 @@ const FormatTool = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-night-sky border shadow-md rounded-lg">
+    <div className="w-full max-w-2xl mx-auto p-6 border rounded-lg">
       <h2 className="text-2xl font-bold mb-4">JSONとXML整形ツール</h2>
       <div className="space-y-4">
         <select
           value={format}
           onChange={(e) => setFormat(e.target.value)}
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border rounded bg-background-secondary"
         >
           <option value="json">JSON (コメント対応)</option>
           <option value="xml">XML</option>
@@ -56,11 +56,11 @@ const FormatTool = () => {
           placeholder={`${format.toUpperCase()}を入力してください（JSONはコメント可）`}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-full h-40 p-2 border rounded"
+          className="w-full h-40 p-2 border rounded bg-background-secondary"
         />
         <button
           onClick={handleFormat}
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="mt-4 w-full bg-background-secondary text-primary py-2 px-4 rounded-md hover:bg-accent2 transition-colors text-sm sm:text-base"
         >
           整形する
         </button>
@@ -68,7 +68,7 @@ const FormatTool = () => {
           placeholder="整形結果"
           value={output}
           readOnly
-          className="w-full h-40 p-2 border rounded bg-gray-100"
+          className="w-full h-40 p-2 border rounded bg-background-secondary"
         />
       </div>
     </div>

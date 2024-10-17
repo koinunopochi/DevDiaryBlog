@@ -9,12 +9,12 @@ const ToolCard = ({
   description: string;
   link: string;
 }) => (
-  <div className="bg-white dark:bg-night-sky shadow-md rounded-lg p-6 mb-4 border">
+  <div className="shadow-md rounded-lg p-6 mb-4 border">
     <h3 className="text-xl font-bold mb-2">{title}</h3>
-    <p className="text-gray-600 dark:text-gray-400 mb-4">{description}</p>
+    <p className="mb-4">{description}</p>
     <Link
       to={link}
-      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+      className="mt-4 w-full bg-background-secondary text-primary py-2 px-4 rounded-md hover:bg-accent2 transition-colors text-sm sm:text-base"
     >
       ツールを使用する
     </Link>

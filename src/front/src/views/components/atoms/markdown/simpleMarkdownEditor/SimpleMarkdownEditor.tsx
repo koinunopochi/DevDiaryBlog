@@ -194,7 +194,7 @@ const SimpleMarkdownEditor: React.FC<SimpleMarkdownEditorProps> = ({
         onKeyDown={handleKeyDown}
         textareaProps={{
           onPaste: handlePaste,
-          className: `w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-night-sky text-gray-900 dark:text-white ${className}`,
+          className: `w-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-background-main text-primary ${className}`,
         }}
         preview="edit"
         hideToolbar={false}

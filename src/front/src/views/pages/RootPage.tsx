@@ -124,7 +124,7 @@ const RootPage: React.FC<{ apiClient: EnhancedApiClient }> = ({
           </div>
           <Link
             to="/articles"
-            className="mt-6 text-blue-500 font-semibold flex items-center"
+            className="mt-6 text-accent1 hover:text-secondary font-semibold flex items-center"
           >
             すべての記事を見る <ArrowRight className="ml-1" size={18} />
           </Link>
@@ -158,12 +158,10 @@ const RootPage: React.FC<{ apiClient: EnhancedApiClient }> = ({
             <Link
               key={category.name}
               to={`/articles?category=${encodeURIComponent(category.name)}`}
-              className="bg-white dark:bg-night-sky border p-4 rounded-lg text-center"
+              className="border p-4 rounded-lg text-center hover:text-accent2"
             >
               <h3 className="font-semibold mb-1">{category.name}</h3>
-              <span className="text-sm text-gray-500">
-                {category.count} 記事
-              </span>
+              <span className="text-sm">{category.count} 記事</span>
             </Link>
           ))}
         </div>

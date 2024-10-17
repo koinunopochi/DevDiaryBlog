@@ -20,7 +20,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
     <button
       type="submit"
       disabled={disabled || isLoading}
-      className={`w-full sm:w-auto flex items-center justify-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 text-sm sm:text-base ${
+      className={`w-full sm:w-auto flex items-center justify-center bg-background-secondary text-primary hover:bg-accent2 font-bold py-2 px-4 rounded transition-colors duration-200 text-sm sm:text-base ${
         disabled || isLoading ? 'opacity-50 cursor-not-allowed' : ''
       } ${className}`}
     >

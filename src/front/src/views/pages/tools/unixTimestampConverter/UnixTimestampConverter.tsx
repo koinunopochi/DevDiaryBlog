@@ -16,14 +16,14 @@ const UnixTimestampConverter = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-night-sky border shadow-md rounded-lg">
+    <div className="w-full max-w-2xl mx-auto p-6border rounded-lg border p-3">
       <h2 className="text-2xl font-bold mb-4">UNIX タイムスタンプ変換ツール</h2>
       <div className="space-y-4">
         <div className="flex space-x-4">
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value)}
-            className="p-2 border rounded"
+            className="p-2 border rounded bg-background-main"
           >
             <option value="toDateTime">タイムスタンプ → 日時</option>
             <option value="toTimestamp">日時 → タイムスタンプ</option>
@@ -35,7 +35,7 @@ const UnixTimestampConverter = () => {
             placeholder="UNIXタイムスタンプを入力"
             value={timestamp}
             onChange={(e) => setTimestamp(e.target.value)}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded bg-background-secondary"
           />
         ) : (
           <input
@@ -47,13 +47,13 @@ const UnixTimestampConverter = () => {
         )}
         <button
           onClick={handleConvert}
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          className="mt-4 w-full bg-background-secondary text-primary py-2 px-4 rounded-md hover:bg-accent2 transition-colors text-sm sm:text-base"
         >
           変換
         </button>
-        <div className="p-2 border rounded bg-gray-100">
+        <div className="p-2 border rounded">
           {(mode === 'toDateTime' ? dateTime : timestamp) || (
-            <span className='text-gray-500'>結果がここに表示されます</span>
+            <span className="">結果がここに表示されます</span>
           )}
         </div>
       </div>

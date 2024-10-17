@@ -9,23 +9,60 @@ import { UserService } from '@/services/UserService';
 import ArticleRootPage from '@/views/pages/articles/ArticleRootPage';
 import RootPage from '@/views/pages/RootPage';
 import WishesRootPage from '@/views/pages/wishes/WishesRootPage';
+import DevelopRootPage from '@/views/pages/develop/DevelopRootPage';
 
 const LoginPage = React.lazy(() => import('@/views/pages/login/LoginPage'));
-const RegisterPage = React.lazy(() => import('@/views/pages/register/Register'));
-const EditorPage = React.lazy(() => import('@/views/pages/articles/edit/EditorPage'));
-const ArticlePage = React.lazy(() => import('@/views/pages/articles/articleId/ArticlePage'));
-const AccountPage = React.lazy(() => import('@/views/pages/settings/account/AccountPage'));
-const ProfilePage = React.lazy(() => import('@/views/pages/settings/profile/ProfilePage'));
-const ToolsRootPage = React.lazy(() => import('@/views/pages/tools/ToolsRootPage'));
-const Base64Converter = React.lazy(() => import('@/views/pages/tools/base64/Base64Converter'));
-const FormatTool = React.lazy(() => import('@/views/pages/tools/formatTool/FormatTool'));
-const NewlineConverter = React.lazy(() => import('@/views/pages/tools/newlineConverter/NewlineConverter'));
-const URLEncoderDecoder = React.lazy(() => import('@/views/pages/tools/URLEncoderDecoder/URLEncoderDecoder'));
-const UnixTimestampConverter = React.lazy(() => import('@/views/pages/tools/unixTimestampConverter/UnixTimestampConverter'));
-const ColorCodeConverter = React.lazy(() => import('@/views/pages/tools/colorCodeConverter/ColorCodeConverter'));
-const RegexTester = React.lazy(() => import('@/views/pages/tools/regexTester/RegexTester'));
-const UsernamePage = React.lazy(() => import('@/views/pages/username/UsernamePage'));
+const RegisterPage = React.lazy(
+  () => import('@/views/pages/register/Register')
+);
+const EditorPage = React.lazy(
+  () => import('@/views/pages/articles/edit/EditorPage')
+);
+const ArticlePage = React.lazy(
+  () => import('@/views/pages/articles/articleId/ArticlePage')
+);
+const AccountPage = React.lazy(
+  () => import('@/views/pages/settings/account/AccountPage')
+);
+const ProfilePage = React.lazy(
+  () => import('@/views/pages/settings/profile/ProfilePage')
+);
+const ToolsRootPage = React.lazy(
+  () => import('@/views/pages/tools/ToolsRootPage')
+);
+const Base64Converter = React.lazy(
+  () => import('@/views/pages/tools/base64/Base64Converter')
+);
+const FormatTool = React.lazy(
+  () => import('@/views/pages/tools/formatTool/FormatTool')
+);
+const NewlineConverter = React.lazy(
+  () => import('@/views/pages/tools/newlineConverter/NewlineConverter')
+);
+const URLEncoderDecoder = React.lazy(
+  () => import('@/views/pages/tools/URLEncoderDecoder/URLEncoderDecoder')
+);
+const UnixTimestampConverter = React.lazy(
+  () =>
+    import('@/views/pages/tools/unixTimestampConverter/UnixTimestampConverter')
+);
+const ColorCodeConverter = React.lazy(
+  () => import('@/views/pages/tools/colorCodeConverter/ColorCodeConverter')
+);
+const RegexTester = React.lazy(
+  () => import('@/views/pages/tools/regexTester/RegexTester')
+);
+const UsernamePage = React.lazy(
+  () => import('@/views/pages/username/UsernamePage')
+);
 const AboutPage = React.lazy(() => import('@/views/pages/about/AboutPage'));
+
+const ColorPalette = React.lazy(
+  () => import('@/views/pages/develop/colorPalette/ColorPalette')
+);
+const DesignSystemSamples = React.lazy(
+  () => import('@/views/pages/develop/designSystemSamples/DesignSystemSamples')
+);
 
 export const createRoutes = (
   apiClient: EnhancedApiClient,
@@ -36,10 +73,7 @@ export const createRoutes = (
 ) => {
   const authRoutes = (
     <>
-      <Route
-        path="/login"
-        element={<LoginPage authService={authService} />}
-      />
+      <Route path="/login" element={<LoginPage authService={authService} />} />
       <Route
         path="/register"
         element={<RegisterPage authService={authService} />}
@@ -99,9 +133,7 @@ export const createRoutes = (
         element={
           <ProfilePage
             initialData={userService.getProfile()}
-            defaultProfileIcons={() =>
-              profileService.getDefaultProfileIcons()
-            }
+            defaultProfileIcons={() => profileService.getDefaultProfileIcons()}
             onSubmit={(data) => profileService.saveProfile(data)}
           />
         }
@@ -114,10 +146,7 @@ export const createRoutes = (
       <Route path="/tools" element={<ToolsRootPage />} />
       <Route path="/tools/base64" element={<Base64Converter />} />
       <Route path="/tools/format" element={<FormatTool />} />
-      <Route
-        path="/tools/newline-converter"
-        element={<NewlineConverter />}
-      />
+      <Route path="/tools/newline-converter" element={<NewlineConverter />} />
       <Route
         path="/tools/url-encoder-decoder"
         element={<URLEncoderDecoder />}
@@ -130,24 +159,28 @@ export const createRoutes = (
         path="/tools/color-code-converter"
         element={<ColorCodeConverter />}
       />
-      <Route
-        path="/tools/regex-tester"
-        element={<RegexTester />}
-      />
+      <Route path="/tools/regex-tester" element={<RegexTester />} />
       <Route path="/tools/*" element={<Navigate to="/tools" />} />
     </>
   );
 
   const profileRoutes = (
-    <Route
-      path=":username"
-      element={<UsernamePage apiClient={apiClient} />}
-    />
+    <Route path=":username" element={<UsernamePage apiClient={apiClient} />} />
   );
 
-  const wishRoutes = (
-    <Route path="wish" element={<WishesRootPage />} />
-  )
+  const wishRoutes = <Route path="wish" element={<WishesRootPage />} />;
+
+  const develop = (
+    <>
+      <Route path="/develop" element={<DevelopRootPage />} />
+      <Route path="/develop/design/colors" element={<ColorPalette />} />
+      <Route
+        path="/develop/design/components"
+        element={<DesignSystemSamples />}
+      />
+      <Route path="/develop/*" element={<Navigate to="/develop" />} />
+    </>
+  );
 
   return {
     authRoutes,
@@ -157,5 +190,6 @@ export const createRoutes = (
     toolRoutes,
     profileRoutes,
     wishRoutes,
+    develop,
   };
 };

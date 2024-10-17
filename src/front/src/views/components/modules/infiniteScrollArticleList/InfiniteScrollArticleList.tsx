@@ -40,14 +40,14 @@ const InfiniteScrollArticleList: React.FC<InfiniteScrollArticleListProps> = ({
   }, [fetchMoreArticles, nextCursor, isLoading]);
 
   return (
-    <div>
+    <div className=''>
       <ArticlePreviewList articles={articles} onTagClick={onTagClick} />
       {nextCursor && (
         <div className="mt-8 text-center">
           <button
             onClick={loadMoreArticles}
             disabled={isLoading}
-            className={`w-full sm:w-auto flex items-center justify-center bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-200 text-sm sm:text-base ${
+            className={`w-full sm:w-auto flex items-center justify-center bg-background-secondary text-primary hover:bg-accent2 font-bold py-2 px-4 rounded transition-colors duration-200 text-sm sm:text-base ${
               isLoading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >

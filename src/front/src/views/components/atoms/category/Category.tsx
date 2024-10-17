@@ -47,12 +47,10 @@ const Category: React.FC<CategoryProps> = ({
       id={category.id}
       className={twMerge(
         'rounded-lg p-4 sm:p-6 max-w-sm sm:max-w-md mx-auto border relative',
-        'bg-white dark:bg-night-sky',
-        'text-gray-800 dark:text-gray-200',
         'transition-all duration-300 ease-in-out',
         isSelected ? 'ring-2 ring-blue-500' : '',
         onCategoryClick &&
-          'cursor-pointer hover:bg-gray-50 dark:hover:bg-night-sky-light',
+          'cursor-pointer hover:bg-background-secondary dark:hover:bg-night-sky-light',
         className
       )}
       onClick={handleCategoryClick}
