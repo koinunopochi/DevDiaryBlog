@@ -9,6 +9,7 @@ import { AccountService } from '@/services/AccountService';
 import { ProfileService } from '@/services/ProfileService';
 import { UserService } from '@/services/UserService';
 import { createRoutes } from './routes';
+import CommonMetaTags from './views/components/atoms/meta/commonMetaTags/CommonMetaTags';
 
 const LoadingSpinner = () => <div>Loading...</div>;
 
@@ -49,9 +50,8 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div
-        className="min-h-screen max-w-full"
-      >
+      <CommonMetaTags/>
+      <div className="min-h-screen max-w-full">
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             {authRoutes}
