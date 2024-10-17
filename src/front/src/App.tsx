@@ -38,6 +38,7 @@ function App() {
     toolRoutes,
     profileRoutes,
     wishRoutes,
+    develop,
   } = createRoutes(
     apiClient,
     authService,
@@ -59,6 +60,7 @@ function App() {
               {toolRoutes}
               {profileRoutes}
               {wishRoutes}
+              {develop}
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
