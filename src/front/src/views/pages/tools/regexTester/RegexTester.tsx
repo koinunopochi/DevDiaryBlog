@@ -40,14 +40,11 @@ const RegexTester: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-night-sky border shadow-md rounded-lg">
+    <div className="w-full max-w-2xl mx-auto p-6 border rounded-lg">
       <h2 className="text-2xl font-bold mb-4">正規表現テスター</h2>
       <div className="space-y-4">
         <div>
-          <label
-            htmlFor="pattern"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="pattern" className="block text-sm font-medium">
             正規表現パターン
           </label>
           <input
@@ -55,22 +52,19 @@ const RegexTester: React.FC = () => {
             type="text"
             value={pattern}
             onChange={(e) => setPattern(e.target.value)}
-            className="mt-1 block w-full p-2 border rounded-md shadow-sm"
+            className="mt-1 block w-full p-2 border rounded-md shadow-sm bg-background-secondary"
             placeholder="例: \b\w+\b"
           />
         </div>
         <div>
-          <label
-            htmlFor="testString"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="testString" className="block text-sm font-medium">
             テスト文字列
           </label>
           <textarea
             id="testString"
             value={testString}
             onChange={(e) => setTestString(e.target.value)}
-            className="mt-1 block w-full p-2 border rounded-md shadow-sm"
+            className="mt-1 block w-full p-2 border rounded-md shadow-sm bg-background-secondary"
             rows={4}
             placeholder="テストしたい文字列を入力してください"
           />
@@ -84,7 +78,7 @@ const RegexTester: React.FC = () => {
                 onChange={() => setFlags({ ...flags, [key]: !value })}
                 className="form-checkbox h-5 w-5 text-blue-600"
               />
-              <span className="ml-2 text-gray-700">{key}</span>
+              <span className="ml-2">{key}</span>
             </label>
           ))}
         </div>

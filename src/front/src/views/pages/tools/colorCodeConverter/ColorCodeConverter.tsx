@@ -35,7 +35,7 @@ const ColorCodeConverter = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-night-sky border shadow-md rounded-lg">
+    <div className="w-full max-w-2xl mx-auto p-6 border rounded-lg">
       <h2 className="text-2xl font-bold mb-4">カラーコード変換ツール</h2>
       <div className="space-y-4">
         <div className="flex items-center space-x-4">
@@ -43,13 +43,13 @@ const ColorCodeConverter = () => {
             type="color"
             value={hex}
             onChange={handleHexChange}
-            className="w-12 h-12"
+            className="w-12 h-12 bg-background-secondary"
           />
           <input
             type="text"
             value={hex}
             onChange={handleHexChange}
-            className="p-2 border rounded"
+            className="p-2 border rounded bg-background-secondary"
           />
         </div>
         <div className="flex space-x-4">
@@ -59,7 +59,7 @@ const ColorCodeConverter = () => {
             max="255"
             value={rgb.r}
             onChange={(e) => handleRgbChange('r', e.target.value)}
-            className="p-2 border rounded w-20"
+            className="p-2 border rounded w-20 bg-background-secondary"
           />
           <input
             type="number"
@@ -67,7 +67,7 @@ const ColorCodeConverter = () => {
             max="255"
             value={rgb.g}
             onChange={(e) => handleRgbChange('g', e.target.value)}
-            className="p-2 border rounded w-20"
+            className="p-2 border rounded w-20 bg-background-secondary"
           />
           <input
             type="number"
@@ -75,10 +75,10 @@ const ColorCodeConverter = () => {
             max="255"
             value={rgb.b}
             onChange={(e) => handleRgbChange('b', e.target.value)}
-            className="p-2 border rounded w-20"
+            className="p-2 border rounded w-20 bg-background-secondary"
           />
         </div>
-        <div className="p-2 border rounded bg-gray-100">
+        <div className="p-2 border rounded bg-background-secondary">
           RGB: rgb({rgb.r}, {rgb.g}, {rgb.b})
         </div>
         <div
