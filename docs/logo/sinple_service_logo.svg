@@ -4,7 +4,6 @@
     .morse { stroke: #24292e; stroke-width: 2; }
     .colored-morse { stroke: #FFA500; stroke-width: 2; }
   </style>
-  <rect x="0" y="0" width="300" height="100" fill="#ffffff"/>
   <text x="10" y="60" class="main-text" fill="#24292e">tetex.tech</text>
   
   <!-- Main line -->
