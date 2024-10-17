@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { User,LogOut, ChevronDown } from 'lucide-react';
+import { User, LogOut, ChevronDown } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useNavigate } from 'react-router-dom';
 import WithCharacterLog from '@/img/with_character_logo.svg';
 import ThemeToggle from '@/views/components/atoms/themeToggle/ThemeToggle';
+import { useTheme } from '@/contexts/ThemeContext';
 
 type UserProfile = {
   displayName: string;
@@ -19,7 +20,15 @@ export interface HeaderProps {
   onCreateAccount?: () => void;
 }
 
-const Avatar = ({ src, alt, fallback }: { src: string | undefined, alt: string | undefined, fallback: React.ReactNode }) => (
+const Avatar = ({
+  src,
+  alt,
+  fallback,
+}: {
+  src: string | undefined;
+  alt: string | undefined;
+  fallback: React.ReactNode;
+}) => (
   <div className="h-8 w-8 rounded-full overflow-hidden bg-gray-200">
     {src ? (
       <img src={src} alt={alt} className="h-full w-full object-cover" />
@@ -34,6 +43,7 @@ const Avatar = ({ src, alt, fallback }: { src: string | undefined, alt: string |
 export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const navigate = useNavigate();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const storedProfile = localStorage.getItem('profile');
@@ -65,13 +75,19 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
     }
   };
 
-    const menuItemClass = ({ active }: { active: boolean }) =>
-      twMerge(
-        'flex items-center w-full text-left px-4 py-2 text-sm',
-        active
-          ? 'bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-gray-100'
-          : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
-      );
+  const menuItemClass = ({ active }: { active: boolean }) =>
+    twMerge(
+      'flex items-center w-full text-left px-4 py-2 text-sm',
+      active
+        ? 'bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-gray-100'
+        : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
+    );
+
+  const buttonBaseStyle = `
+    px-4 py-2 text-sm font-medium rounded-md
+    focus:outline-none focus:ring-2 focus:ring-offset-2
+    transition-colors duration-200
+  `;
 
   return (
     <header className="border-b-2 ">
@@ -128,13 +144,23 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
             <div className="space-x-2">
               <button
                 onClick={onLogin}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className={`${buttonBaseStyle} hover:opacity-90`}
+                style={{
+                  backgroundColor: theme.colors.primary,
+                  color: theme.colors.textInverted,
+                  border: `1px solid ${theme.colors.primary}`,
+                }}
               >
                 ログイン
               </button>
               <button
                 onClick={onCreateAccount}
-                className="px-4 py-2 text-sm font-medium text-indigo-600 bg-white border border-indigo-600 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className={`${buttonBaseStyle} hover:bg-opacity-10`}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: theme.colors.primary,
+                  border: `1px solid ${theme.colors.primary}`,
+                }}
               >
                 新規登録
               </button>
