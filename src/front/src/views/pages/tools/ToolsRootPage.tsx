@@ -4,25 +4,37 @@ const ToolCard = ({
   title,
   description,
   link,
+  isExternal = false,
 }: {
   title: string;
   description: string;
   link: string;
+  isExternal?: boolean;
 }) => (
   <div className="shadow-md rounded-lg p-6 mb-4 border">
     <h3 className="text-xl font-bold mb-2">{title}</h3>
     <p className="mb-4">{description}</p>
-    <Link
-      to={link}
-      className="mt-4 w-full bg-background-secondary text-primary py-2 px-4 rounded-md hover:bg-accent2 transition-colors text-sm sm:text-base"
-    >
-      ツールを使用する
-    </Link>
+    {isExternal ? (
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 w-full bg-background-secondary text-primary py-2 px-4 rounded-md hover:bg-accent2 transition-colors text-sm sm:text-base inline-block text-center"
+      >
+        ツールを使用する
+      </a>
+    ) : (
+      <Link
+        to={link}
+        className="mt-4 w-full bg-background-secondary text-primary py-2 px-4 rounded-md hover:bg-accent2 transition-colors text-sm sm:text-base inline-block text-center"
+      >
+        ツールを使用する
+      </Link>
+    )}
   </div>
 );
-
 const ToolsRootPage = () => {
-  const tools = [
+  const internalTools = [
     {
       title: 'Base64 エンコーダー/デコーダー',
       description:
@@ -67,14 +79,127 @@ const ToolsRootPage = () => {
     },
   ];
 
+  const externalTools = {
+    コーディング支援: [
+      {
+        title: '変数名生成ツール',
+        description: 'プログラミングの変数名を簡単に考えられるツールです。',
+        link: 'https://codic.jp/engine',
+      },
+      {
+        title: 'JSON Formatter & Validator',
+        description:
+          'JSONデータのフォーマットと検証を行うオンラインツールです。',
+        link: 'https://jsonformatter.curiousconcept.com/',
+      },
+      {
+        title: 'Regex101',
+        description: '正規表現のテストと解説を行うツールです。',
+        link: 'https://regex101.com/',
+      },
+    ],
+    デザイン: [
+      {
+        title: 'イラスト素材',
+        description: 'シンプルで使いやすいイラスト素材を提供しています。',
+        link: 'https://loosedrawing.com/illust/1460/',
+      },
+      {
+        title: 'カラーパレット生成',
+        description: '色の組み合わせを簡単に見つけられるツールです。',
+        link: 'https://coolors.co/000000-291528-3a3e3b-f0eff4-9e829c',
+      },
+      {
+        title: 'Googleアイコン',
+        description: 'Googleが提供する豊富なアイコンセットです。',
+        link: 'https://fonts.google.com/icons',
+      },
+      {
+        title: 'フリーアイコン集',
+        description: '多様なフリーアイコンを提供しています。',
+        link: 'https://icooon-mono.com/category/other/page/20/',
+      },
+      {
+        title: 'CSS Grid Generator',
+        description: 'CSSグリッドレイアウトを視覚的に作成できるツールです。',
+        link: 'https://cssgrid-generator.netlify.app/',
+      },
+      {
+        title: 'Favicon Generator',
+        description: '様々なサイズのファビコンを生成するツールです。',
+        link: 'https://realfavicongenerator.net/',
+      },
+    ],
+    ユーティリティ: [
+      {
+        title: 'AWSコスト計算',
+        description: 'AWSサービスのコストを簡単に計算できます。',
+        link: 'https://aws-rough.cc/',
+      },
+      {
+        title: '絵文字コピーツール',
+        description: '様々な絵文字をコピーして使用できます。',
+        link: 'https://emojigraph.org/ja/party-popper/',
+      },
+      {
+        title: 'Lorem Ipsum Generator',
+        description: 'ダミーテキストを生成するツールです。',
+        link: 'https://loremipsum.io/',
+      },
+      {
+        title: 'Optimize Images',
+        description: '画像を最適化して圧縮するツールです。',
+        link: 'https://imagecompressor.com/',
+      },
+    ],
+    参考資料: [
+      {
+        title: 'サービスロゴまとめ',
+        description: '様々なサービスのロゴをまとめて確認できます。',
+        link: 'https://qiita.com/Ry0xi/items/857687c892f783955fe1#python%E5%85%AC%E5%BC%8F',
+      },
+      {
+        title: 'Can I Use',
+        description: 'ウェブ技術の互換性をブラウザごとに確認できるツールです。',
+        link: 'https://caniuse.com/',
+      },
+      {
+        title: 'Public APIs',
+        description: '無料で使用できるAPIのリストです。',
+        link: 'https://github.com/public-apis/public-apis',
+      },
+      {
+        title: 'DevDocs',
+        description:
+          '多数のプログラミング言語やフレームワークのドキュメントを一箇所で検索できるツールです。',
+        link: 'https://devdocs.io/',
+      },
+    ],
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">開発ツール</h1>
-      <div className="grid md:grid-cols-2 gap-4">
-        {tools.map((tool, index) => (
+
+      <h2 className="text-2xl font-bold mb-4">内部ツール</h2>
+      <div className="grid md:grid-cols-2 gap-4 mb-8">
+        {internalTools.map((tool, index) => (
           <ToolCard key={index} {...tool} />
         ))}
       </div>
+
+      <h2 className="text-2xl font-bold mb-4">外部おすすめツール・サイト</h2>
+      <p className='text-red-400'>※ 安全性を保障するものではないことに注意してください。</p>
+      {Object.entries(externalTools).map(([category, tools]) => (
+        <div key={category} className="mb-8">
+          <h3 className="text-xl font-bold mb-4">{category}</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            {tools.map((tool, index) => (
+              <ToolCard key={index} {...tool} isExternal={true} />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
