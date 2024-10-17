@@ -49,7 +49,9 @@ function App() {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-night-sky text-gray-900 dark:text-white max-w-full">
+      <div
+        className="min-h-screen max-w-full"
+      >
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
             {authRoutes}
