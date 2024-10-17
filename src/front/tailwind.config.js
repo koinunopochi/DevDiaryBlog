@@ -22,4 +22,18 @@ module.exports = {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern: /bg-\[#([0-9a-fA-F]{6})\]/,
+      variants: ['hover'],
+    },
+    {
+      pattern: /text-\[#([0-9a-fA-F]{6})\]/,
+      variants: ['hover'],
+    },
+    {
+      pattern: /border-\[#([0-9a-fA-F]{6})\]/,
+      variants: ['hover'],
+    },
+  ],
 };
