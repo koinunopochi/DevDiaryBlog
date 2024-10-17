@@ -22,7 +22,7 @@ class GetLatestArticleCardsController extends Controller
     try {
       $limit = $request->input('limit', 10);
       $cursor = $request->input('cursor') ? Cursor::fromBase64($request->input('cursor')) : null;
-      $sortBy = $request->input('sortBy', 'created_at');
+      $sortBy = $this->camelToSnakeCase($request->input('sortBy', 'created_at'));
 
       $result = $this->getLatestArticleCardsUseCase->execute(
         $limit,
@@ -40,5 +40,9 @@ class GetLatestArticleCardsController extends Controller
       Log::error($e);
       return response()->json(['error' => $e->getMessage()], 500);
     }
+  }
+  private function camelToSnakeCase($string)
+  {
+    return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
   }
 }

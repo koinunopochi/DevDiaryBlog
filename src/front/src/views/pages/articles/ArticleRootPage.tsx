@@ -1,149 +1,165 @@
-import React, { useState } from 'react';
-import { Search, Calendar, User, Tag, ThumbsUp, MessageCircle } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search, ArrowUpDown } from 'lucide-react';
+import { EnhancedApiClient } from '@/infrastructure/utils/EnhancedApiClient';
+import InfiniteScrollArticleList from '@components/modules/infiniteScrollArticleList/InfiniteScrollArticleList';
+import { ArticlePreviewProps } from '@components/blocks/articlePreview/ArticlePreview';
 
-const ArticleRootPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('全て');
+interface ArticleRootPageProps {
+  apiClient: EnhancedApiClient;
+}
 
-  const categories = [
-    '全て',
-    'Docker',
-    'Laravel',
-    'React',
-    'MySQL',
-    'Tailwind',
-  ];
+interface Article extends Omit<ArticlePreviewProps, 'onTagClick'> {
+  id: string;
+  title: string;
+  author: {
+    username: string;
+    displayName: string;
+    profileImage: string;
+  };
+  likes: number;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string;
+}
 
-  const articles = [
-    {
-      id: 1,
-      title: 'Docker Composeで実現する超快適な開発環境',
-      date: '2024-10-05',
-      author: '山田太郎',
-      excerpt:
-        'Docker Composeを駆使して、Laravel、MySQL、Reactの開発環境を爆速で構築する方法を徹底解説。環境構築の悩みから解放されよう！',
-      category: 'Docker',
-      likes: 124,
-      comments: 18,
-      image: '/api/placeholder/800/600',
+interface Response {
+  articles: Article[];
+  nextCursor: string;
+  hasNextPage: boolean;
+  totalItems: number;
+}
+
+const ArticleRootPage: React.FC<ArticleRootPageProps> = ({ apiClient }) => {
+  const navigate = useNavigate();
+  const [selectedTag, setSelectedTag] = useState('全て');
+  const [initialArticles, setInitialArticles] = useState<Article[]>([]);
+  const [initialNextCursor, setInitialNextCursor] = useState<string | null>(
+    null
+  );
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+
+  const handleTagClick = useMemo(
+    () => (name: string) => {
+      setSelectedTag(name);
+      // タグが選択されたときの追加のロジックをここに実装できます
     },
-    {
-      id: 2,
-      title: 'LaravelとReactの匠の技：最強のフルスタック開発',
-      date: '2024-10-08',
-      author: '佐藤花子',
-      excerpt:
-        'LaravelバックエンドとReact SPAフロントエンドの連携テクニックを完全網羅。パフォーマンスと開発効率を両立する秘訣を公開！',
-      category: 'Laravel',
-      likes: 89,
-      comments: 23,
-      image: '/api/placeholder/800/600',
-    },
-    {
-      id: 3,
-      title: 'Tailwind CSSで魅せる！レスポンシブの神業テクニック',
-      date: '2024-10-10',
-      author: '鈴木一郎',
-      excerpt:
-        'Tailwind CSSを使いこなし、あらゆるデバイスで完璧に決まるレスポンシブデザインを実現。コード量削減と美しさの両立を体感せよ。',
-      category: 'Tailwind',
-      likes: 156,
-      comments: 31,
-      image: '/api/placeholder/800/600',
-    },
-  ];
+    []
+  );
 
-  const filteredArticles =
-    selectedCategory === '全て'
-      ? articles
-      : articles.filter((article) => article.category === selectedCategory);
+  const toggleSortDirection = useCallback(() => {
+    setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+  }, []);
+
+  const fetchArticles = useCallback(
+    async (cursor: string | null) => {
+      if (!apiClient) return { articles: [], nextCursor: null };
+
+      try {
+        const params = new URLSearchParams({
+          limit: '10',
+          sortBy: 'created_at',
+          sortDirection: sortDirection,
+        });
+
+        if (cursor) {
+          params.append('cursor', cursor);
+        }
+
+        if (selectedTag !== '全て') {
+          params.append('tag', selectedTag);
+        }
+
+        const response = await apiClient.get<Response>(
+          `/api/articles/latest?${params.toString()}`
+        );
+
+        console.log('Fetched articles:', response.articles); // デバッグログ
+
+        return {
+          articles: response.articles,
+          nextCursor: response.hasNextPage ? response.nextCursor : null,
+        };
+      } catch (error) {
+        console.error('Failed to fetch articles:', error);
+        setError('記事の取得に失敗しました。後でもう一度お試しください。');
+        return { articles: [], nextCursor: null };
+      }
+    },
+    [apiClient, selectedTag, sortDirection]
+  );
+
+  useEffect(() => {
+    const initializeArticles = async () => {
+      setIsInitialLoading(true);
+      const { articles, nextCursor } = await fetchArticles(null);
+      setInitialArticles(articles);
+      setInitialNextCursor(nextCursor);
+      setIsInitialLoading(false);
+    };
+
+    initializeArticles();
+  }, [fetchArticles]);
+
+  if (!apiClient) return null;
 
   return (
-    <div className="">
-      <div className="container mx-auto px-4 py-8">
-        {/* <h1 className="text-4xl font-bold mb-8 text-center">テックブログ</h1> */}
-
-        <div className="mb-8">
-          <div className="relative max-w-xl mx-auto">
-            <input
-              type="text"
-              placeholder="記事を検索..."
-              className="w-full p-3 pl-12 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-            />
-            <Search
-              className="absolute left-4 top-3.5 text-gray-400"
-              size={20}
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-full ${
-                selectedCategory === category
-                  ? 'bg-blue-500 text-white border'
-                  : 'bg-white dark:bg-night-sky text-gray-700 hover:bg-gray-100 border'
-              } transition-colors duration-200`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredArticles.map((article) => (
-            <div
-              key={article.id}
-              className="bg-white dark:bg-night-sky rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 border"
-            >
-              <img
-                src={article.image}
-                alt={article.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <div className="flex items-center mb-2">
-                  <Tag size={16} className="mr-2 text-blue-500" />
-                  <span className="text-sm text-blue-500">
-                    {article.category}
-                  </span>
-                </div>
-                <h2 className="text-xl font-semibold mb-2 line-clamp-2">
-                  {article.title}
-                </h2>
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  {article.excerpt}
-                </p>
-                <div className="flex items-center text-sm text-gray-500 mb-4">
-                  <Calendar size={16} className="mr-1" />
-                  <span className="mr-4">{article.date}</span>
-                  <User size={16} className="mr-1" />
-                  <span>{article.author}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center text-gray-500">
-                    <ThumbsUp size={16} className="mr-1" />
-                    <span className="mr-3">{article.likes}</span>
-                    <MessageCircle size={16} className="mr-1" />
-                    <span>{article.comments}</span>
-                  </div>
-                  <button className="text-blue-500 hover:text-blue-700 font-semibold">
-                    続きを読む
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 flex justify-center">
-          <button className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transition-colors duration-200 shadow-md">
-            もっと記事を読む
-          </button>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <div className="relative max-w-xl mx-auto">
+          <input
+            type="text"
+            placeholder="記事を検索..."
+            className="w-full p-3 pl-12 border rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+          <Search className="absolute left-4 top-3.5 text-gray-400" size={20} />
         </div>
       </div>
+
+      <div className="flex flex-wrap justify-center items-center gap-2 mb-8">
+        {[
+          '全て',
+          ...new Set(initialArticles.flatMap((article) => article.tags)),
+        ].map((tag) => (
+          <button
+            key={tag}
+            onClick={() => handleTagClick(tag)}
+            className={`px-4 py-2 rounded-full ${
+              selectedTag === tag
+                ? 'bg-blue-500 text-white border'
+                : 'bg-white dark:bg-night-sky text-gray-700 hover:bg-gray-100 border'
+            } transition-colors duration-200`}
+          >
+            {tag}
+          </button>
+        ))}
+        <button
+          onClick={toggleSortDirection}
+          className="flex items-center px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
+        >
+          <ArrowUpDown className="mr-2" size={16} />
+          {sortDirection === 'asc' ? '古い順' : '新しい順'}
+        </button>
+      </div>
+
+      {isInitialLoading ? (
+        <p>記事を読み込み中...</p>
+      ) : error ? (
+        <p className="text-red-500">{error}</p>
+      ) : initialArticles.length > 0 ? (
+        <div className="p-2">
+          <InfiniteScrollArticleList
+            initialArticles={initialArticles}
+            onTagClick={handleTagClick}
+            fetchMoreArticles={fetchArticles}
+            initialNextCursor={initialNextCursor}
+          />
+        </div>
+      ) : (
+        <p>記事がありません。</p>
+      )}
     </div>
   );
 };

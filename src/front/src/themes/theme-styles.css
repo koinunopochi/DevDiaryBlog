@@ -1,0 +1,140 @@
+:root {
+  /* ライトモードのデフォルト値 */
+  --color-primary: #ffa500;
+  --color-accent1: #e69400;
+  --color-accent2: #ffb733;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-inverted: #ffffff;
+  --color-background-main: #ffffff;
+  --color-background-secondary: #fff5e6;
+  --color-background-dark: #333333;
+  --color-border-primary: #ffa500;
+  --color-border-secondary: #ffb733;
+  --color-link-default: #e69400;
+  --color-link-hover: #ffa500;
+  --color-success: #4caf50;
+  --color-warning: #ff9800;
+  --color-error: #f44336;
+  --color-info: #2196f3;
+}
+
+/* ダークモード */
+.theme-dark {
+  --color-primary: #ffa500;
+  --color-accent1: #ffb733;
+  --color-accent2: #e69400;
+  --color-text-primary: #e0e0e0;
+  --color-text-secondary: #a0a0a0;
+  --color-text-inverted: #080808;
+  --color-background-main: #080808;
+  --color-background-secondary: #1a1a1a;
+  --color-background-light: #333333;
+  --color-border-primary: #ffa500;
+  --color-border-secondary: #ffb733;
+  --color-link-default: #ffa500;
+  --color-link-hover: #ffb733;
+  --color-success: #66bb6a;
+  --color-warning: #ffa726;
+  --color-error: #ef5350;
+  --color-info: #42a5f5;
+}
+
+/* 自然テーマ */
+.theme-nature {
+  --color-primary: #4caf50;
+  --color-accent1: #8bc34a;
+  --color-accent2: #cddc39;
+  --color-text-primary: #33691e;
+  --color-text-secondary: #558b2f;
+  --color-text-inverted: #ffffff;
+  --color-background-main: #f1f8e9;
+  --color-background-secondary: #dcedc8;
+  --color-background-dark: #33691e;
+  --color-border-primary: #4caf50;
+  --color-border-secondary: #8bc34a;
+  --color-link-default: #4caf50;
+  --color-link-hover: #8bc34a;
+  --color-success: #66bb6a;
+  --color-warning: #ffa726;
+  --color-error: #ef5350;
+  --color-info: #42a5f5;
+}
+
+/* 背景色 */
+.bg-primary { background-color: var(--color-primary); }
+.bg-accent1 { background-color: var(--color-accent1); }
+.bg-accent2 { background-color: var(--color-accent2); }
+.bg-background-main { background-color: var(--color-background-main); }
+.bg-background-secondary { background-color: var(--color-background-secondary); }
+.bg-background-dark { background-color: var(--color-background-dark); }
+
+/* テキスト色 */
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-inverted { color: var(--color-text-inverted); }
+
+/* ボーダー色 */
+.border-primary { border-color: var(--color-border-primary); }
+.border-secondary { border-color: var(--color-border-secondary); }
+
+/* リンク色 */
+.link { color: var(--color-link-default); }
+.link:hover { color: var(--color-link-hover); }
+
+/* 状態色 */
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-error { color: var(--color-error); }
+.text-info { color: var(--color-info); }
+.text-accent1 { color: var(--color-accent1); }
+.text-accent2 { color: var(--color-accent2); }
+
+.bg-success { background-color: var(--color-success); }
+.bg-warning { background-color: var(--color-warning); }
+.bg-error { background-color: var(--color-error); }
+.bg-info { background-color: var(--color-info); }
+
+/* ホバー状態 */
+.hover\:bg-primary:hover { background-color: var(--color-primary); }
+.hover\:bg-accent1:hover { background-color: var(--color-accent1); }
+.hover\:bg-accent2:hover { background-color: var(--color-accent2); }
+.hover\:bg-background-main:hover { background-color: var(--color-background-main); }
+.hover\:bg-background-secondary:hover { background-color: var(--color-background-secondary); }
+.hover\:bg-background-dark:hover { background-color: var(--color-background-dark); }
+
+.hover\:text-primary:hover { color: var(--color-text-primary); }
+.hover\:text-secondary:hover { color: var(--color-text-secondary); }
+.hover\:text-inverted:hover { color: var(--color-text-inverted); }
+.hover\:text-accent1:hover { color: var(--color-accent1); }
+.hover\:text-accent2:hover { color: var(--color-accent2); }
+
+.hover\:border-primary:hover { border-color: var(--color-border-primary); }
+.hover\:border-secondary:hover { border-color: var(--color-border-secondary); }
+
+/* フォーカス状態 */
+.focus\:outline-primary:focus { outline-color: var(--color-primary); }
+.focus\:outline-accent1:focus { outline-color: var(--color-accent1); }
+.focus\:outline-accent2:focus { outline-color: var(--color-accent2); }
+
+/* アクティブ状態 */
+.active\:bg-primary:active { background-color: var(--color-primary); }
+.active\:bg-accent1:active { background-color: var(--color-accent1); }
+.active\:bg-accent2:active { background-color: var(--color-accent2); }
+
+/* グラデーション背景 */
+.bg-gradient-primary {
+  background-image: linear-gradient(to right, var(--color-primary), var(--color-accent1));
+}
+
+/* ボックスシャドウ */
+.shadow-primary {
+  box-shadow: 0 4px 6px -1px rgba(var(--color-primary), 0.1), 0 2px 4px -1px rgba(var(--color-primary), 0.06);
+}
+
+/* トランジション */
+.transition-colors {
+  transition-property: color, background-color, border-color;
+  transition-duration: 0.3s;
+  transition-timing-function: ease-in-out;
+}

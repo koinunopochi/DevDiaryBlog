@@ -16,6 +16,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({ authService }) => {
     await authService.logout();
     navigate('/login');
   };
+
   return (
     <BasePageLayout className="flex flex-col">
       <Header
@@ -24,11 +25,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({ authService }) => {
         onCreateAccount={() => navigate('/register')}
       />
       <TabNavigation />
-      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-background-main text-primary">
         <Outlet />
       </main>
-      <footer className="bg-gray-100 dark:bg-gray-800 py-4">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-600 dark:text-gray-300">
+      <footer className="py-4 bg-background-secondary text-accent1">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           © {new Date().getFullYear()} Your Company Name. All rights reserved.
         </div>
       </footer>

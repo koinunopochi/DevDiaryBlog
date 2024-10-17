@@ -56,40 +56,41 @@ const Profile: React.FC<ProfileProps> = ({
     return <NotFound />;
   }
 
-  const profileEditButton = (
-    <button
-      className="mt-4 w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 py-2 px-4 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-sm sm:text-base"
-      onClick={onEditProfile}
-    >
-      プロフィールを編集する
-    </button>
+const profileEditButton = (
+  <button
+    className="mt-4 w-full bg-background-secondary text-primary py-2 px-4 rounded-md hover:bg-accent2 transition-colors text-sm sm:text-base"
+    onClick={onEditProfile}
+  >
+    プロフィールを編集する
+  </button>
+);
+
+if (isLoading) {
+  return (
+    <div className="bg-background-main p-4 rounded-lg shadow-md w-full max-w-sm mx-auto">
+      <p className="text-sm text-secondary text-center">
+        ユーザーデータを読み込んでいます...
+      </p>
+    </div>
   );
+}
 
-  if (isLoading) {
-    return (
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md w-full max-w-sm mx-auto">
-        <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-          ユーザーデータを読み込んでいます...
-        </p>
-      </div>
-    );
-  }
+if (!loadedUserData || !loadedUserData.profile) {
+  return (
+    <div className="bg-background-main p-4 rounded-lg shadow-md w-full max-w-sm mx-auto">
+      <p className="mt-4 text-sm text-secondary text-center">
+        プロフィールが設定されていません
+      </p>
+      {isEditable && loadedUserData?.auth.canUpdate && profileEditButton}
+    </div>
+  );
+}
 
-  if (!loadedUserData || !loadedUserData.profile) {
-    return (
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md w-full max-w-sm mx-auto">
-        <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
-          プロフィールが設定されていません
-        </p>
-        {isEditable && loadedUserData?.auth.canUpdate && profileEditButton}
-      </div>
-    );
-  }
 
   const { displayName, bio, avatarUrl, socialLinks } = loadedUserData.profile;
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-md w-full max-w-sm mx-auto">
+    <div className="bg-background-main p-4 sm:p-6 rounded-lg w-full max-w-sm mx-auto border">
       <div className="flex flex-col items-center">
         <Icon
           src={avatarUrl}
@@ -100,12 +101,10 @@ const Profile: React.FC<ProfileProps> = ({
             console.log('ユーザーを編集する');
           }}
         />
-        <h2 className="mt-4 text-lg sm:text-xl font-bold dark:text-white">
+        <h2 className="mt-4 text-lg sm:text-xl font-bold text-primary">
           {displayName}
         </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          @{loadedUserData.user.name}
-        </p>
+        <p className="text-sm text-secondary">@{loadedUserData.user.name}</p>
 
         <div className="flex mt-2 space-x-2">
           {socialLinks.github && (
@@ -130,26 +129,26 @@ const Profile: React.FC<ProfileProps> = ({
           )}
         </div>
 
-        <p className="mt-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center">
+        <p className="mt-4 text-xs sm:text-sm text-secondary text-center">
           {bio}
         </p>
       </div>
 
       {isEditable && loadedUserData.auth.canUpdate && profileEditButton}
 
-      <div className="mt-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400 space-y-2">
+      <div className="mt-4 text-xs sm:text-sm text-secondary space-y-2">
         <p className="flex items-center">
-          <Mail className="w-4 h-4 mr-2 text-gray-800 dark:text-gray-200" />
+          <Mail className="w-4 h-4 mr-2 text-primary" />
           <span className="truncate">{loadedUserData.user.email}</span>
         </p>
         <p className="flex items-center">
-          <Calendar className="w-4 h-4 mr-2 text-gray-800 dark:text-gray-200" />
+          <Calendar className="w-4 h-4 mr-2 text-primary" />
           <span>
             {new Date(loadedUserData.user.createdAt).toLocaleDateString()}
           </span>
         </p>
         <p className="flex items-center">
-          <Tag className="w-4 h-4 mr-2 text-gray-800 dark:text-gray-200" />
+          <Tag className="w-4 h-4 mr-2 text-primary" />
           <span>{loadedUserData.user.status}</span>
         </p>
         {Object.entries(socialLinks).map(([key, value]) => {
@@ -160,9 +159,9 @@ const Profile: React.FC<ProfileProps> = ({
                 href={value}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+                className="flex items-center text-secondary hover:text-primary transition-colors"
               >
-                <Link className="w-4 h-4 mr-2 text-gray-800 dark:text-gray-200" />
+                <Link className="w-4 h-4 mr-2 text-primary" />
                 <span>{key}</span>
               </a>
             );

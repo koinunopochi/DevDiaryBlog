@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { User,LogOut, ChevronDown } from 'lucide-react';
+import { User, LogOut, ChevronDown } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useNavigate } from 'react-router-dom';
-import DarkModeToggle from '@/views/components/atoms/darkModeToggle/DarkModeToggle';
+import WithCharacterLog from '@/img/with_character_logo.svg';
+import ThemeToggle from '@/views/components/atoms/themeToggle/ThemeToggle';
 
 type UserProfile = {
   displayName: string;
@@ -18,7 +19,15 @@ export interface HeaderProps {
   onCreateAccount?: () => void;
 }
 
-const Avatar = ({ src, alt, fallback }: { src: string | undefined, alt: string | undefined, fallback: React.ReactNode }) => (
+const Avatar = ({
+  src,
+  alt,
+  fallback,
+}: {
+  src: string | undefined;
+  alt: string | undefined;
+  fallback: React.ReactNode;
+}) => (
   <div className="h-8 w-8 rounded-full overflow-hidden bg-gray-200">
     {src ? (
       <img src={src} alt={alt} className="h-full w-full object-cover" />
@@ -34,75 +43,64 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedProfile = localStorage.getItem('profile');
-    if (storedProfile) {
-      try {
-        setUserProfile(JSON.parse(storedProfile));
-      } catch (error) {
-        console.error('Error parsing profile from localStorage:', error);
-      }
-    }
-  }, []);
+   useEffect(() => {
+     const storedProfile = localStorage.getItem('profile');
+     if (storedProfile) {
+       try {
+         setUserProfile(JSON.parse(storedProfile));
+       } catch (error) {
+         console.error('Error parsing profile from localStorage:', error);
+       }
+     }
+   }, []);
 
-  const toMyPage = () => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      try {
-        const { name } = JSON.parse(user);
-        if (name) {
-          navigate(`/${name}`);
-        } else {
-          throw new Error('User name not found');
-        }
-      } catch (error) {
-        console.error('Error parsing user from localStorage:', error);
-        alert('エラーが発生しました。ログインしてください。');
-      }
-    } else {
-      alert('マイページにアクセスするにはログインしてください。');
-    }
-  };
+   const toMyPage = () => {
+     const user = localStorage.getItem('user');
+     if (user) {
+       try {
+         const { name } = JSON.parse(user);
+         if (name) {
+           navigate(`/${name}`);
+         } else {
+           throw new Error('User name not found');
+         }
+       } catch (error) {
+         console.error('Error parsing user from localStorage:', error);
+         alert('エラーが発生しました。ログインしてください。');
+       }
+     } else {
+       alert('マイページにアクセスするにはログインしてください。');
+     }
+   };
 
-    const menuItemClass = ({ active }: { active: boolean }) =>
-      twMerge(
-        'flex items-center w-full text-left px-4 py-2 text-sm',
-        active
-          ? 'bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-gray-100'
-          : 'text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600'
-      );
+  const menuItemClass = ({ active }: { active: boolean }) =>
+    twMerge(
+      'flex items-center w-full text-left px-4 py-2 text-sm',
+      active
+        ? 'hover:bg-background-main hover:text-accent1 '
+        : 'text-text-primary hover:bg-background-main hover:text-accent1'
+    );
+
+  const buttonBaseStyle = `
+    px-4 py-2 text-sm font-medium rounded-md
+    focus:outline-none focus:ring-2 focus:ring-offset-2
+    transition-colors duration-200
+  `;
 
   return (
-    <header className="border-b-2 ">
+    <header className="border-b-2 border-border-primary">
       <div className="mx-auto px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
         <div className="flex items-center">
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 32 32"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g fill="none" fillRule="evenodd">
-              <path
-                d="M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z"
-                fill="#FFF"
-              />
-              <path
-                d="M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z"
-                fill="#555AB9"
-              />
-              <path
-                d="M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z"
-                fill="#91BAF8"
-              />
-            </g>
-          </svg>
-          <h1 className="ml-3 text-xl font-bold">Acme</h1>
+          <img src={WithCharacterLog} alt="ロゴ" width={130} height={100} />
         </div>
         <div>
           {userProfile ? (
             <Menu as="div" className="relative inline-block text-left">
-              <MenuButton className="inline-flex items-center justify-center w-full rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+              <MenuButton
+                className={`inline-flex items-center justify-center w-full rounded-md border px-4 py-2 text-sm font-medium 
+                            focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200
+                            bg-background-main border-border-primary text-text-primary`}
+              >
                 <Avatar
                   src={userProfile.avatarUrl}
                   alt={userProfile.displayName}
@@ -112,7 +110,10 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
                 <ChevronDown className="ml-2 h-5 w-5" aria-hidden="true" />
               </MenuButton>
 
-              <MenuItems className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <MenuItems
+                className={`origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg ring-1 ring-opacity-5 focus:outline-none
+                            bg-background-main border-border-primary`}
+              >
                 <div className="py-1">
                   <MenuItem>
                     {({ active }) => (
@@ -127,7 +128,7 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
                   </MenuItem>
                   <MenuItem>
                     {({ active }) => (
-                      <DarkModeToggle className={menuItemClass({ active })} />
+                      <ThemeToggle className={menuItemClass({ active })} />
                     )}
                   </MenuItem>
                   <MenuItem>
@@ -145,16 +146,19 @@ export const Header = ({ onLogin, onLogout, onCreateAccount }: HeaderProps) => {
               </MenuItems>
             </Menu>
           ) : (
-            <div className="space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <button>
+                <ThemeToggle className="ml-2" />
+              </button>
               <button
                 onClick={onLogin}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className={`${buttonBaseStyle} bg-primary text-text-inverted border border-primary hover:opacity-90`}
               >
                 ログイン
               </button>
               <button
                 onClick={onCreateAccount}
-                className="px-4 py-2 text-sm font-medium text-indigo-600 bg-white border border-indigo-600 rounded-md hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className={`${buttonBaseStyle} bg-transparent text-primary border border-primary hover:bg-primary hover:bg-opacity-10`}
               >
                 新規登録
               </button>

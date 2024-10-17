@@ -19,12 +19,11 @@ const Tag: React.FC<TagProps> = ({ id, name, onClick, className }) => {
     <span
       id={id}
       className={twMerge(
-        'bg-blue-100 dark:bg-cosmic-blue text-blue-800 dark:text-starlight',
+        'bg-background-secondary text-primary',
         'text-xs sm:text-sm font-medium px-2 py-0.5 rounded',
-        'transition-all duration-200 ease-in-out',
-        onClick &&
-          'cursor-pointer hover:bg-blue-200 dark:hover:bg-cosmic-blue-light',
-        onClick && 'active:bg-blue-300 dark:active:bg-cosmic-blue-dark',
+        'transition-colors',
+        onClick && 'cursor-pointer hover:bg-accent2',
+        onClick && 'active:bg-accent1',
         className
       )}
       onClick={handleClick}

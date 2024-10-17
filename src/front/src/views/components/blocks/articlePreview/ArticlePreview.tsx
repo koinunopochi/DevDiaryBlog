@@ -5,7 +5,6 @@ import Tag from '@components/atoms/tag/Tag';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 
-// ユーザー名を省略する関数
 const truncateUsername = (username: string, maxLength: number = 15) => {
   if (username.length <= maxLength) return username;
   return `${username.slice(0, maxLength)}...`;
@@ -26,17 +25,16 @@ const EnhancedTooltip: React.FC<{
         {children}
       </div>
       {isVisible && (
-        <div className="absolute z-10 p-3 bg-gray-800 text-white text-sm rounded shadow-lg w-auto">
+        <div className="absolute z-10 p-3 text-sm rounded shadow-lg w-auto bg-background-secondary text-accent1">
           <div>
-            <span className="">{author.displayName}</span>
-            <span className="text-gray-300">(@{author.username})</span>
+            <span>{author.displayName}</span>
+            <span className="text-text-secondary">(@{author.username})</span>
           </div>
         </div>
       )}
     </div>
   );
 };
-
 
 export interface ArticlePreviewProps {
   id: string;
@@ -76,15 +74,15 @@ const ArticlePreview: React.FC<ArticlePreviewProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-night-sky rounded-lg p-5 transition-all duration-300 border hover:shadow-md hover:border-blue-300 dark:hover:border-blue-500">
+    <div className="rounded-lg p-5 transition-all duration-300 border hover:shadow-md bg-background-main border-border-primary hover:border-primary">
       <div
         className="cursor-pointer transform transition-transform duration-300 hover:scale-[1.02]"
         onClick={handleArticleClick}
       >
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-starlight mb-2 hover:text-blue-600 dark:hover:text-blue-400">
+        <h2 className="text-xl font-semibold mb-2 text-text-primary hover:text-primary">
           {title}
         </h2>
-        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-starlight mb-2">
+        <div className="flex items-center justify-between text-sm mb-2 text-text-secondary">
           <div className="flex items-center">
             <EnhancedTooltip author={author}>
               <Link
@@ -102,12 +100,12 @@ const ArticlePreview: React.FC<ArticlePreviewProps> = ({
             </EnhancedTooltip>
           </div>
           <div className="flex items-center">
-            <Heart size={16} className="mr-1 text-red-500" />
+            <Heart size={16} className="mr-1 text-error" />
             <span>{likes}</span>
           </div>
         </div>
         {(createdAt || updatedAt) && (
-          <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+          <div className="text-xs mb-2 text-text-secondary">
             <Clock size={12} className="inline-block mr-1" />
             {createdAt && <span>作成: {formatDate(createdAt)}</span>}
             {updatedAt && createdAt !== updatedAt && (
